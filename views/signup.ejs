@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <!-- external css -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- localhosted bootstrap -->
+    <link href="/bootstrap 5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- localhosted font-awesome icons -->
+    <link rel="stylesheet" href="/font-awesome 4.7.0/css/font-awesome.css">
+    <meta charset="utf-8">
+</head>
+
+<body style="background-color: #f8f5e5;">
+    <%-include('navbar');-%>
+
+
+        <main class="mt-5" style="justify-content: center; align-items: center; display: flex;">
+            <div class="row shadow" style="background-color: #fff8e1; width: 70%; height: auto;">
+                <div class="col-md-6">
+                    <img src="../images/formImage.png" class="img-fluid w-100" alt="Logo">
+                </div>
+                <div class="col-md-6" style="">
+                    <h2 class="text-center mt-5">Create Account</h2>
+                    <form>
+
+                        <div class="col-sm-12 px-3" style="">
+                            <label for="inputName" class="col-sm-2 col-form-label" style=" width: 200px;">Full
+                                Name</label>
+                            <input type="text" class="form-control" id="inputName" placeholder="Enter your name">
+                        </div>
+
+
+                        <div class="col-sm-12 px-3">
+                            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                            <input type="email" class="form-control" id="inputEmail"
+                                placeholder="Enter your email address">
+                        </div>
+
+                        <div class="col-sm-12 px-3">
+                            <label for="inputPhoneNumber" class="col-sm-2 col-form-label" style=" width: 200px;">Phone
+                                Number</label>
+                            <input type="number" class="form-control" id="inputPhoneNumber"
+                                placeholder="Enter your phone number">
+                        </div>
+
+
+                        <div class="col-sm-12 px-3">
+                            <label for="userName" class="col-sm-2 col-form-label" style="width: 200px;">User
+                                Name</label>
+                            <input type="text" class="form-control" id="userName" placeholder="Enter your username">
+                        </div>
+
+                        <div class="col-sm-12 px-3">
+                            <label for="role" class="col-sm-2 col-form-label" style="width: 200px;">Select Role</label>
+                            <select name="role" id="role" class="form-control">
+                                <option value="" selected style="">Select a role</option>
+                                <option value="user">Regular User</option>
+                                <option value="agent">Agent</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-sm-12 px-3">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                        </div>
+
+                        <p class="text-center" style="font-size: 0.8rem; margin-top: 10px;">By signing up you agree to
+                            <a href="">terms and
+                                conditions</a> at
+                            StayLib
+                        </p>
+
+                        <div class="px-3">
+                            <button type="submit" class="btn btn-primary "
+                                style="width: 100%; background-color: #D7A20D; border: none;">Sign
+                                Up</button>
+                        </div>
+
+                        <p class="text-center" style="font-size: 0.8rem; margin-top: 10px;">Already have an account?<a
+                                href="/login">Login</a></p>
+
+                </div>
+
+
+                </form>
+            </div>
+
+            </div>
+            </div>
+        </main>
+
+        <!-- jQuery -->
+        <script src="js/jquery-3.7.1.min.js">
+        </script>
+        <!-- external JS -->
+        <script src="js/script.js">
+        </script>
+</body>
+
+</html>
