@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Information</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #FFFBE7; /* Light yellow background */
+            color: #333;
+        }
+        .header {
+            background-color: #FFE9B5; /* Lighter yellow header */
+            padding: 10px 0;
+            text-align: center;
+        }
+        .booking-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .hotel-image {
+            width: 80%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .date-icon {
+            color: #ffc107;
+        }
+        .btn-custom {
+            background-color: #F5C469; /* Custom button color */
+            color: #FFF;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+        .btn-cancel {
+            background-color: #ccc;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+        .btn-group .btn {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="images/logo.png" alt="StayLib Logo" style="width: 90px;">
+    </div>
+    
+    <h2 style="text-align: center;">Booking Information</h2>
+        <p style="text-align: center;">Please fill up the blank fields below</p>
+    <div class="container mt-5">
+        
+        <div class="booking-container">
+            <div class="hotel-details">
+                <img src="images/Mamba Point.jpg" alt="Hotel Name" class="hotel-image">
+                <p class="mt-2"><strong>Mambapoint Hotel</strong><br>Mamba Point</p>
+            </div>
+            
+            <div class="booking-details">
+                <p>How long will you stay?</p>
+                <div class="btn-group" role="group" aria-label="Duration">
+                    <button type="button" class="btn btn-custom" style="background-color: red;">-</button>
+                    <button type="button" class="btn btn-light">2 Days</button>
+                    <button type="button" class="btn btn-custom" style="background-color: green;">+</button>
+                </div>
+                
+                <p class="mt-3">Check in Date</p>
+                <p><i class="fas fa-calendar-alt date-icon"></i> 20 Jan - 22 Jan</p>
+                
+                <p>Check out Date</p>
+                <p><i class="fas fa-calendar-alt date-icon"></i> 20 Jan - 22 Jan</p>
+                
+                <p>You will pay $400 USD for 2 Days</p>
+                
+                <button class="btn btn-custom" style="background-color: #ffc107;">Book Now!</button>
+                <button class="btn btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

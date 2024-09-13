@@ -1,0 +1,64 @@
+<%-include('dashnav');-%>
+<div class="wrapper">
+   <!-- page contents -->
+<div class="content-wrapper bg-white">
+<div class="navbar bg-light">
+    <input type="text" placeholder="search" id = "search">
+    <!-- sorting -->
+    <p class="text-lowercase text-dark">sort by <i class="fa fa-chevron-down"></i></p>
+<!-- selection of months -->
+    <div id="options">
+    <select name="Month" id="Month">
+        <optgroup>
+    <option>This Month</option>
+  <optgroup>
+    <option value="Jan">January</option>
+  </optgroup>
+  <optgroup>
+    <option value="Feb">Feburary</option>
+    <option value="March">March</option>
+      <option value="April">April</option>
+      <option value="May">May</option>
+      <option value="June">June</option>
+      <option value="July">July</option>
+      <option value="Aug">August</option>
+      <option value="September">September</option>
+      <option value="October">October</option>
+      
+      <option value="Nov">November</option>
+      <option value="Dec">December</option>
+  </optgroup>
+</select>
+        <!--- booking selection -->
+        <select name="Booking" id="Booking">
+  <optgroup>
+    <option value="Booking">Booking</option>
+    <option value="saab">Saab</option>
+  </optgroup>
+  <optgroup label="German Cars">
+    <option value="mercedes">Mercedes</option>
+    <option value="audi">Audi</option>
+  </optgroup>
+</select>
+        <!-- other icons -->
+    <br>
+    <br>
+    <button type="button">
+    <i class="fa fa-trash" id="trash"></i>
+    </button>
+        <button type="button">
+        <i class="fa fa-file"></i> print
+        </button>
+    </div>
+    </div>
+    <div class="card-body">
+    <div class="card-header">
+        <p class="lead text-capitalize">
+        list of hotel rooms
+        </p>
+        </div>
+    </div>
+        </div>
+      </div>
+
+    <%-include('sidebar');-%>

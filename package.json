@@ -1,0 +1,20 @@
+{
+  "name": "js-final-project-group-6-libhost",
+  "version": "1.0.0",
+  "description": "Final Project - ODC Full-Stack Web Development",
+  "main": "server.js",
+  "scripts": {
+    "teststart": "node server.js"
+  },
+  "author": "Group #6 - StayLib",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "js-final-project-group-6-libhost": "file:",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.4",
+    "path": "^0.12.7"
+  }
+}
