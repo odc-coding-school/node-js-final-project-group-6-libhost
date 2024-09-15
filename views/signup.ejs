@@ -23,11 +23,11 @@
                 <div class="col-md-6">
                     <img src="../images/formImage.png" class="img-fluid w-100" alt="Logo">
                 </div>
-                <div class="col-md-6" style="">
+                <div class="col-md-6">
                     <h2 class="text-center mt-5">Create Account</h2>
-                    <form>
+                    <form action="/signup" method="post" enctype="multipart/form-data">
 
-                        <div class="col-sm-12 px-3" style="">
+                        <div class="col-sm-12 px-3">
                             <label for="inputName" class="col-sm-2 col-form-label" style=" width: 200px;">Full
                                 Name</label>
                             <input type="text" class="form-control" id="inputName" placeholder="Enter your name">
@@ -57,10 +57,16 @@
                         <div class="col-sm-12 px-3">
                             <label for="role" class="col-sm-2 col-form-label" style="width: 200px;">Select Role</label>
                             <select name="role" id="role" class="form-control">
-                                <option value="" selected style="">Select a role</option>
+                                <option selected>Select a role</option>
                                 <option value="user">Regular User</option>
                                 <option value="agent">Agent</option>
                             </select>
+                        </div>
+
+                        <div class="col-sm-12 px-3">
+                            <label for="profilePicture" class="col-sm-2 col-form-label" style="width: 200px;">Pick a
+                                Profile Picture</label>
+                            <input type="file" class="form-control" id="profilePicture">
                         </div>
 
 

@@ -6,7 +6,20 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 const { title } = require("process");
-const upload = multer();
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database("./staylib.db");
+
+// middleware for storing images
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "/tmp/my-uploads");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix);
+  },
+});
+const upload = multer({ storage: storage });
 
 // Middleware
 app.use(bodyparser.urlencoded({ extended: true }));
@@ -19,18 +32,9 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "views")));
 
 // static files
-
-// external css files
-
-app.use("/css", express.static(path.join(__dirname, "public/css")));
-
 // external js files
 
 app.use("/js", express.static(path.join(__dirname, "public/js")));
-
-// images
-
-app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 // bootstrap
 
@@ -43,7 +47,6 @@ app.use(
   "/js",
   express.static(path.join(__dirname, "node_modules/bootstrap/dist/js"))
 );
-
 // fontawesome 4
 
 app.use(
@@ -78,14 +81,31 @@ app.get("/payment", (req, res) => {
   res.render("payment");
 });
 
-// home page
+db.serialize(() => {
+  db.run(
+    `CREATE TABLE IF NOT EXISTS user (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    full_name VARCHAR(250),
+    email VARCHAR(250),
+    user_name VARCHAR(250),
+    phone_number VARCHAR(250),
+    role VARCHAR(250),
+    password VARCHAR(250),
+    profile_picture BLOB,
+    date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+    `
+  );
+});
 
+db.close();
+
+// home page
 app.get("/", (req, res) => {
   res.render("index", {
     title: "Home||Page",
   });
 });
-
 app.get("/home", (req, res) => {
   res.render("index", {
     title: "Home||Page",
@@ -93,7 +113,6 @@ app.get("/home", (req, res) => {
 });
 
 // about page
-
 app.get("/about", (req, res) => {
   res.render("about", {
     title: "About||Page",
@@ -101,7 +120,6 @@ app.get("/about", (req, res) => {
 });
 
 // explore
-
 app.get("/explore", (req, res) => {
   res.render("index", {
     title: "Explore||Page",
@@ -109,11 +127,17 @@ app.get("/explore", (req, res) => {
 });
 
 // signup
-
 app.get("/signup", (req, res) => {
   res.render("signup", {
     title: "SignUp||Page",
   });
+});
+
+app.post("/signup", (req, res) => {
+  res.render("signup", {
+    title: "SignUP||Page",
+  });
+  console.log("Signed Up");
 });
 
 // verification
