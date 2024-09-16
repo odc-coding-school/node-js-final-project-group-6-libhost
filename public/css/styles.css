@@ -195,7 +195,7 @@ label{
 
 h2.text-capitalize{
     
-    color: gold;
+    color: #d7a20d;
 }
 
 
@@ -230,7 +230,7 @@ select{
 
 #search{
     
-    background-color: gold;
+    background-color: #d7a20d;
 }
 
 .fa-check-circle{
@@ -245,7 +245,7 @@ select{
 
 button.btn-outline{
     width: 80%;
-    background: gold;
+    background: #d7a20d;
 }
 
 img.card#single{
@@ -285,7 +285,7 @@ p{
 
 a.btn{
 
-    background-color: gold;
+    background-color: #d7a20d;
     width: 40%;
 }
 
@@ -351,12 +351,12 @@ a.text-dark{
 a.btn#search{
     
     width: auto;
-    background-color: gold;
+    background-color: #d7a20d;
 }
 
 a.btn:hover{
     
-    background-color: gold;
+    background-color: #d7a20d;
 }
 
 img{
@@ -369,7 +369,7 @@ img{
 
 .card#card1{
     
-    background-image: url('../images/130007126_131259508771522_7787710300509387114_nf608170.jpg');
+    background-image: url('../images/Colony\ Hotel.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     height:250px;
@@ -396,17 +396,17 @@ img{
 
 .fa-map-marker{
 
-    color: gold;
+    color: #d7a20d;
 }
 
 .fa-star{
     
-    color: gold;
+    color: #d7a20d;
 }
 
 span{
     
-    background: gold;
+    background: #d7a20d;
     color: white;
     width: 130px;
     border-radius: 5px 1px 5px;
@@ -418,7 +418,7 @@ span{
 
 .card#card2{
     
-    background-image: url('../images/130107337_131259532104853_5702520814285235230_nfb0e8c7.jpg');
+    background-image: url('../images/Boulavard\ Hotel.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     height: 250px;
@@ -427,7 +427,7 @@ span{
 
 .card#card3{
     
-    background-image: url('../images/130501788_131259478771525_1830775133465420256_ncad3d0b.jpg');
+    background-image: url('../images/Farmington2.jpeg');
     background-size: cover;
     background-repeat: no-repeat;
     height: 250px;
@@ -437,7 +437,7 @@ span{
 
 .card#card4{
     
-    background-image: url('../images/131275249_134767581754048_1373928561023380115_n69ea993.jpg');
+    background-image: url('../images/Royal\ grand.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     height: 250px;
@@ -446,7 +446,7 @@ span{
 
 .card#card5{
     
-    background-image: url('../images/130007126_131259508771522_7787710300509387114_nf608170.jpg');
+    background-image: url('../images/Mamba\ Point.jpg');
     background-size: cover;
     background-repeat: no-repeat;
    
@@ -456,7 +456,7 @@ span{
 
 .card#card6{
     
-    background-image: url('../images/130107337_131259532104853_5702520814285235230_nfb0e8c7.jpg');
+    background-image: url('../images/ocean\ view.webp');
     background-size: cover;
     background-repeat: no-repeat;
     
