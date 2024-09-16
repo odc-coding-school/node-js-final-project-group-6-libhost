@@ -1,39 +1,38 @@
+
+
 <div class="content bg-light">
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm">
- <div class="card bg-white" id="price">
-          <button type="button" class = "btn" style="padding-bottom: 20px;" id="calendar"><i class="fa fa-calendar text-lg text-left"></i>checkavaliable
-     </button>
-           </div>
-    </div>
-    <div class="col-sm">
- <div class="card bg-white" id="price">
-        <button type="button" class="btn" id="user">
-        <i class="fa fa-user"></i> persons 2
-            
-     </button>
-           </div>
-    </div>
-    <div class="col-sm">
- <div class="card bg-white" id="price">
-         <button class="btn">
-       <i class="fa fa-map-marker" id="location"></i> select location
-     </button>
-           </div>
-    </div>
-       <div class="col-sm">
-           <div class="card bg-white" id="price">
-          <button type="button" class="btn">
-                <i class="fa fa-dollar"></i> price range
-               </button>
-           </div>
-    </div>
+ <form id="">
+
+  <div class="card bg-white" id="price">
+    <input type="text" id="location" placeholder="Enter location" aria-label="Location">
+             </div>
+      </div>
       <div class="col-sm">
-<button type="button" class="btn" href="#" id="search">
-          search
-          </button>
+   <div class="card bg-white" id="price">
+    <input type="number" id="priceMin" placeholder="Min price" aria-label="Minimum Price">
+             </div>
+      </div>
+      <div class="col-sm">
+   <div class="card bg-white" id="price">
+    <input type="number" id="priceMax" placeholder="Max price" aria-label="Maximum Price">
+             </div>
+      </div>
+         <div class="col-sm">
+             <div class="card bg-white" id="price">
+              <input type="text" id="amenities" placeholder="Enter amenities (comma-separated)" aria-label="Amenities">
+             </div>
+      </div>
+        <div class="col-sm">
+  <button type="submit" class="btn" href="#" id="search">
+            search
+            </button>
+      </div>
     </div>
-  </div>
+ </form>
 </div>
 </div>
+
+<script src="js/search.js"></script>

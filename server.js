@@ -110,6 +110,53 @@ app.get("/accommodations", (req, res) => {
   });
 });
 
+// Searching and Filtering implemtation
+// Endpoint to search accommodations
+app.get('/search', (req, res) => {
+  const { location, priceMin, priceMax, amenities } = req.query;
+
+  // Construct the SQL query with filters
+  let sql = `SELECT * FROM accommodations WHERE 1 = 1`;
+  if (location) {
+      sql += ` AND location LIKE '%' || ? || '%'`;
+  }
+  if (priceMin && priceMax) {
+      sql += ` AND price BETWEEN ? AND ?`;
+  }
+  if (amenities) {
+      const amenitiesList = amenities.split(',');
+      amenitiesList.forEach((amenity, index) => {
+          if (index === 0) {
+              sql += ` AND (amenities LIKE '%' || ? || '%'`;
+          } else {
+              sql += ` OR amenities LIKE '%' || ? || '%'`;
+          }
+      });
+      if (amenitiesList.length > 0) {
+          sql += ')';
+      }
+  }
+
+  // Prepare the values for parameterized query
+  const params = [];
+  if (location) params.push(location);
+  if (priceMin && priceMax) {
+      params.push(priceMin, priceMax);
+  }
+  if (amenities) {
+      params.push(...amenities.split(','));
+  }
+
+  // Execute the query
+  db.all(sql, params, (err, rows) => {
+      if (err) {
+          res.status(500).send({ error: err.message });
+      } else {
+          res.send(rows);
+      }
+  });
+});
+
 // Create users table if not exists
 db.serialize(() => {
   db.run(
