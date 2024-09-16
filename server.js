@@ -12,7 +12,7 @@ const db = new sqlite3.Database("./staylib.db");
 // middleware for storing images
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "/tmp/my-uploads");
+    cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -98,7 +98,7 @@ db.serialize(() => {
   );
 });
 
-db.close();
+// db.close();
 
 // home page
 app.get("/", (req, res) => {
@@ -133,10 +133,40 @@ app.get("/signup", (req, res) => {
   });
 });
 
-app.post("/signup", (req, res) => {
+app.post("/signup", upload.single("photo"), (req, res) => {
   res.render("signup", {
     title: "SignUP||Page",
   });
+
+  let userInfo = {
+    fullname: req.body.fullname,
+    email: req.body.email,
+    phonenumber: req.body.phonenumber,
+    username: req.body.username,
+    role: req.body.role,
+    photo: req.file ? req.file.path : null,
+    password: req.body.password,
+  };
+
+  db.run(
+    `INSERT INTO user (full_name,email,user_name,phone_number,role,password,profile_picture) VALUES (?,?,?,?,?,?,?)`,
+    [
+      userInfo.fullname,
+      userInfo.email,
+      userInfo.username,
+      userInfo.phonenumber,
+      userInfo.role,
+      userInfo.password,
+      userInfo.photo,
+    ],
+    function (err) {
+      if (err) {
+        return console.log("User Table Insert Error: ", err.message);
+      }
+      console.log("User Data:", userInfo);
+      res.redirect("/login");
+    }
+  );
   console.log("Signed Up");
 });
 
