@@ -9,7 +9,6 @@ const sqlite3 = require("sqlite3").verbose();
 // const db = new sqlite3.Database("./staylib.db");
 const db = new sqlite3.Database(path.join(__dirname, "staylib.db"));
 
-
 // middleware for storing images
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -64,46 +63,50 @@ app.get("/payment", (req, res) => {
 });
 
 // Adding Accomodation Route
-app.get('/accomodationlist', (req, res) => {
-  res.render("accomodationlist")
-})
+app.get("/accomodationlist", (req, res) => {
+  res.render("accomodationlist");
+});
 // Fecting Accomodation Route
-app.get('/fectingdashboard', (req, res) => {
-  res.render("fectingdashboard")
-})
+app.get("/fectingdashboard", (req, res) => {
+  res.render("fectingdashboard");
+});
 //Database Tables
 db.serialize(() => {
-  db.run("CREATE TABLE IF NOT EXISTS accommodations (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, location TEXT, price REAL, description TEXT, images TEXT)");
- 
+  db.run(
+    "CREATE TABLE IF NOT EXISTS accommodations (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, location TEXT, price REAL, description TEXT, images TEXT)"
+  );
 });
 
 // Adding Accommodation Route
-app.post('/add-accommodation', upload.array('images'), (req, res) => {
+app.post("/add-accommodation", upload.array("images"), (req, res) => {
   const { name, location, price, description } = req.body;
-  const images = req.files.map(file => file.path).join(',');
+  const images = req.files.map((file) => file.path).join(",");
 
   db.run(
     `INSERT INTO accommodations (name, location, price, description, images) VALUES (?, ?, ?, ?, ?)`,
     [name, location, price, description, images],
-    function(err) {
+    function (err) {
       if (err) {
-        console.error('Accommodation Insert Error: ', err.message);
-        return res.status(500).json({ success: false, message: 'Server Error' });
+        console.error("Accommodation Insert Error: ", err.message);
+        return res
+          .status(500)
+          .json({ success: false, message: "Server Error" });
       }
-      res.json({ success: true, message: 'Accommodation added successfully!' });
+      res.json({ success: true, message: "Accommodation added successfully!" });
     }
   );
 });
 
-
 // Fetching Accommodations Route
-app.get('/accommodations', (req, res) => {
-  db.all('SELECT * FROM accommodations', [], (err, rows) => {
+app.get("/accommodations", (req, res) => {
+  db.all("SELECT * FROM accommodations", [], (err, rows) => {
     if (err) {
-      console.error('Fetch Accommodations Error: ', err.message);
-      return res.status(500).send('Server Error');
+      console.error("Fetch Accommodations Error: ", err.message);
+      return res.status(500).send("Server Error");
     }
     res.json(rows);
+
+    console.log(rows);
   });
 });
 
@@ -150,7 +153,7 @@ app.get("/signup", (req, res) => {
 
 app.post("/signup", upload.single("photo"), async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
-  
+
   let userInfo = {
     fullname: req.body.fullname,
     email: req.body.email,
@@ -204,26 +207,25 @@ app.get("/login", (req, res) => {
 });
 
 //Login post route
-app.post('/login', (req, res) => {
+app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
   db.get("SELECT * FROM user WHERE email = ?", [email], (err, row) => {
-      if (err) {
-          console.error(err.message);
-          res.send("Error checking email");
-      } else if (!row) {
-          res.render("login-error-message");
+    if (err) {
+      console.error(err.message);
+      res.send("Error checking email");
+    } else if (!row) {
+      res.render("login-error-message");
+    } else {
+      const match = bcrypt.compareSync(password, row.Password);
+      if (match) {
+        res.render("home");
       } else {
-          const match = bcrypt.compareSync(password, row.Password);
-          if (match) {
-              res.render("home");
-          } else {
-              res.render("Wrong_password");
-          }
+        res.render("Wrong_password");
       }
+    }
   });
 });
-
 
 // Start server
 app.listen(port, () => {
