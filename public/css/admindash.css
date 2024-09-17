@@ -1,0 +1,103 @@
+body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1 {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 2rem;
+  }
+  
+  /* Flex container for the search bar and other elements */
+  .search-and-add-container {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 10px; /* Space between elements */
+    width: calc(100% - 250px); /* Adjust width to avoid hitting the sidebar */
+    margin-left: 150px; /* Add margin to account for the sidebar width */
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+  
+  /* Styling for the search input and icon */
+  .search-container {
+    position: relative;
+    flex-grow: 1;
+    max-width: 700px; /* Increase the max-width of the search bar */
+  }
+  
+  .search-container input {
+    width: 100%;
+    padding: 10px 10px 10px 40px; /* Space for the icon */
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+  }
+  
+  .search-container i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #555;
+    font-size: 18px;
+  }
+  
+  .add-user-btn {
+    margin-left: 2px; /* Space between search bar and button */
+  }
+  
+  .add-user-btn button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-user-btn button i {
+    margin-left: 5px;
+  }
+  
+  .saved-search {
+    margin-left: 20px; /* Space between button and dropdown */
+  }
+  
+  .saved-search select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .filter {
+    margin-left: 10px; /* Space between dropdown and filter icon */
+    font-size: 24px;
+    color: #555;
+    cursor: pointer;
+  }
+  
+  /* Media query for smaller screens */
+  @media (max-width: 768px) {
+    .search-and-add-container {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%; /* Full width for small screens */
+      margin-left: 0; /* No margin for smaller screens */
+    }
+  
+    .search-container,
+    .add-user-btn,
+    .saved-search,
+    .filter {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    .filter {
+      text-align: right;
+    }
+  }
+  

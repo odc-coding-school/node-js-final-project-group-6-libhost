@@ -1,45 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - LibHost</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/dashboard.css" rel="stylesheet">
+    <%- include('partial/header.ejs') %>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">LibHost Admin</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Properties</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Bookings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Users</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Dashboard contents here -->
-                <h1>Welcome to the Admin Dashboard</h1>
-            </div>
-        </div>
+    <header>
+        <%- include('partial/navbar.ejs') %>
+  <%- include('partial/sidebar.ejs') %>
+    </header>
+  <!-- Main Content -->
+  <h1>Admin Dashboard</h1>
+  <div class="container">
+    <div class="search-and-add-container">
+      <div class="search-container">
+        <input type="text" placeholder="Search Document">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="add-user-btn">
+        <button class="user">Add Owner<i class="fa-solid fa-plus"></i></button>
+      </div>
+      <div class="saved-search">
+        <select name="saved-search" id="saved-search">
+          <option value="">Saved Search</option>
+          <option value="1">John Brown</option>
+        </select>
+      </div>
+      <div class="filter">
+        <i class="fa-solid fa-arrow-up-wide-short"></i>
+      </div>
     </div>
+  </div>
 
-    <script src="js/bootstrap.bundle.min.js"></script>
+  <div class="table-header"></div>
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
