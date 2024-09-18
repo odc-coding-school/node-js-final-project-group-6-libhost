@@ -25,6 +25,9 @@ const upload = multer({ storage: storage });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
+app.use(express.urlencoded({ extended: true })); // for form-encoded data
+app.use(express.json()); // for JSON data
+
 // Static files configuration
 app.use(express.static(path.join(__dirname, "views")));
 app.use("/js", express.static(path.join(__dirname, "public/js")));
@@ -206,25 +209,65 @@ app.get("/login", (req, res) => {
   res.render("login", { title: "Login || Page" });
 });
 
-//Login post route
 app.post("/login", (req, res) => {
-  const { email, password } = req.body;
+  const loginInfo = {
+    email: req.body.email,
+    password: req.body.password, // plaintext password from form
+  };
 
-  db.get("SELECT * FROM user WHERE email = ?", [email], (err, row) => {
-    if (err) {
-      console.error(err.message);
-      res.send("Error checking email");
-    } else if (!row) {
-      res.render("login-error-message");
-    } else {
-      const match = bcrypt.compareSync(password, row.Password);
-      if (match) {
-        res.render("home");
-      } else {
-        res.render("Wrong_password");
+  // Fetch user from the database using email
+  db.get(
+    "SELECT * FROM user WHERE email = ?",
+    [loginInfo.email],
+    (err, row) => {
+      if (err) {
+        console.error("Database Error:", err.message);
+        return res.status(500).send("Server Error");
       }
+
+      if (!row) {
+        // If user is not found
+        console.log("User not found");
+        return res.redirect("/login");
+      }
+
+      // Compare the password provided with the stored hashed password
+      bcrypt.compare(loginInfo.password, row.password, (err, result) => {
+        if (err) {
+          console.error("Bcrypt Compare Error:", err.message);
+          return res.status(500).send("Server Error");
+        }
+
+        if (result) {
+          // Passwords match, login successful
+          console.log("Login Successful");
+          // Redirect to dashboard or another page
+          return res.redirect("/dashboard");
+        } else {
+          // Passwords do not match
+          console.log("Wrong Credentials");
+          return res.redirect("/login");
+        }
+      });
     }
-  });
+  );
+  // });
+
+  // db.get("SELECT * FROM user WHERE email = ?", [email], (err, row) => {
+  //   if (err) {
+  //     console.error(err.message);
+  //     res.send("Error checking email");
+  //   } else if (!row) {
+  //     res.render("login-error-message");
+  //   } else {
+  //     const match = bcrypt.compareSync(password, row.Password);
+  //     if (match) {
+  //       res.render("home");
+  //     } else {
+  //       res.render("Wrong_password");
+  //     }
+  //   }
+  // });
 });
 
 // Start server
