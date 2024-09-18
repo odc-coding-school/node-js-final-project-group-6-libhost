@@ -104,7 +104,7 @@ app.get("/accommodations", (req, res) => {
       console.error("Fetch Accommodations Error: ", err.message);
       return res.status(500).send("Server Error");
     }
-    res.json(rows);
+    // res.json(rows);
 
     console.log(rows);
   });
