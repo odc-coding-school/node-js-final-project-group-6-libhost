@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <!-- external css -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- localhosted bootstrap -->
+    <link href="/bootstrap 5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- localhosted font-awesome icons -->
+    <link rel="stylesheet" href="/font-awesome 4.7.0/css/font-awesome.css">
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <%-include('navbar');-%>
+
+        <div class="card-body">
+            <div class="container" id="form">
+                <div class="content">
+                    <center>
+                        <div class="card" id="confrimation_alert">
+
+                            <center>
+                                <br>
+                                <i class="fa fa-check-circle" style="font-size: 34px; color: green"></i>
+                                <br>
+                                <br>
+                                <p class="text-capitalize text-center text-xx-lg">
+                                    once we verified, you can access dashboard
+                                </p>
+                                <a class="btn btn-outline" href="/dashboard">
+                                    view dashboard
+                                </a>
+                            </center>
+                        </div>
+                    </center>
+                </div>
+            </div>
+
+            <!-- jQuery -->
+            <script src="js/jquery-3.7.1.min.js">
+            </script>
+            <!-- external JS -->
+            <script src="js/script.js">
+            </script>
+</body>
+
+</html>

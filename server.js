@@ -1,15 +1,18 @@
+// Required Modules
 const express = require("express");
-const app = express();
 const bodyParser = require("body-parser");
-const port = 5000;
 const path = require("path");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 const sqlite3 = require("sqlite3").verbose();
 const session = require("express-session");
-// const db = new sqlite3.Database("./staylib.db");
+
+// Initialize App
+const app = express();
+const port = 5000;
 const db = new sqlite3.Database(path.join(__dirname, "staylib.db"));
 
+// Session Configuration
 app.use(
   session({
     secret: "secret_key_stay_lib",
@@ -18,27 +21,18 @@ app.use(
     cookie: { secure: false },
   })
 );
-// middleware for storing images
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
-  },
-});
-const upload = multer({ storage: storage });
 
-// Middleware
+// Middleware Configuration
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
-app.use(express.urlencoded({ extended: true })); // for form-encoded data
-app.use(express.json()); // for JSON data
-
-// Static files configuration
+// Static Files Configuration
 app.use(express.static(path.join(__dirname, "views")));
+app.use("/css", express.static(path.join(__dirname, "public/css")));
+app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use("/js", express.static(path.join(__dirname, "public/js")));
 app.use(
   "/css",
@@ -53,124 +47,44 @@ app.use(
     path.join(__dirname, "node_modules/@fortawesome/fontawesome-free")
   )
 );
-app.set("views", path.join(__dirname, "views"));
-app.use("/css", express.static(path.join(__dirname, "public/css")));
-app.use("/images", express.static(path.join(__dirname, "public/images")));
 
-// Routes
-app.get("/adminDashboard", (req, res) => {
-  res.render("adminDashboard");
+// Multer Configuration for File Uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix);
+  },
 });
+const upload = multer({ storage: storage });
 
-app.get("/userDashboard", (req, res) => {
-  res.render("user_dashboard");
-});
+function isAuthenticated(req, res, next) {
+  if (req.session.userInfo) {
+    return next(); // User is authenticated, proceed to the next middleware/route
+  } else {
+    // alert("Kindly login before proceding");
+    res.redirect("/login"); // User is not authenticated, redirect to login page
+  }
+}
 
-app.get("/bookingInfo", (req, res) => {
-  res.render("bookingInfo");
-});
+let userInfo = {};
+let currentUser = {};
 
-app.get("/payment", (req, res) => {
-  res.render("payment");
-});
-
-// Adding Accomodation Route
-app.get("/add-accomodation", (req, res) => {
-  res.render("add-accomodation");
-});
-// Fecting Accomodation Route
-app.get("/fectingdashboard", (req, res) => {
-  res.render("fectingdashboard");
-});
-//Database Tables
+// Database Table Creation
 db.serialize(() => {
   db.run(
-    "CREATE TABLE IF NOT EXISTS accommodations (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, location TEXT, price REAL, description TEXT, images TEXT)"
+    `CREATE TABLE IF NOT EXISTS accommodations (
+      id INTEGER PRIMARY KEY AUTOINCREMENT, 
+      name TEXT, 
+      location TEXT, 
+      price REAL, 
+      description TEXT, 
+      images TEXT
+    )`
   );
-});
 
-// Adding Accommodation Route
-app.post("/add-accommodation", upload.array("images"), (req, res) => {
-  const { name, location, price, description } = req.body;
-  const images = req.files.map((file) => file.path).join(",");
-
-  db.run(
-    `INSERT INTO accommodations (name, location, price, description, images) VALUES (?, ?, ?, ?, ?)`,
-    [name, location, price, description, images],
-    function (err) {
-      if (err) {
-        console.error("Accommodation Insert Error: ", err.message);
-        return res
-          .status(500)
-          .json({ success: false, message: "Server Error" });
-      }
-      res.json({ success: true, message: "Accommodation added successfully!" });
-    }
-  );
-});
-
-// Fetching Accommodations Route
-app.get("/accommodations", (req, res) => {
-  db.all("SELECT * FROM accommodations", [], (err, rows) => {
-    if (err) {
-      console.error("Fetch Accommodations Error: ", err.message);
-      return res.status(500).send("Server Error");
-    }
-    // res.json(rows);
-
-    console.log(rows);
-  });
-});
-
-// Searching and Filtering implemtation
-// Endpoint to search accommodations
-app.get("/search", (req, res) => {
-  const { location, priceMin, priceMax, amenities } = req.query;
-
-  // Construct the SQL query with filters
-  let sql = `SELECT * FROM accommodations WHERE 1 = 1`;
-  if (location) {
-    sql += ` AND location LIKE '%' || ? || '%'`;
-  }
-  if (priceMin && priceMax) {
-    sql += ` AND price BETWEEN ? AND ?`;
-  }
-  if (amenities) {
-    const amenitiesList = amenities.split(",");
-    amenitiesList.forEach((amenity, index) => {
-      if (index === 0) {
-        sql += ` AND (amenities LIKE '%' || ? || '%'`;
-      } else {
-        sql += ` OR amenities LIKE '%' || ? || '%'`;
-      }
-    });
-    if (amenitiesList.length > 0) {
-      sql += ")";
-    }
-  }
-
-  // Prepare the values for parameterized query
-  const params = [];
-  if (location) params.push(location);
-  if (priceMin && priceMax) {
-    params.push(priceMin, priceMax);
-  }
-  if (amenities) {
-    params.push(...amenities.split(","));
-  }
-
-  // Execute the query
-  db.all(sql, params, (err, rows) => {
-    if (err) {
-      res.status(500).send({ error: err.message });
-    } else {
-      res.send(rows);
-    }
-  });
-});
-
-// Create users table if not exists
-db.serialize(() => {
   db.run(
     `CREATE TABLE IF NOT EXISTS user (
       id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -184,36 +98,38 @@ db.serialize(() => {
       date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )`
   );
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS roles(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role VARCHAR(250)
+  )`);
 });
 
-// Home page
-app.get("/", (req, res) => {
-  res.render("index", { title: "Home || Page" });
-});
+// Routes
 
-app.get("/home", (req, res) => {
-  res.render("index", { title: "Home || Page" });
-});
+// Home, About, Explore, and Dashboards
+app.get("/", (req, res) => res.render("index", { title: "Home || Page" }));
+app.get("/home", (req, res) => res.render("index", { title: "Home || Page" }));
+app.get("/about", (req, res) =>
+  res.render("index", { title: "About || Page" })
+);
+app.get("/explore", (req, res) =>
+  res.render("index", { title: "Explore || Page" })
+);
+app.get("/adminDashboard", (req, res) => res.render("adminDashboard"));
+app.get("/userDashboard", (req, res) => res.render("user_dashboard"));
+app.get("/dashboard", (req, res) =>
+  res.render("dashboard", { title: "User Dashboard || Page" })
+);
 
-// About page
-app.get("/about", (req, res) => {
-  res.render("about", { title: "About || Page" });
-});
-
-// Explore page
-app.get("/explore", (req, res) => {
-  res.render("index", { title: "Explore || Page" });
-});
-
-// Sign-up routes
-app.get("/signup", (req, res) => {
-  res.render("signup", { title: "SignUp || Page" });
-});
-
+// Signup
+app.get("/signup", (req, res) =>
+  res.render("signup", { title: "SignUp || Page" })
+);
 app.post("/signup", upload.single("photo"), async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-  let userInfo = {
+  const userInfo = {
     fullname: req.body.fullname,
     email: req.body.email,
     phonenumber: req.body.phonenumber,
@@ -222,9 +138,11 @@ app.post("/signup", upload.single("photo"), async (req, res) => {
     photo: req.file ? req.file.path : null,
     password: hashedPassword,
   };
+  console.log(userInfo);
 
   db.run(
-    `INSERT INTO user (full_name,email,user_name,phone_number,role,password,profile_picture) VALUES (?,?,?,?,?,?,?)`,
+    `INSERT INTO user (full_name,email,user_name,phone_number,role,password,profile_picture) 
+     VALUES (?,?,?,?,?,?,?)`,
     [
       userInfo.fullname,
       userInfo.email,
@@ -234,99 +152,121 @@ app.post("/signup", upload.single("photo"), async (req, res) => {
       userInfo.password,
       userInfo.photo,
     ],
-    function (err) {
-      if (err) {
-        console.log("User Table Insert Error: ", err.message);
-        return res.status(500).send("Server Error");
-      }
-      console.log("User Data:", userInfo);
+    (err) => {
+      if (err) return res.status(500).send("Server Error");
       res.redirect("/login");
     }
   );
 });
 
-// Confirmation page
-app.get("/confirmation", (req, res) => {
-  res.render("view_dashboard", { title: "View User Dashboard" });
-});
-
-// Forget password page
-app.get("/forget_password", (req, res) => {
-  res.render("forget_password", { title: "Forget Password || Page" });
-});
-
-// Dashboard
-app.get("/dashboard", (req, res) => {
-  res.render("dashboard", { title: "User Dashboard || Page" });
-});
-
-// Login page
-app.get("/login", (req, res) => {
-  res.render("login", { title: "Login || Page" });
-});
-
+// Login
+app.get("/login", (req, res) =>
+  res.render("login", { title: "Login || Page" })
+);
 app.post("/login", (req, res) => {
-  const loginInfo = {
-    email: req.body.email,
-    password: req.body.password, // plaintext password from form
-  };
+  const loginInfo = { email: req.body.email, password: req.body.password };
+  console.log("Login Information:", loginInfo);
 
-  // Fetch user from the database using email
   db.get(
     "SELECT * FROM user WHERE email = ?",
     [loginInfo.email],
     (err, row) => {
-      if (err) {
-        console.error("Database Error:", err.message);
-        return res.status(500).send("Server Error");
+      if (err) return res.status(500).send("Server Error");
+      if (!row) return res.redirect("/login");
+      if (row) {
+        bcrypt.compare(loginInfo.password, row.password, (err, result) => {
+          if (result) {
+            req.session.userInfo = row;
+            userInfo = req.session.userInfo;
+            console.log("User Information Login Route:", userInfo);
+            console.log("Login Successfully");
+            return res.redirect("/dashboard");
+          } else {
+            console.log("Wrong Credential");
+            res.redirect("/login");
+          }
+        });
       }
-
-      if (!row) {
-        // If user is not found
-        console.log("User not found");
-        return res.redirect("/login");
-      }
-
-      // Compare the password provided with the stored hashed password
-      bcrypt.compare(loginInfo.password, row.password, (err, result) => {
-        if (err) {
-          console.error("Bcrypt Compare Error:", err.message);
-          return res.status(500).send("Server Error");
-        }
-
-        if (result) {
-          // Passwords match, login successful
-          console.log("Login Successful");
-          // Redirect to dashboard or another page
-          return res.redirect("/dashboard");
-        } else {
-          // Passwords do not match
-          console.log("Wrong Credentials");
-          return res.redirect("/login");
-        }
-      });
     }
   );
-  // });
-
-  // db.get("SELECT * FROM user WHERE email = ?", [email], (err, row) => {
-  //   if (err) {
-  //     console.error(err.message);
-  //     res.send("Error checking email");
-  //   } else if (!row) {
-  //     res.render("login-error-message");
-  //   } else {
-  //     const match = bcrypt.compareSync(password, row.Password);
-  //     if (match) {
-  //       res.render("home");
-  //     } else {
-  //       res.render("Wrong_password");
-  //     }
-  //   }
-  // });
 });
 
-// Start server
+// Accommodation Routes
+app.get("/add-accomodation", isAuthenticated, (req, res) =>
+  res.render("add-accomodation")
+);
+app.post(
+  "/add-accommodation",
+  isAuthenticated,
+  upload.array("images"),
+  (req, res) => {
+    const { name, location, price, description } = req.body;
+    const images = req.files.map((file) => file.path).join(",");
+    db.run(
+      `INSERT INTO accommodations (name, location, price, description, images) 
+     VALUES (?, ?, ?, ?, ?)`,
+      [name, location, price, description, images],
+      (err) => {
+        if (err)
+          return res
+            .status(500)
+            .json({ success: false, message: "Server Error" });
+        res.json({
+          success: true,
+          message: "Accommodation added successfully!",
+        });
+      }
+    );
+  }
+);
+
+app.get("/accommodations", isAuthenticated, (req, res) => {
+  db.all("SELECT * FROM accommodations", [], (err, rows) => {
+    if (err) return res.status(500).send("Server Error");
+    res.json(rows);
+  });
+});
+
+// Search and Filter Accommodations
+app.get("/search", (req, res) => {
+  const { location, priceMin, priceMax, amenities } = req.query;
+  let sql = `SELECT * FROM accommodations WHERE 1 = 1`;
+  if (location) sql += ` AND location LIKE '%' || ? || '%'`;
+  if (priceMin && priceMax) sql += ` AND price BETWEEN ? AND ?`;
+  if (amenities) {
+    const amenitiesList = amenities.split(",");
+    amenitiesList.forEach((amenity, index) => {
+      sql +=
+        index === 0
+          ? ` AND (amenities LIKE '%' || ? || '%'`
+          : ` OR amenities LIKE '%' || ? || '%'`;
+    });
+    if (amenitiesList.length > 0) sql += ")";
+  }
+  const params = [];
+  if (location) params.push(location);
+  if (priceMin && priceMax) params.push(priceMin, priceMax);
+  if (amenities) params.push(...amenities.split(","));
+  db.all(sql, params, (err, rows) => {
+    if (err) return res.status(500).send({ error: err.message });
+    res.send(rows);
+  });
+});
+
+// Payment and Confirmation Pages
+app.get("/payment", isAuthenticated, (req, res) => res.render("payment"));
+app.get("/payment-confirmation", isAuthenticated, (req, res) =>
+  res.render("payment-confirmation", isAuthenticated, {
+    title: "View User Dashboard",
+  })
+);
+
+// Forget Password
+app.get("/forget_password", (req, res) =>
+  res.render("forget_password", { title: "Forget Password || Page" })
+);
+
+// Start Server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
