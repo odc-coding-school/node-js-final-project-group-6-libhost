@@ -1,0 +1,132 @@
+#sidebarMenu {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    color: white;
+    overflow-y: auto;
+    padding-top: 20px;
+  }
+
+  #sidebarMenu .logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  #sidebarMenu .logo img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  #sidebarMenu .list-group-item {
+    background-color: #fff;
+    color: #837c7c;
+    margin-bottom: 15px;
+  }
+
+  #sidebarMenu .list-group-item:hover,
+  #sidebarMenu .list-group-item.active {
+    background-color: #fff;
+    color: #d7a20d;
+  }
+
+  /* Navbar adjustment */
+  nav.navbar {
+    position: fixed;
+    top: 0;
+    width: calc(100% - 250px);
+    z-index: 1000;
+    left: 250px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background-color: #f8f9fa; /* Adjust background color for contrast */
+  }
+
+  /* Main content adjustment */
+  .main-content {
+    margin-left: 250px;
+    margin-top: 60px; /* Adjust based on the height of the navbar */
+    padding: 20px;
+    flex-grow: 1;
+  }
+
+  .greeting {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .greeting .title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  .greeting .subtitle {
+    font-size: 1rem;
+    color: #6c757d;
+  }
+
+  .navbar .user-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar .notification {
+    position: relative;
+    margin-right: 20px;
+  }
+
+  .navbar .notification .fa-bell {
+    font-size: 1.25rem;
+    color: #6c757d;
+  }
+
+  .navbar .user-info .divider {
+    height: 40px;
+    width: 1px;
+    background-color: #ccc;
+    margin: 0 20px;
+  }
+
+  .navbar .user-info .username {
+    font-size: 1rem;
+    margin-right: 10px;
+    color: #000; /* Ensure text is visible */
+  }
+
+  .navbar .user-info .user-image img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .dropdown-toggle::after {
+    display: inline-block;
+    content: "\f078"; /* Unicode for down arrow */
+    font-family: 'Font Awesome 5 Free'; /* Font Awesome for the dropdown arrow */
+    font-weight: 900; /* Required for Font Awesome solid icons */
+    color: #000; /* Ensure arrow is visible */
+  }
+
+  .dropdown-menu {
+    min-width: 200px;
+  }
+
+  .user-dropdown .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: transparent;
+  }
+
+  .user-dropdown .dropdown-toggle .user-image {
+    margin-right: 10px;
+  }
+
+  .user-dropdown .dropdown-menu {
+    min-width: 200px;
+  }
