@@ -63,7 +63,7 @@ app.get("/adminDashboard", (req, res) => {
 });
 
 app.get("/userDashboard", (req, res) => {
-  res.render("userDashboard");
+  res.render("user_dashboard");
 });
 
 app.get("/bookingInfo", (req, res) => {
@@ -75,8 +75,8 @@ app.get("/payment", (req, res) => {
 });
 
 // Adding Accomodation Route
-app.get("/accomodationlist", (req, res) => {
-  res.render("accomodationlist");
+app.get("/add-accomodation", (req, res) => {
+  res.render("add-accomodation");
 });
 // Fecting Accomodation Route
 app.get("/fectingdashboard", (req, res) => {

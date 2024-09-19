@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Add Accommodation</title>
+    <style>
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-control,
+        .form-control-file {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .form-control:focus,
+        .form-control-file:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .img-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .img-preview img {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 5px;
+        }
+
+        .form-check-label {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Add New Accommodation</h2>
+        <form method="post" action="/add-accommodation" id="addAccommodationForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Accommodation Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" class="form-control" id="location" name="location" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Price per Night ($)</label>
+                <input type="number" class="form-control" id="price" name="price" required min="0">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="images">Upload Images</label>
+                <input type="file" class="form-control-file" id="images" name="images" multiple accept="image/*">
+                <small class="form-text text-muted">You can upload multiple images. Max file size: 5MB each.</small>
+                <div class="img-preview mt-3" id="imgPreview"></div>
+            </div>
+            <div class="form-group">
+                <label for="type">Type of Accommodation</label>
+                <select class="form-control" id="type" name="type" required>
+                    <option value="">Select Type</option>
+                    <option value="Hotel">Hotel</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Hostel">Hostel</option>
+                    <option value="Guesthouse">Guesthouse</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Amenities</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="wifi" name="amenities[]" value="Wi-Fi">
+                    <label class="form-check-label" for="wifi">Wi-Fi</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="pool" name="amenities[]" value="Pool">
+                    <label class="form-check-label" for="pool">Pool</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="breakfast" name="amenities[]" value="Breakfast">
+                    <label class="form-check-label" for="breakfast">Breakfast</label>
+                </div>
+                <!-- Add more amenities as needed -->
+            </div>
+            <!-- <div class="form-group">
+                <label for="checkInTime">Check-In Time</label>
+                <input type="time" class="form-control" id="checkInTime" name="checkInTime" required>
+            </div>
+            <div class="form-group">
+                <label for="checkOutTime">Check-Out Time</label>
+                <input type="time" class="form-control" id="checkOutTime" name="checkOutTime" required>
+            </div>
+            <div class="form-group">
+                <label for="rating">Rating (1-5 Stars)</label>
+                <input type="number" class="form-control" id="rating" name="rating" min="1" max="5">
+            </div> -->
+            <div class="form-group">
+                <label for="contact">Contact Information</label>
+                <input type="text" class="form-control" id="contact" name="contact">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('images').addEventListener('change', function (event) {
+            const preview = document.getElementById('imgPreview');
+            preview.innerHTML = ''; // Clear existing previews
+            const files = event.target.files;
+
+            for (const file of files) {
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        preview.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        document.getElementById('addAccommodationForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch('/add-accommodation', { // Make sure this matches your backend route
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => alert('Accommodation added successfully!'))
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+
+</html>

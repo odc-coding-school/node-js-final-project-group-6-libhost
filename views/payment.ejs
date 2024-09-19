@@ -9,31 +9,64 @@
         body {
             background-color: #FFFBE7; /* Light yellow background */
             color: #333;
+            font-family: Arial, sans-serif;
         }
         .header {
             background-color: #FFE9B5; /* Lighter yellow header */
-            padding: 10px 0;
+            padding: 15px 0;
             text-align: center;
         }
+        .header img {
+            width: 120px;
+        }
         .container {
-            padding: 20px;
+            padding: 30px;
             margin-top: 20px;
         }
         .btn-custom {
             background-color: #F5C469; /* Custom button color */
             color: #FFF;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 20px;
             margin-top: 10px;
+            border-radius: 5px;
+        }
+        .btn-custom:hover {
+            background-color: #e0a800;
         }
         .btn-cancel {
             background-color: #ccc;
+            color: #333;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 20px;
             margin-top: 10px;
+            border-radius: 5px;
+        }
+        .btn-cancel:hover {
+            background-color: #b3b3b3;
         }
         .payment-details, .card-details {
-            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .payment-details p, .card-details p {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #F5C469;
+            box-shadow: 0 0 0 0.2rem rgba(245, 196, 105, 0.25);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
         }
     </style>
 </head>
@@ -42,22 +75,22 @@
         <img src="images/logo.png" alt="StayLib Logo">
     </div>
 
-    <h2 style="text-align: center;">Payment</h2>
-        <p style="text-align: center;">Kindly follow the instructions below</p>
+    <h2 class="text-center mt-4">Payment</h2>
+    <p class="text-center">Kindly follow the instructions below</p>
 
     <div class="container">
         <div class="row">
             <div class="col-md-6 payment-details">
-                <p><strong>Transfer LankaStay:</strong></p>
-                <p>2 Days at Blue Origin Fams,<br>Galle, Sri Lanka</p>
-                <p><strong>Total: $400 USD</strong></p>
-                <p><strong>Initial Payment: $200</strong></p>
+                <h5>Transfer Details:</h5>
+                <p><strong>Hotel:</strong> Blue Origin Fams<br>Galle, Sri Lanka</p>
+                <p><strong>Total Amount:</strong> $400 USD</p>
+                <p><strong>Initial Payment:</strong> $200 USD</p>
             </div>
             <div class="col-md-6 card-details">
                 <form>
                     <div class="form-group">
                         <label for="cardNumber">Card Number</label>
-                        <input type="text" class="form-control" id="cardNumber" placeholder="Payment card number">
+                        <input type="text" class="form-control" id="cardNumber" placeholder="Enter your card number">
                     </div>
                     <div class="form-group">
                         <label for="bank">Bank</label>
@@ -70,11 +103,11 @@
                     </div>
                     <div class="form-group">
                         <label for="expDate">Exp Date</label>
-                        <input type="text" class="form-control" id="expDate" placeholder="Validation date">
+                        <input type="text" class="form-control" id="expDate" placeholder="MM/YY">
                     </div>
                     <div class="form-group">
                         <label for="cvv">CVV</label>
-                        <input type="text" class="form-control" id="cvv" placeholder="Beside the card">
+                        <input type="text" class="form-control" id="cvv" placeholder="Enter CVV">
                     </div>
                     <button type="submit" class="btn btn-custom">Pay Now</button>
                     <button type="button" class="btn btn-cancel">Cancel</button>
