@@ -2,18 +2,20 @@ body {
     margin: 0;
     padding: 0;
   }
-  
-  h1 {
+    
+  p {
     text-align: center;
-    margin: 20px 0;
+    margin-top: 75px ; /* Reduced margin for h1 */
+    margin-right: 450px;
     font-size: 2rem;
+    margin-bottom: 0;
   }
   
-  /* Flex container for the search bar and other elements */
+  /* Adjusted padding for the search-and-add-container to reduce spacing */
   .search-and-add-container {
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 10px; /* Reduced padding */
     gap: 10px; /* Space between elements */
     width: calc(100% - 250px); /* Adjust width to avoid hitting the sidebar */
     margin-left: 150px; /* Add margin to account for the sidebar width */
@@ -28,7 +30,7 @@ body {
   }
   
   .search-container input {
-    width: 100%;
+    width: 125%;
     padding: 10px 10px 10px 40px; /* Space for the icon */
     border-radius: 10px;
     border: 1px solid #ccc;
@@ -46,7 +48,7 @@ body {
   }
   
   .add-user-btn {
-    margin-left: 2px; /* Space between search bar and button */
+    margin-left: 100px; /* Space between search bar and button */
   }
   
   .add-user-btn button {
@@ -100,4 +102,41 @@ body {
       text-align: right;
     }
   }
-  
+  .table-header {
+    background-color: white;
+    width: 100%;
+    padding: 15px; /* Add some padding for better aesthetics */
+    text-align: center; /* Center the text */
+    border-bottom: 1px solid #ccc; /* Optional: Add a border for a cleaner look */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.table-header h3 {
+    margin-right:600px ; /* Remove any default margin from the header */
+    margin-bottom: 0;
+    font-size: 1.5rem; /* Adjust font size as needed */
+    color: #333; /* Text color for better readability */
+}
+.table-container {
+  margin-left: 250px; /* Adjust based on sidebar width */
+  padding: 20px;
+  background-color: #fff; /* Optional to make the table stand out */
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+/* Highlight only the text in the Button Title column */
+.highlight-text {
+  background-color: #ffff99; /* Light yellow background for the text */
+  font-weight: bold;
+  padding: 2px 5px; /* Optional: Add some padding around the text */
+  color: #333; /* Text color for readability */
+  border-radius: 3px; /* Optional: Rounded edges for the highlight */
+}
