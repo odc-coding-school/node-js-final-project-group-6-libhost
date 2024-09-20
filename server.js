@@ -102,7 +102,8 @@ db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS roles(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    role VARCHAR(250)
+    role_name VARCHAR(250),
+    description VARCHAR(250)
   )`);
 });
 
@@ -118,15 +119,26 @@ app.get("/explore", (req, res) =>
   res.render("index", { title: "Explore || Page" })
 );
 app.get("/adminDashboard", (req, res) => res.render("adminDashboard"));
-app.get("/userDashboard", (req, res) => res.render("user_dashboard"));
-app.get("/dashboard", (req, res) =>
-  res.render("dashboard", { title: "User Dashboard || Page" })
-);
+app.get("/userDashboard", (req, res) => res.render("userDashboard"));
+// app.get("/dashboard", (req, res) =>
+//   res.render("dashboard", { title: "User Dashboard || Page" })
+// );
 
 // Signup
-app.get("/signup", (req, res) =>
-  res.render("signup", { title: "SignUp || Page" })
-);
+app.get("/signup", (req, res) => {
+  db.all(
+    `SELECT * FROM roles WHERE role_name="Host" OR role_name="Guest"`,
+    [],
+    (err, roles) => {
+      if (err) {
+        console.error(err.message);
+        return res.redirect("/signup");
+      }
+      console.log(roles);
+      res.render("signup.ejs", { title: "SignUp || Page", roles: roles });
+    }
+  );
+});
 app.post("/signup", upload.single("photo"), async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const userInfo = {
@@ -154,7 +166,9 @@ app.post("/signup", upload.single("photo"), async (req, res) => {
     ],
     (err) => {
       if (err) return res.status(500).send("Server Error");
-      res.redirect("/login");
+      else {
+        res.redirect("/login");
+      }
     }
   );
 });
@@ -178,9 +192,20 @@ app.post("/login", (req, res) => {
           if (result) {
             req.session.userInfo = row;
             userInfo = req.session.userInfo;
-            console.log("User Information Login Route:", userInfo);
-            console.log("Login Successfully");
-            return res.redirect("/dashboard");
+
+            if (userInfo.role == "Admin") {
+              console.log("User Information Login Route:", userInfo);
+              console.log("Login Successfully as an Admin");
+              return res.redirect("/adminDashboard");
+            } else if (userInfo.role == "Host") {
+              console.log("User Information Login Route:", userInfo);
+              console.log("Login Successfully as Host");
+              return res.redirect("/hostDashboard");
+            } else {
+              console.log("User Information Login Route:", userInfo);
+              console.log("Login Successfully as a Guest");
+              return res.redirect("/guestDashboard");
+            }
           } else {
             console.log("Wrong Credential");
             res.redirect("/login");
