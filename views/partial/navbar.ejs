@@ -1,36 +1,30 @@
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top" style="height: 70px;">
   <div class="container-fluid">
     <!-- Greeting Section -->
     <div class="greeting">
-      <h5 class="mb-0">Hello, Hotel Owner</h5>
+      <h5 class="mb-0">Hello, Admin</h5>
       <p class="text-muted mb-0">Have a nice day</p>
     </div>
 
-    <!-- User Info Section -->
-    <div class="user-info d-flex align-items-center">
+    <!-- Spacer to align content to the right -->
+    <div class="ms-auto d-flex align-items-center">
       <!-- Notifications -->
-      <div class="notification me-3">
+      <div class="notification me-3 position-relative">
         <i class="fas fa-bell fa-lg"></i>
-        <span class="badge bg-danger">3</span> <!-- Example notification count -->
+        <span class="badge bg-danger position-absolute top-0 start-100 translate-middle p-1 rounded-circle">3</span>
       </div>
 
       <!-- Divider -->
       <div class="divider me-3" style="width: 1px; height: 30px; background-color: #ddd;"></div>
 
       <!-- User Dropdown -->
-      <div class="dropdown user-dropdown">
-<<<<<<< HEAD
+      <div class="dropdown">
         <button class="btn dropdown-toggle d-flex align-items-center" type="button" id="dropdownMenuButton"
           data-bs-toggle="dropdown" aria-expanded="false">
           <!-- User Image -->
           <div class="user-image me-2">
-            <img src="vacation.jfif" alt="User Image" class="rounded-circle" style="width: 40px; height: 40px;">
-=======
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-          <div class="user-image">
-            <img src="images/admin1.jpg" alt="User Image">
->>>>>>> 64bcbb3d4446d5dfda81604533525a227fd4644e
+            <img src="uplo" alt="User Image" class="rounded-circle" style="width: 40px; height: 40px;">
           </div>
           <!-- User Details -->
           <div class="user-details text-start">
@@ -47,4 +41,3 @@
     </div>
   </div>
 </nav>
-<!-- Navbar -->

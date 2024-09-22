@@ -118,12 +118,50 @@ app.get("/about", (req, res) =>
 app.get("/explore", (req, res) =>
   res.render("index", { title: "Explore || Page" })
 );
-app.get("/adminDashboard", (req, res) => res.render("adminDashboard"));
-app.get("/userDashboard", (req, res) => res.render("userDashboard"));
-// app.get("/dashboard", (req, res) =>
-//   res.render("dashboard", { title: "User Dashboard || Page" })
-// );
-
+app.get("/admin-dashboard", (req, res) => {
+  db.all(`SELECT * FROM user`, [], (err, users) => {
+    if (err) {
+      console.error(err.message);
+      return res.redirect("/admin-dashboard");
+    }
+    db.all(`SELECT * FROM accommodations`, [], (err, accommodations) => {
+      if (err) {
+        console.error(err.message);
+        return res.redirect("/admin-dashboard");
+      }
+      res.render("adminDashboard", {
+        users: users,
+        accommodations: accommodations,
+      });
+    });
+  });
+});
+app.get("/manage-user", (req, res) => {
+  db.all(`SELECT * FROM user`, [], (err, users) => {
+    if (err) {
+      console.error(err.message);
+      return res.redirect("/admin-dashboard");
+    }
+    res.render("adminManageUser", { users: users });
+  });
+});
+app.get("/manage-accommodation", (req, res) => {
+  db.all(`SELECT * FROM accommodations`, [], (err, accommodations) => {
+    if (err) {
+      console.error(err.message);
+      return res.redirect("/manage-accommodation");
+    }
+    res.render("adminManageAccommodations", { accommodations: accommodations });
+  });
+});
+app.get("/guest-dashboard", (req, res) =>
+  res.render("userDashboard", {
+    title: "User Dashboard",
+    userInfo: userInfo,
+  })
+);
+app.get("/hostDashboard", (req, res) => res.render("hostDashboard"));
+console.log(userInfo);
 // Signup
 app.get("/signup", (req, res) => {
   db.all(
