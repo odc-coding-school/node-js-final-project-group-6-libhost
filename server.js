@@ -288,6 +288,59 @@ app.post("/add-user", upload.single("photo"), async (req, res) => {
     }
   );
 });
+// Accommodation Routes
+app.get("/admin-add-accommodation", isAuthenticated, (req, res) =>
+  res.render("admin-add-accommodation")
+);
+app.post(
+  "/admin-add-accommodation",
+  isAuthenticated,
+  upload.array("images"),
+  (req, res) => {
+    const {
+      name,
+      location,
+      price,
+      description,
+      bedrooms,
+      bathrooms,
+      kitchen,
+      living_room,
+      dinning_room,
+    } = req.body;
+    const images = JSON.stringify(req.files.map((file) => file.path)); // Store as JSON array
+    const userId = req.session.userInfo.id;
+    db.run(
+      `INSERT INTO accommodations (name, location, price, description, images, bedrooms, bathrooms, kitchen, living_room, dinning_room, user_id) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        name,
+        location,
+        price,
+        description,
+        images,
+        bedrooms,
+        bathrooms,
+        kitchen,
+        living_room,
+        dinning_room,
+        userId,
+      ],
+      (err) => {
+        if (err)
+          return res
+            .status(500)
+            .json({ success: false, message: "Server Error" });
+        // res.json({
+        //   success: true,
+        //   message: "Accommodation added successfully!",
+        // });
+        res.redirect("/manage-accommodation");
+      }
+    );
+  }
+);
+
 app.get("/guest-dashboard", isAuthenticated, (req, res) =>
   res.render("userDashboard", {
     title: "User Dashboard",
@@ -303,6 +356,7 @@ app.get("/host-manage-property", isAuthenticated, (req, res) => {
   currentuser(req);
   res.render("hostManageProperty", { currentUser: currentUser });
 });
+
 console.log(userInfo);
 // Signup
 app.get("/signup", (req, res) => {
@@ -495,9 +549,9 @@ app.get("/forget_password", (req, res) =>
   res.render("forget_password", { title: "Forget Password || Page" })
 );
 
-app.get('/fectingdashboard', (req, res) => {
-  res.render("fectingdashboard")
-})
+app.get("/fectingdashboard", (req, res) => {
+  res.render("fectingdashboard");
+});
 
 // Start Server
 app.listen(port, () => {

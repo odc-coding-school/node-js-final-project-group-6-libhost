@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Final Project - ODC Full-Stack Web Development",
   "main": "server.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "teststart": "node server.js",
     "start": "node server.js",
