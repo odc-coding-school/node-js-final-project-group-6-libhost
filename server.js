@@ -363,6 +363,10 @@ app.get("/forget_password", (req, res) =>
   res.render("forget_password", { title: "Forget Password || Page" })
 );
 
+app.get('/fectingdashboard', (req, res) => {
+  res.render("fectingdashboard")
+})
+
 // Start Server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
