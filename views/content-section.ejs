@@ -2,61 +2,76 @@
   <div class="container text-center" id="content-section">
     <p class="text-dark text-capitalize lead">discover hidden gems across liberia</p>
     <div class="row">
+
       <% accommodations.forEach((accommodation, index)=> { %>
-        <div class="col-md-4 mb-3">
-          <div class="card shadow-sm">
-            <!-- Price Badge -->
-            <div class="price-tag text-white px-2 py-1"
-              style="position: absolute; top: 10px; left: 10px; background-color: #d7a20d;">
-              <i class="fa fa-dollar"></i>
-              <%= accommodation.price %>
-            </div>
-
-            <!-- Carousel -->
-            <div id="carousel<%= index %>" class="carousel slide" data-bs-ride="carousel">
-              <div class="carousel-inner">
-                <% accommodation.images.forEach((image, imgIndex)=> { %>
-                  <div class="carousel-item <%= imgIndex === 0 ? 'active' : '' %>">
-                    <img src="<%= image %>" alt="Property Image" class="card-img-top img-fluid d-block w-100"
-                      style="height: 250px; object-fit: cover;">
-                  </div>
-                  <% }) %>
+        <a href="/property-detail/<%= accommodation.id %>" class="text-decoration-none">
+          <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+              <!-- Price Badge -->
+              <div class="price-tag text-white px-2 py-1"
+                style="position: absolute; top: 10px; left: 10px; background-color: #d7a20d;">
+                <i class="fa fa-dollar"></i>
+                <%= accommodation.price %>
               </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#carousel<%= index %>"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carousel<%= index %>"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-              </button>
-            </div>
+              <!-- Carousel -->
+              <div id="carousel<%= index %>" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                  <% accommodation.images.forEach((image, imgIndex)=> { %>
+                    <div class="carousel-item <%= imgIndex === 0 ? 'active' : '' %>">
+                      <img src="<%= image %>" alt="Property Image" class="card-img-top img-fluid d-block w-100"
+                        style="height: 250px; object-fit: cover;">
+                    </div>
+                    <% }) %>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel<%= index %>"
+                  data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel<%= index %>"
+                  data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
 
-            <!-- Card Body -->
-            <div class="card-body">
-              <!-- Accommodation Name and Location -->
-              <h5 class="card-title text-capitalize">
-                <i class="fa fa-map-marker"></i>
-                <%= accommodation.name %> || <%= accommodation.location %>
-              </h5>
+              <!-- Card Body -->
+              <div class="card-body">
+                <div class="text-start">
+                  <!-- Accommodation Name and Location -->
+                  <h5 class="card-title text-capitalize">
 
-              <!-- Bedrooms and Rating -->
-              <p class="card-text text-capitalize">
-                <i class="fa fa-bed"></i> 24 bedrooms
-                <span class="float-end" style="background-color: transparent;">
-                  <i class="fa fa-star text-warning"></i>
-                  <i class="fa fa-star text-warning"></i>
-                  <i class="fa fa-star text-warning"></i>
-                  <i class="fa fa-star text-warning"></i>
-                  <i class="fa fa-star text-muted"></i>
-                </span>
-              </p>
+                    <%= accommodation.name %>
+
+                  </h5>
+                  <h5>
+                    <i class="fa fa-map-marker"></i>
+                    <%= accommodation.location %>
+                  </h5>
+                </div>
+
+                <p>
+                  <%= accommodation.full_name %>
+                </p>
+
+                <!-- Bedrooms and Rating -->
+                <p class="card-text text-capitalize">
+                  <i class="fa fa-bed"></i>
+                  <%= accommodation.bedrooms %> bedrooms
+                    <span class="float-end" style="background-color: transparent;">
+                      <i class="fa fa-star text-warning"></i>
+                      <i class="fa fa-star text-warning"></i>
+                      <i class="fa fa-star text-warning"></i>
+                      <i class="fa fa-star text-warning"></i>
+                      <i class="fa fa-star text-muted"></i>
+                    </span>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </a>
         <% }) %>
+
     </div>
 
     <script src="js/search.js"></script>

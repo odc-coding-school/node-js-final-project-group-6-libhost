@@ -98,47 +98,63 @@
                 <div class="img-preview mt-3" id="imgPreview"></div>
             </div>
             <div class="form-group">
-                <label for="type">Type of Accommodation</label>
-                <select class="form-control" id="type" name="type" required>
-                    <option value="">Select Type</option>
-                    <option value="Hotel">Hotel</option>
-                    <option value="Apartment">Apartment</option>
-                    <option value="Hostel">Hostel</option>
-                    <option value="Guesthouse">Guesthouse</option>
-                </select>
+                <label for="bedrooms">Number of Bedrooms</label>
+                <input type="number" class="form-control" id="bedrooms" name="bedrooms" required min="0">
             </div>
             <div class="form-group">
-                <label>Amenities</label>
+                <label for="bathrooms">Number of Bathrooms</label>
+                <input type="number" class="form-control" id="bathrooms" name="bathrooms" required min="0">
+            </div>
+            <div class="form-group">
+                <label for="kitchen">Kitchen Available</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="wifi" name="amenities[]" value="Wi-Fi">
-                    <label class="form-check-label" for="wifi">Wi-Fi</label>
+                    <input class="form-check-input" type="radio" id="kitchen_yes" name="kitchen" value="1" required>
+                    <label class="form-check-label" for="kitchen_yes">Yes</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="pool" name="amenities[]" value="Pool">
-                    <label class="form-check-label" for="pool">Pool</label>
+                    <input class="form-check-input" type="radio" id="kitchen_no" name="kitchen" value="0" required>
+                    <label class="form-check-label" for="kitchen_no">No</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="living_room">Living Room Available</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="living_room_yes" name="living_room" value="1"
+                        required>
+                    <label class="form-check-label" for="living_room_yes">Yes</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="breakfast" name="amenities[]" value="Breakfast">
-                    <label class="form-check-label" for="breakfast">Breakfast</label>
+                    <input class="form-check-input" type="radio" id="living_room_no" name="living_room" value="0"
+                        required>
+                    <label class="form-check-label" for="living_room_no">No</label>
                 </div>
-                <!-- Add more amenities as needed -->
+            </div>
+            <div class="form-group">
+                <label for="dinning_room">Dining Room Available</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="dinning_room_yes" name="dinning_room" value="1"
+                        required>
+                    <label class="form-check-label" for="dinning_room_yes">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="dinning_room_no" name="dinning_room" value="0"
+                        required>
+                    <label class="form-check-label" for="dinning_room_no">No</label>
+                </div>
             </div>
             <!-- <div class="form-group">
-                <label for="checkInTime">Check-In Time</label>
-                <input type="time" class="form-control" id="checkInTime" name="checkInTime" required>
-            </div>
-            <div class="form-group">
-                <label for="checkOutTime">Check-Out Time</label>
-                <input type="time" class="form-control" id="checkOutTime" name="checkOutTime" required>
-            </div>
-            <div class="form-group">
-                <label for="rating">Rating (1-5 Stars)</label>
-                <input type="number" class="form-control" id="rating" name="rating" min="1" max="5">
+                <label for="availability">Availability</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="available_yes" name="availability" value="1"
+                        required>
+                    <label class="form-check-label" for="available_yes">Available</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="available_no" name="availability" value="0"
+                        required>
+                    <label class="form-check-label" for="available_no">Not Available</label>
+                </div>
             </div> -->
-            <div class="form-group">
-                <label for="contact">Contact Information</label>
-                <input type="text" class="form-control" id="contact" name="contact">
-            </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
@@ -164,17 +180,17 @@
             }
         });
 
-        document.getElementById('addAccommodationForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            fetch('/add-accommodation', { // Make sure this matches your backend route
-                method: 'POST',
-                body: formData,
-            })
-                .then(response => response.json())
-                .then(data => alert('Accommodation added successfully!'))
-                .catch(error => console.error('Error:', error));
-        });
+        // document.getElementById('addAccommodationForm').addEventListener('submit', function (event) {
+        //     event.preventDefault();
+        //     const formData = new FormData(this);
+        //     fetch('/add-accommodation', { // Make sure this matches your backend route
+        //         method: 'POST',
+        //         body: formData,
+        //     })
+        //         .then(response => response.json())
+        //         .then(data => alert('Accommodation added successfully!'))
+        //         .catch(error => console.error('Error:', error));
+        // });
     </script>
 </body>
 

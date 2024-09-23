@@ -84,12 +84,21 @@ db.serialize(() => {
   db.run(
     `CREATE TABLE IF NOT EXISTS accommodations (
       id INTEGER PRIMARY KEY AUTOINCREMENT, 
-      name TEXT, 
-      location TEXT, 
-      price REAL, 
-      description TEXT, 
+      name VARCHAR(255), 
+      location VARCHAR(255), 
+      price INT, 
+      description VARCHAR(255), 
       images TEXT,
-      user_id INT
+      bedrooms INT,
+      bathrooms INT,
+      kitchen BOOLEAN,
+      living_room BOOLEAN,
+      dinning_room BOOLEAN,
+      availability BOOLEAN DEFAULT 1,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      user_id INT,
+      FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
     )`
   );
 
@@ -117,6 +126,73 @@ db.serialize(() => {
 
 // Routes
 const homeProperty = (res) => {
+  db.all(
+    `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture FROM accommodations 
+     JOIN user ON accommodations.user_id = user.id`,
+    [],
+    (err, accommodations) => {
+      if (err) {
+        console.error(err.message);
+        return res.redirect("/home");
+      }
+
+      // Parse the JSON images before rendering
+      accommodations.forEach((accommodation) => {
+        accommodation.images = JSON.parse(accommodation.images);
+      });
+      console.log("sample", accommodations);
+      res.render("index", {
+        title: "Home || Page",
+        accommodations,
+      });
+    }
+  );
+};
+// Home, About, Explore, and Dashboards
+
+app.get("/home", (req, res) => {
+  homeProperty(res);
+});
+app.get("/", (req, res) => {
+  homeProperty(res);
+});
+app.get("/about", (req, res) => {
+  res.render("about", { title: "About" });
+});
+app.get("/property-detail/:id", (req, res) => {
+  const propertyId = req.params.id;
+
+  db.get(
+    `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture
+     FROM accommodations
+     JOIN user ON accommodations.user_id = user.id
+     WHERE accommodations.id = ?`,
+    [propertyId],
+    (err, accommodation) => {
+      if (err) {
+        return res.status(500).send("Error retrieving accommodation details");
+      }
+
+      if (!accommodation) {
+        return res.status(404).send("Accommod5ation not found");
+      }
+
+      // Parse the JSON images before rendering
+      accommodation.images = JSON.parse(accommodation.images);
+
+      console.log(accommodation);
+
+      // Render the accommodation detail page
+      res.render("propertydetail", {
+        title: "Property Detail",
+        property: accommodation, // Passing the single property object
+      });
+    }
+  );
+});
+
+// res.render("propertydetail", { title: "Property Detail" });
+app.get("/explore", (req, res) => {
   db.all(`SELECT * FROM accommodations`, [], (err, accommodations) => {
     if (err) {
       console.error(err.message);
@@ -127,22 +203,12 @@ const homeProperty = (res) => {
     accommodations.forEach((accommodation) => {
       accommodation.images = JSON.parse(accommodation.images);
     });
-    res.render("index", {
-      title: "Home || Page",
+    res.render("explore", {
+      title: "Explore || Page",
       accommodations,
     });
   });
-};
-// Home, About, Explore, and Dashboards
-
-app.get("/home", (req, res) => {
-  homeProperty(res);
 });
-app.get("/", (req, res) => {
-  homeProperty(res);
-});
-app.get("/about", (req, res) => homeProperty(res));
-app.get("/explore", (req, res) => homeProperty(res));
 app.get("/admin-dashboard", isAuthenticated, (req, res) => {
   db.all(`SELECT * FROM user`, [], (err, users) => {
     if (err) {
@@ -178,6 +244,49 @@ app.get("/manage-accommodation", isAuthenticated, (req, res) => {
     }
     res.render("adminManageAccommodations", { accommodations: accommodations });
   });
+});
+app.get("/add-user", (req, res) => {
+  db.all(`SELECT * FROM roles`, [], (err, roles) => {
+    if (err) {
+      console.error(err.message);
+      return res.redirect("/manage-accommodation");
+    }
+    console.log(roles);
+    res.render("add-user", { title: "Add User || Page", roles: roles });
+  });
+});
+app.post("/add-user", upload.single("photo"), async (req, res) => {
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+  const userInfo = {
+    fullname: req.body.fullname,
+    email: req.body.email,
+    phonenumber: req.body.phonenumber,
+    username: req.body.username,
+    role: req.body.role,
+    photo: req.file ? req.file.path : null,
+    password: hashedPassword,
+  };
+  console.log(userInfo);
+
+  db.run(
+    `INSERT INTO user (full_name,email,user_name,phone_number,role,password,profile_picture) 
+     VALUES (?,?,?,?,?,?,?)`,
+    [
+      userInfo.fullname,
+      userInfo.email,
+      userInfo.username,
+      userInfo.phonenumber,
+      userInfo.role,
+      userInfo.password,
+      userInfo.photo,
+    ],
+    (err) => {
+      if (err) return res.status(500).send("Server Error");
+      else {
+        res.redirect("/manage-user");
+      }
+    }
+  );
 });
 app.get("/guest-dashboard", isAuthenticated, (req, res) =>
   res.render("userDashboard", {
@@ -296,22 +405,45 @@ app.post(
   isAuthenticated,
   upload.array("images"),
   (req, res) => {
-    const { name, location, price, description } = req.body;
+    const {
+      name,
+      location,
+      price,
+      description,
+      bedrooms,
+      bathrooms,
+      kitchen,
+      living_room,
+      dinning_room,
+    } = req.body;
     const images = JSON.stringify(req.files.map((file) => file.path)); // Store as JSON array
+    const userId = req.session.userInfo.id;
     db.run(
-      `INSERT INTO accommodations (name, location, price, description, images) 
-     VALUES (?, ?, ?, ?, ?)`,
-      [name, location, price, description, images],
+      `INSERT INTO accommodations (name, location, price, description, images, bedrooms, bathrooms, kitchen, living_room, dinning_room, user_id) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        name,
+        location,
+        price,
+        description,
+        images,
+        bedrooms,
+        bathrooms,
+        kitchen,
+        living_room,
+        dinning_room,
+        userId,
+      ],
       (err) => {
         if (err)
           return res
             .status(500)
             .json({ success: false, message: "Server Error" });
-        res.json({
-          success: true,
-          message: "Accommodation added successfully!",
-        });
-        // res.redirect("/host-manage-property");
+        // res.json({
+        //   success: true,
+        //   message: "Accommodation added successfully!",
+        // });
+        res.redirect("/host-manage-property");
       }
     );
   }
