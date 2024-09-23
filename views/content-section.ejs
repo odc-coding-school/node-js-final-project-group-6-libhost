@@ -1,174 +1,64 @@
 <body>
-  <div class="container justified-center" id="content-section">
-    <p class="text-dark text-capitalize text-x-lg lead">discover hidden gems across liberia</p>
+  <div class="container text-center" id="content-section">
+    <p class="text-dark text-capitalize lead">discover hidden gems across liberia</p>
     <div class="row">
+      <% accommodations.forEach((accommodation, index)=> { %>
+        <div class="col-md-4 mb-3">
+          <div class="card shadow-sm">
+            <!-- Price Badge -->
+            <div class="price-tag text-white px-2 py-1"
+              style="position: absolute; top: 10px; left: 10px; background-color: #d7a20d;">
+              <i class="fa fa-dollar"></i>
+              <%= accommodation.price %>
+            </div>
 
-      <% accommodations.forEach(accommodation=> { %>
-        <div class="col-sm">
-          <div class="card" id="card1">
-            <!--                 <i class="fa fa-heart"></i>-->
-            <span>
-              <p><i class="fa fa-dollar"></i>
-                <%= accommodation.price %>
+            <!-- Carousel -->
+            <div id="carousel<%= index %>" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                <% accommodation.images.forEach((image, imgIndex)=> { %>
+                  <div class="carousel-item <%= imgIndex === 0 ? 'active' : '' %>">
+                    <img src="<%= image %>" alt="Property Image" class="card-img-top img-fluid d-block w-100"
+                      style="height: 250px; object-fit: cover;">
+                  </div>
+                  <% }) %>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carousel<%= index %>"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carousel<%= index %>"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body">
+              <!-- Accommodation Name and Location -->
+              <h5 class="card-title text-capitalize">
+                <i class="fa fa-map-marker"></i>
+                <%= accommodation.name %> || <%= accommodation.location %>
+              </h5>
+
+              <!-- Bedrooms and Rating -->
+              <p class="card-text text-capitalize">
+                <i class="fa fa-bed"></i> 24 bedrooms
+                <span class="float-end" style="background-color: transparent;">
+                  <i class="fa fa-star text-warning"></i>
+                  <i class="fa fa-star text-warning"></i>
+                  <i class="fa fa-star text-warning"></i>
+                  <i class="fa fa-star text-warning"></i>
+                  <i class="fa fa-star text-muted"></i>
+                </span>
               </p>
-            </span>
-          </div>
-          <div class="desc fixed shadow">
-            <ul class="list-unstyle text-left">
-              <li>
-                <p class="text-capitalize text-bold text-left">
-                  <i class="fa fa-map-marker"></i>
-                  <%= accommodation.name %>
-                    || <%= accommodation.location %>
-                </p>
-              <li>
-                <p class="text-capitalize text-bold text-left">
-                  <i class="fa fa-bed"></i> 24 bedrooms <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                </p>
-
-              </li>
-            </ul>
+            </div>
           </div>
         </div>
         <% }) %>
-          <!-- <div class="col-sm">
-        <div class="card" id="card2">
-          <span>
-            <p><i class="fa fa-dollar"></i>25 per night</p>
-          </span>
-        </div>
-        <div class="desc fixed">
-          <ul class="list-unstyle text-left">
-            <li>
-              <p class="text-capitalize text-bold text-left">
-                <i class="fa fa-map-marker"></i> corona hotel || 24 street sinkor
-              </p>
-              
-            <li>
-              <p class="text-capitalize text-bold text-left">
-                <i class="fa fa-bed"></i> 24 bedrooms <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-              </p>
+    </div>
 
-            </li>
-          </ul>
-        </div>
-      </div> -->
-          <!-- <div class="col-sm">
-        <div class="card" id="card3">
-                   <i class="fa fa-heart"></i>
-          <span>
-            <p><i class="fa fa-dollar"></i>15 per night</p>
-          </span>
-        </div>
-        <div class="desc fixed">
-          <ul class="list-unstyle text-left">
-            <li>
-              <p class="text-capitalize text-bold text-left">
-                <i class="fa fa-map-marker"></i> corona hotel || 24 street sinkor
-              </p>
-
-            <li>
-              <p class="text-capitalize text-bold text-left">
-                <i class="fa fa-bed"></i> 24 bedrooms <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-
-            </li>
-          </ul>
-        </div>
-      </div> -->
-
-          <!-- second set of cards
-
-      <div class="container" id="content-section">
-        <div class="row no-gutters">
-          <div class="col-sm">
-
-            <div class="card" id="card4">
-              <span>
-                <p><i class="fa fa-dollar"></i>75 per night</p>
-              </span>
-            </div>
-            <div class="desc fixed">
-              <ul class="list-unstyle text-left">
-                <li>
-                  <p class="text-capitalize text-bold text-left">
-                    <i class="fa fa-map-marker"></i> corona hotel || 24 street sinkor
-                  </p>
-
-                <li>
-                  <p class="text-capitalize text-bold text-left">
-                    <i class="fa fa-bed"></i> 24 bedrooms <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                  </p>
-
-                </li>
-              </ul>
-            </div>
-
-          </div>
-          <div class="col-sm">
-            <div class="card" id="card5">
-              <span>
-                <p><i class="fa fa-dollar"></i>60 per night</p>
-              </span>
-            </div>
-            <div class="desc fixed">
-              <ul class="list-unstyle text-left">
-                <li>
-                  <p class="text-capitalize text-bold text-left">
-                    <i class="fa fa-map-marker"></i> corona hotel || 24 street sinkor
-                  </p>
-
-                <li>
-                  <p class="text-capitalize text-bold text-left">
-                    <i class="fa fa-bed"></i> 24 bedrooms <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                  </p>
-
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-sm">
-            <div class="card" id="card6">
-              <span>
-                <p><i class="fa fa-dollar"></i>10 per night</p>
-              </span>
-            </div>
-            <div class="desc fixed">
-              <ul class="list-unstyle text-left">
-                <li>
-                  <p class="text-capitalize text-bold text-left">
-                    <i class="fa fa-map-marker"></i> corona hotel || 24 street sinkor
-                  </p>
-
-                <li>
-                  <p class="text-capitalize text-bold text-left">
-                    <i class="fa fa-bed"></i> 24 bedrooms <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-
-                  </p>
-
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-          <!-- </div> -->
-
-          <script src="js/search.js"></script>
+    <script src="js/search.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

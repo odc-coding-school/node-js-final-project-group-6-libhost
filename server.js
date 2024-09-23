@@ -122,9 +122,14 @@ const homeProperty = (res) => {
       console.error(err.message);
       return res.redirect("/home");
     }
+
+    // Parse the JSON images before rendering
+    accommodations.forEach((accommodation) => {
+      accommodation.images = JSON.parse(accommodation.images);
+    });
     res.render("index", {
       title: "Home || Page",
-      accommodations: accommodations,
+      accommodations,
     });
   });
 };
@@ -270,7 +275,7 @@ app.post("/login", (req, res) => {
             } else {
               console.log("User Information Login Route:", userInfo);
               console.log("Login Successfully as a Guest");
-              return res.redirect("/guestDashboard");
+              return res.redirect("/guest-dashboard");
             }
           } else {
             console.log("Wrong Credential");
@@ -292,7 +297,7 @@ app.post(
   upload.array("images"),
   (req, res) => {
     const { name, location, price, description } = req.body;
-    const images = req.files.map((file) => file.path).join(",");
+    const images = JSON.stringify(req.files.map((file) => file.path)); // Store as JSON array
     db.run(
       `INSERT INTO accommodations (name, location, price, description, images) 
      VALUES (?, ?, ?, ?, ?)`,
@@ -306,6 +311,7 @@ app.post(
           success: true,
           message: "Accommodation added successfully!",
         });
+        // res.redirect("/host-manage-property");
       }
     );
   }
