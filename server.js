@@ -34,6 +34,7 @@ app.use(express.static(path.join(__dirname, "views")));
 app.use("/css", express.static(path.join(__dirname, "public/css")));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use("/js", express.static(path.join(__dirname, "public/js")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(
   "/css",
   express.static(path.join(__dirname, "node_modules/bootstrap/dist/css"))
@@ -72,6 +73,12 @@ function isAuthenticated(req, res, next) {
 let userInfo = {};
 let currentUser = {};
 
+const currentuser = (req) => {
+  currentUser = req.session.userInfo;
+};
+
+console.log("User Infomation:", userInfo);
+console.log("Login User Info:", currentUser);
 // Database Table Creation
 db.serialize(() => {
   db.run(
@@ -81,7 +88,8 @@ db.serialize(() => {
       location TEXT, 
       price REAL, 
       description TEXT, 
-      images TEXT
+      images TEXT,
+      user_id INT
     )`
   );
 
@@ -108,17 +116,29 @@ db.serialize(() => {
 });
 
 // Routes
-
+const homeProperty = (res) => {
+  db.all(`SELECT * FROM accommodations`, [], (err, accommodations) => {
+    if (err) {
+      console.error(err.message);
+      return res.redirect("/home");
+    }
+    res.render("index", {
+      title: "Home || Page",
+      accommodations: accommodations,
+    });
+  });
+};
 // Home, About, Explore, and Dashboards
-app.get("/", (req, res) => res.render("index", { title: "Home || Page" }));
-app.get("/home", (req, res) => res.render("index", { title: "Home || Page" }));
-app.get("/about", (req, res) =>
-  res.render("index", { title: "About || Page" })
-);
-app.get("/explore", (req, res) =>
-  res.render("index", { title: "Explore || Page" })
-);
-app.get("/admin-dashboard", (req, res) => {
+
+app.get("/home", (req, res) => {
+  homeProperty(res);
+});
+app.get("/", (req, res) => {
+  homeProperty(res);
+});
+app.get("/about", (req, res) => homeProperty(res));
+app.get("/explore", (req, res) => homeProperty(res));
+app.get("/admin-dashboard", isAuthenticated, (req, res) => {
   db.all(`SELECT * FROM user`, [], (err, users) => {
     if (err) {
       console.error(err.message);
@@ -136,7 +156,7 @@ app.get("/admin-dashboard", (req, res) => {
     });
   });
 });
-app.get("/manage-user", (req, res) => {
+app.get("/manage-user", isAuthenticated, (req, res) => {
   db.all(`SELECT * FROM user`, [], (err, users) => {
     if (err) {
       console.error(err.message);
@@ -145,7 +165,7 @@ app.get("/manage-user", (req, res) => {
     res.render("adminManageUser", { users: users });
   });
 });
-app.get("/manage-accommodation", (req, res) => {
+app.get("/manage-accommodation", isAuthenticated, (req, res) => {
   db.all(`SELECT * FROM accommodations`, [], (err, accommodations) => {
     if (err) {
       console.error(err.message);
@@ -154,13 +174,21 @@ app.get("/manage-accommodation", (req, res) => {
     res.render("adminManageAccommodations", { accommodations: accommodations });
   });
 });
-app.get("/guest-dashboard", (req, res) =>
+app.get("/guest-dashboard", isAuthenticated, (req, res) =>
   res.render("userDashboard", {
     title: "User Dashboard",
     userInfo: userInfo,
   })
 );
-app.get("/hostDashboard", (req, res) => res.render("hostDashboard"));
+app.get("/host-dashboard", isAuthenticated, (req, res) => {
+  // currentUser = req.session.userInfo;
+  currentuser(req);
+  res.render("hostDashboard", { currentUser: currentUser });
+});
+app.get("/host-manage-property", isAuthenticated, (req, res) => {
+  currentuser(req);
+  res.render("hostManageProperty", { currentUser: currentUser });
+});
 console.log(userInfo);
 // Signup
 app.get("/signup", (req, res) => {
@@ -238,7 +266,7 @@ app.post("/login", (req, res) => {
             } else if (userInfo.role == "Host") {
               console.log("User Information Login Route:", userInfo);
               console.log("Login Successfully as Host");
-              return res.redirect("/hostDashboard");
+              return res.redirect("/host-dashboard");
             } else {
               console.log("User Information Login Route:", userInfo);
               console.log("Login Successfully as a Guest");
@@ -283,7 +311,7 @@ app.post(
   }
 );
 
-app.get("/accommodations", isAuthenticated, (req, res) => {
+app.get("/accommodations", (req, res) => {
   db.all("SELECT * FROM accommodations", [], (err, rows) => {
     if (err) return res.status(500).send("Server Error");
     res.json(rows);
