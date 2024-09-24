@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const multer = require("multer");
 const sqlite3 = require("sqlite3").verbose();
 const session = require("express-session");
+const flash = require("connect-flash");
 
 // Initialize App
 const app = express();
@@ -21,6 +22,16 @@ app.use(
     cookie: { secure: false },
   })
 );
+
+// Flash middleware
+app.use(flash());
+
+// Middleware to pass flash messages to all views
+// app.use((req, res, next) => {
+//   res.locals.success_msg = req.flash("success_msg");
+//   res.locals.error_msg = req.flash("error_msg");
+//   next();
+// });
 
 // Middleware Configuration
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -72,6 +83,15 @@ function isAuthenticated(req, res, next) {
 
 function adminAuthenticated(req, res, next) {
   if (req.session.userInfo && req.session.userInfo.role === "Admin") {
+    return next();
+  } else {
+    req.flash("info", "Flash is back!");
+    res.redirect("/login");
+  }
+}
+
+function hostAuthenticated(req, res, next) {
+  if (req.session.userInfo && req.session.userInfo.role === "Host") {
     return next(); // User is authenticated, proceed to the next middleware/route
   } else {
     // alert("Kindly login before proceding");
@@ -363,7 +383,7 @@ app.get("/guest-dashboard", isAuthenticated, (req, res) =>
     userInfo: userInfo,
   })
 );
-app.get("/host-dashboard", isAuthenticated, (req, res) => {
+app.get("/host-dashboard", hostAuthenticated, (req, res) => {
   // currentUser = req.session.userInfo;
   currentuser(req);
   db.all(
@@ -382,7 +402,7 @@ app.get("/host-dashboard", isAuthenticated, (req, res) => {
     }
   );
 });
-app.get("/host-manage-property", isAuthenticated, (req, res) => {
+app.get("/host-manage-property", hostAuthenticated, (req, res) => {
   currentuser(req);
 
   db.all(

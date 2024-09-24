@@ -1,2 +1,3 @@
 For Images: $ npm install --save multer
 For UserSession: npm install express-session
+npm install connect-flash
