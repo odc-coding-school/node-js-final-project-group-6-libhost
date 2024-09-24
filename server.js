@@ -70,6 +70,15 @@ function isAuthenticated(req, res, next) {
   }
 }
 
+function adminAuthenticated(req, res, next) {
+  if (req.session.userInfo && req.session.userInfo.role === "Admin") {
+    return next(); // User is authenticated, proceed to the next middleware/route
+  } else {
+    // alert("Kindly login before proceding");
+    res.redirect("/login"); // User is not authenticated, redirect to login page
+  }
+}
+
 let userInfo = {};
 let currentUser = {};
 
@@ -209,7 +218,7 @@ app.get("/explore", (req, res) => {
     });
   });
 });
-app.get("/admin-dashboard", isAuthenticated, (req, res) => {
+app.get("/admin-dashboard", adminAuthenticated, (req, res) => {
   currentuser(req);
   db.all(`SELECT * FROM user`, [], (err, users) => {
     if (err) {
@@ -229,7 +238,7 @@ app.get("/admin-dashboard", isAuthenticated, (req, res) => {
     });
   });
 });
-app.get("/manage-user", isAuthenticated, (req, res) => {
+app.get("/manage-user", adminAuthenticated, (req, res) => {
   currentuser(req);
   db.all(`SELECT * FROM user`, [], (err, users) => {
     if (err) {
@@ -239,7 +248,7 @@ app.get("/manage-user", isAuthenticated, (req, res) => {
     res.render("adminManageUser", { users: users, currentUser: currentUser });
   });
 });
-app.get("/manage-accommodation", isAuthenticated, (req, res) => {
+app.get("/manage-accommodation", adminAuthenticated, (req, res) => {
   currentuser(req);
   db.all(`SELECT * FROM accommodations`, [], (err, accommodations) => {
     if (err) {
@@ -252,7 +261,7 @@ app.get("/manage-accommodation", isAuthenticated, (req, res) => {
     });
   });
 });
-app.get("/add-user", (req, res) => {
+app.get("/add-user", adminAuthenticated, (req, res) => {
   db.all(`SELECT * FROM roles`, [], (err, roles) => {
     if (err) {
       console.error(err.message);
@@ -296,7 +305,7 @@ app.post("/add-user", upload.single("photo"), async (req, res) => {
   );
 });
 // Accommodation Routes
-app.get("/admin-add-accommodation", isAuthenticated, (req, res) =>
+app.get("/admin-add-accommodation", adminAuthenticated, (req, res) =>
   res.render("admin-add-accommodation")
 );
 app.post(
@@ -470,7 +479,7 @@ app.post("/login", (req, res) => {
             if (userInfo.role == "Admin") {
               console.log("User Information Login Route:", userInfo);
               console.log("Login Successfully as an Admin");
-              return res.redirect("/adminDashboard");
+              return res.redirect("/admin-dashboard");
             } else if (userInfo.role == "Host") {
               console.log("User Information Login Route:", userInfo);
               console.log("Login Successfully as Host");
