@@ -30,42 +30,72 @@
                 <!-- Property Cards Grid -->
                 <div class="row">
                     <!-- Example Property Card 1 -->
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <img src="images/sinkor-palace-hotel.jpg" alt="Logo" class="img-fluid">
-                            <div class="card-body">
-                                <h5 class="card-title">Cozy Apartment A</h5>
-                                <p class="card-text">Monrovia, Liberia</p>
-                                <p class="card-text">Bookings: 5</p>
-                                <span class="badge bg-success">Active</span>
-                                <div class="mt-3">
-                                    <button class="btn btn-sm btn-info">View</button>
-                                    <button class="btn btn-sm btn-warning">Edit</button>
-                                    <button class="btn btn-sm btn-danger">Delete</button>
+
+                    <% accommodations.forEach((accommodation,index)=> { %>
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-body">
+
+                                    <!-- Carousel -->
+                                    <div id="carousel<%= index %>" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner rounded-top">
+                                            <% accommodation.images.forEach((image, imgIndex)=> { %>
+                                                <div class="carousel-item <%= imgIndex === 0 ? 'active' : '' %>">
+                                                    <img src="<%= image %>" alt="Property Image"
+                                                        class="card-img-top img-fluid d-block w-100"
+                                                        style="height: 250px; object-fit: cover;">
+                                                </div>
+                                                <% }) %>
+                                        </div>
+                                        <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#carousel<%= index %>" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button"
+                                            data-bs-target="#carousel<%= index %>" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    </div>
+
+                                    <h5 class="card-title">
+                                        <%= accommodation.name %>
+                                    </h5>
+                                    <p class="card-text">
+                                        <%= accommodation.location %>
+                                    </p>
+                                    <p class="card-text">Bookings: 5</p>
+                                    <span class="badge bg-success">Active</span>
+                                    <div class="mt-3">
+                                        <button class="btn btn-sm btn-info">View</button>
+                                        <button class="btn btn-sm btn-warning">Edit</button>
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <% }) %>
 
-                    <!-- Example Property Card 2 -->
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <img src="images/sinkor-palace-hotel.jpg" alt="Logo" class="img-fluid">
-                            <div class="card-body">
-                                <h5 class="card-title">Beach House B</h5>
-                                <p class="card-text">Buchanan, Liberia</p>
-                                <p class="card-text">Bookings: 2</p>
-                                <span class="badge bg-danger">Inactive</span>
-                                <div class="mt-3">
-                                    <button class="btn btn-sm btn-info">View</button>
-                                    <button class="btn btn-sm btn-warning">Edit</button>
-                                    <button class="btn btn-sm btn-danger">Delete</button>
+                            <!-- Example Property Card 2 -->
+                            <!-- <div class="col-md-4">
+                                <div class="card mb-4">
+                                    <img src="images/sinkor-palace-hotel.jpg" alt="Logo" class="img-fluid">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Beach House B</h5>
+                                        <p class="card-text">Buchanan, Liberia</p>
+                                        <p class="card-text">Bookings: 2</p>
+                                        <span class="badge bg-danger">Inactive</span>
+                                        <div class="mt-3">
+                                            <button class="btn btn-sm btn-info">View</button>
+                                            <button class="btn btn-sm btn-warning">Edit</button>
+                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </div> -->
 
-                    <!-- Add more property cards as needed -->
+                            <!-- Add more property cards as needed -->
                 </div>
             </div>
 

@@ -210,6 +210,7 @@ app.get("/explore", (req, res) => {
   });
 });
 app.get("/admin-dashboard", isAuthenticated, (req, res) => {
+  currentuser(req);
   db.all(`SELECT * FROM user`, [], (err, users) => {
     if (err) {
       console.error(err.message);
@@ -223,26 +224,32 @@ app.get("/admin-dashboard", isAuthenticated, (req, res) => {
       res.render("adminDashboard", {
         users: users,
         accommodations: accommodations,
+        currentUser: currentUser,
       });
     });
   });
 });
 app.get("/manage-user", isAuthenticated, (req, res) => {
+  currentuser(req);
   db.all(`SELECT * FROM user`, [], (err, users) => {
     if (err) {
       console.error(err.message);
       return res.redirect("/admin-dashboard");
     }
-    res.render("adminManageUser", { users: users });
+    res.render("adminManageUser", { users: users, currentUser: currentUser });
   });
 });
 app.get("/manage-accommodation", isAuthenticated, (req, res) => {
+  currentuser(req);
   db.all(`SELECT * FROM accommodations`, [], (err, accommodations) => {
     if (err) {
       console.error(err.message);
       return res.redirect("/manage-accommodation");
     }
-    res.render("adminManageAccommodations", { accommodations: accommodations });
+    res.render("adminManageAccommodations", {
+      accommodations: accommodations,
+      currentUser: currentUser,
+    });
   });
 });
 app.get("/add-user", (req, res) => {
@@ -350,11 +357,44 @@ app.get("/guest-dashboard", isAuthenticated, (req, res) =>
 app.get("/host-dashboard", isAuthenticated, (req, res) => {
   // currentUser = req.session.userInfo;
   currentuser(req);
-  res.render("hostDashboard", { currentUser: currentUser });
+  db.all(
+    `SELECT * FROM accommodations WHERE user_id= ?`,
+    [currentUser.id],
+    (err, accommodations) => {
+      if (err) {
+        console.error(err.message);
+        return res.redirect("/host-manage-property");
+      }
+
+      res.render("hostDashboard", {
+        currentUser: currentUser,
+        accommodations,
+      });
+    }
+  );
 });
 app.get("/host-manage-property", isAuthenticated, (req, res) => {
   currentuser(req);
-  res.render("hostManageProperty", { currentUser: currentUser });
+
+  db.all(
+    `SELECT * FROM accommodations WHERE user_id= ?`,
+    [currentUser.id],
+    (err, accommodations) => {
+      if (err) {
+        console.error(err.message);
+        return res.redirect("/host-manage-property");
+      }
+
+      // Parse the JSON images before rendering
+      accommodations.forEach((accommodation) => {
+        accommodation.images = JSON.parse(accommodation.images);
+      });
+      res.render("hostManageProperty", {
+        currentUser: currentUser,
+        accommodations,
+      });
+    }
+  );
 });
 
 console.log(userInfo);
