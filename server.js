@@ -225,6 +225,7 @@ app.get("/about", (req, res) => {
   res.render("about", { title: "About", user: currentUser });
 });
 app.get("/property-detail/:id", (req, res) => {
+  currentUser = req.session.userInfo;
   const propertyId = req.params.id;
   db.get(
     `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture
@@ -246,77 +247,122 @@ app.get("/property-detail/:id", (req, res) => {
       res.render("propertydetail", {
         title: "Property Detail",
         property: accommodation, // Passing the single property object
+        user: currentUser,
       });
+    }
+  );
+});
+
+app.get("/bookings", (req, res) => {
+  const currentUser = req.session.userInfo;
+
+  db.all(
+    "SELECT * FROM bookings WHERE guest_id = ?",
+    [currentUser.id],
+    (err, bookings) => {
+      if (err) {
+        return res.status(500).send("Error fetching bookings");
+      }
+      console.log(bookings);
+      res.render("bookingPage", { bookings: bookings, user: currentUser });
     }
   );
 });
 
 app.post("/booking/:id", (req, res) => {
   const propertyId = req.params.id;
-  console.log("Proper ID", propertyId);
+  const currentUser = req.session.userInfo;
 
-  // Retrieve the property/accommodation details
-  db.get(
-    `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture
-     FROM accommodations
-     JOIN user ON accommodations.user_id = user.id
-     WHERE accommodations.id = ?`,
-    [propertyId],
-    (err, accommodation) => {
-      if (err) {
-        return res.status(500).send("Error retrieving accommodation details");
-      }
-      if (!accommodation) {
-        return res.status(404).send("Accommodation not found");
-      }
-
-      // Parse the JSON images before rendering
-      if (accommodation.images) {
-        accommodation.images = JSON.parse(accommodation.images);
-      }
-
-      console.log("Clicked:", accommodation.images);
-      // Example of where you might use `currentUser` (needs to be defined elsewhere)
-      console.log("Current user:", currentUser);
-
-      // Gather the booking info from the form submission
-      const bookingInfo = {
-        check_in_date: req.body.checkInDate,
-        check_out_date: req.body.checkOutDate,
-        number_of_guest: req.body.numGuests,
-        accommodation_id: propertyId,
-        user_id: currentUser.id, // Assuming `currentUser` contains the logged-in user information
-      };
-      console.log("Booking Info:", bookingInfo);
-
-      // Save booking to database (example with SQL insert)
-      const insertBookingQuery = `
-        INSERT INTO bookings (check_in_date, check_out_date, number_of_guest, accommodation_id, user_id)
-        VALUES (?, ?, ?, ?, ?)
-      `;
-      db.run(
-        insertBookingQuery,
-        [
-          bookingInfo.check_in_date,
-          bookingInfo.check_out_date,
-          bookingInfo.number_of_guest,
-          bookingInfo.accommodation_id,
-          bookingInfo.user_id,
-        ],
-        (insertErr) => {
-          if (insertErr) {
-            return res.status(500).send("Error saving booking information");
-          }
-          // Once the booking is saved, you can render a confirmation page or redirect the user
-          res.render("bookingConfirmation", {
-            title: "Booking Confirmation",
-            property: accommodation,
-            bookingInfo: bookingInfo,
-          });
+  if (currentUser) {
+    // First, get the accommodation's availability from the accommodation table
+    db.get(
+      `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture
+       FROM accommodations
+       JOIN user ON accommodations.user_id = user.id
+       WHERE accommodations.id = ?`,
+      [propertyId],
+      (err, accommodation) => {
+        if (err) {
+          return res.status(500).send("Error retrieving accommodation details");
         }
-      );
-    }
-  );
+        if (!accommodation) {
+          return res.status(404).send("Accommodation not found");
+        }
+
+        // Assuming the accommodation table has availability fields (for example)
+        const availableFrom = new Date(accommodation.check_in_date); // Assuming you have `available_from` in your accommodation table
+        const availableTo = new Date(accommodation.check_out_date); // Assuming you have `available_to` in your accommodation table
+
+        // Parse the check-in and check-out dates from the form
+        const checkInDate = new Date(req.body.checkInDate);
+        const checkOutDate = new Date(req.body.checkOutDate);
+
+        // Check if the selected dates are within the accommodation's availability
+        if (checkInDate < availableFrom || checkOutDate > availableTo) {
+          return res
+            .status(400)
+            .send(
+              "Selected dates are outside the accommodation's available range."
+            );
+        }
+
+        // Calculate the number of days
+        const timeDifference = checkOutDate - checkInDate;
+        const days = timeDifference / (1000 * 60 * 60 * 24); // Convert milliseconds to days
+
+        if (days <= 0) {
+          return res
+            .status(400)
+            .send("Check-out date must be after check-in date");
+        }
+
+        // Calculate the total price
+        const totalPrice = days * accommodation.price;
+
+        const bookingInfo = {
+          check_in_date: req.body.checkInDate,
+          check_out_date: req.body.checkOutDate,
+          number_of_guest: req.body.numGuests,
+          accommodation_id: propertyId,
+          guest_id: currentUser.id,
+          host_id: accommodation.user_id,
+          total_price: totalPrice, // Calculated total price
+        };
+
+        console.log("Booking Info:", bookingInfo);
+
+        // Save booking to the database
+        const insertBookingQuery = `
+          INSERT INTO bookings (guest_id, host_id, accommodation_id, check_in_date, check_out_date, total_price)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `;
+        db.run(
+          insertBookingQuery,
+          [
+            bookingInfo.guest_id,
+            bookingInfo.host_id,
+            bookingInfo.accommodation_id,
+            bookingInfo.check_in_date,
+            bookingInfo.check_out_date,
+            bookingInfo.total_price,
+          ],
+          (insertErr) => {
+            if (insertErr) {
+              return res.status(500).send("Error saving booking information");
+            }
+            // Once the booking is saved, render a confirmation page
+            res.render("bookingConfirmation", {
+              title: "Booking Confirmation",
+              property: accommodation,
+              bookingInfo: bookingInfo,
+            });
+          }
+        );
+      }
+    );
+  } else {
+    res.redirect("/login");
+  }
 });
 
 // res.render("propertydetail", { title: "Property Detail" });
@@ -714,6 +760,18 @@ app.post("/login", (req, res) => {
       }
     }
   );
+});
+
+// Logout route
+app.get("/logout", (req, res) => {
+  // Destroy the session
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).send("Error logging out");
+    }
+    // Redirect to the login page or homepage
+    res.redirect("/login");
+  });
 });
 
 app.get("/accommodations", (req, res) => {

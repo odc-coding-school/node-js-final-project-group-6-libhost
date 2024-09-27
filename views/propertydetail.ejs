@@ -88,15 +88,16 @@
                             </strong>
                         </p>
 
-
                         <form action="/booking/<%= property.id %>" method="POST">
                             <div class="mb-3">
                                 <label for="checkInDate" class="form-label">Check-in Date</label>
-                                <input type="date" class="form-control" id="checkInDate" name="checkInDate" required>
+                                <input type="date" class="form-control" id="checkInDate" name="checkInDate" required
+                                    min="<%= property.check_in_date%>" max="<%= property.check_out_date %>">
                             </div>
                             <div class="mb-3">
                                 <label for="checkOutDate" class="form-label">Check-out Date</label>
-                                <input type="date" class="form-control" id="checkOutDate" name="checkOutDate" required>
+                                <input type="date" class="form-control" id="checkOutDate" name="checkOutDate" required
+                                    min="<%= property.check_in_date%>" max="<%= property.check_out_date %>">
                             </div>
                             <div class="mb-3">
                                 <label for="numGuests" class="form-label">Number of Guests</label>
@@ -105,6 +106,7 @@
                             </div>
                             <button type="submit" class="btn btn-warning text-white">Submit Booking</button>
                         </form>
+
                     </div>
                 </div>
             </div>
