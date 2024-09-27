@@ -1,274 +1,215 @@
-body{
-    margin: 0px;
-    background-color: white;
+body {
+  margin: 0px;
+  background-color: white;
 }
 
-.content{
-    
-    border-radius: 10px;
-    height:auto;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin: 10px;
+.content {
+  border-radius: 10px;
+  height: auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: 10px;
 }
 
-#img-card{
-    
-    padding-bottom: 20px;
+#img-card {
+  padding-bottom: 20px;
 }
 
-
-#features{
-    
-    padding-top: 50px;
-    padding-bottom: 50px;
+#features {
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
-p{
-    font-family: sans-serif;
+p {
+  font-family: sans-serif;
 }
 
-#book{
-    
-    height: 300px;
+#book {
+  height: 300px;
 }
 
-.header{
-    
-    padding-top: 20px;
-    padding-bottom: 20px;
+.header {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
-img.card#card1,img.card#card2{
-    
-    width:156%;
-    height: 230px;
-    margin: 15px;
+p.text-dark#price {
+  margin: 0px;
 }
 
-
-p.text-dark#price{
-    margin: 0px;
+#content-section {
+  padding-top: 50px;
+  padding-bottom: 80px;
 }
 
-
-#content-section{
-    
-    padding-top: 50px;
-    padding-bottom: 80px;
+.container-fluid {
+  /*    border-top: 1px solid whitesmoke;*/
+  margin: 10px;
 }
 
-.container-fluid{
-    
-/*    border-top: 1px solid whitesmoke;*/
-    margin: 10px;
+p#paragraph {
+  margin-left: 20px;
 }
 
-p#paragraph{
-    
-    margin-left: 20px;
+.parag {
+  display: none;
 }
 
-
-.parag{
-    
-    display: none;
+#booking {
+  width: 350px;
+  height: 250px;
 }
 
-#booking{
-    
-    width: 350px;
-    height: 250px;
+.card#price {
+  box-shadow: 1px 2px 1px lightgray;
+  height: 30px;
+  width: 150px;
+  border: 1px solid white;
 }
 
-#img-card{
-
-    height: 350px;
-    width: 250px;
-    
+a#link:hover {
+  background-color: gold;
 }
 
-.card#price{
-    box-shadow: 1px 2px 1px lightgray;
-    height: 30px;
-    width: 150px;
-    border:1px solid white;
+p#text {
+  margin: 10px;
 }
 
-
-
-a#link:hover{
-    
-   background-color: gold;
-    
+.card#confrimation_alert {
+  border: 1px solid whitesmoke;
+  width: 380px;
+  height: 250px;
 }
 
-
-p#text{
-    
-    margin: 10px;
+#options {
+  float: left;
 }
 
-
-.card#confrimation_alert{
-    
-    border: 1px solid whitesmoke;
-    width: 380px;
-    height: 250px;
+img.logo {
+  width: 100px;
+  height: 100px;
 }
 
-
-#options{
-    
-    float: left;
+#close {
+  background-color: red;
+  color: white;
+  float: left;
+  font-size: xx-large;
+  width: 50px;
+  text-align: center;
 }
 
-
-img.logo{
-    
-    width: 100px;
-    height: 100px;
+.col-sm#digit-1,
+.col-sm#digit-2,
+.col-sm#digit-3,
+.col-sm#digit-4 {
+  padding: 20px;
+  background-color: whitesmoke;
+  margin: 10px;
 }
 
-#close{
-    
-    background-color: red;
-    color: white;
-    float: left;
-    font-size: xx-large;
-    width: 50px;
-    text-align: center;
+.container#form {
+  padding-top: 200px;
+  padding-bottom: 80px;
 }
 
-
-.col-sm#digit-1,.col-sm#digit-2,.col-sm#digit-3,.col-sm#digit-4{
-    
-    padding: 20px;
-    background-color: whitesmoke;
-    margin: 10px;
+input[type="text"],
+input[type="password"] {
+  border: 1px solid orange;
+  padding: 10px;
 }
 
-
-.container#form{
-    
-    padding-top: 200px;
-    padding-bottom: 80px;
+input[type="checkbox"] {
+  border: 1px solid orange;
 }
 
-input[type="text"],input[type = "password"]{
-    
-    border: 1px solid orange;
-    padding: 10px;
+a#forget {
+  text-decoration: none;
+  padding: 10px;
+  text-transform: capitalize;
 }
 
-input[type="checkbox"]{
-    
-    border: 1px solid orange;
+button[type="submit"].btn-outline {
+  width: 100%;
+  padding: 10px;
+  background-color: gold;
 }
 
-a#forget{
-    text-decoration: none;
-    padding: 10px;
-    text-transform: capitalize;
+label {
+  float: left;
+  text-transform: capitalize;
 }
 
-button[type = "submit"].btn-outline{
-    
-    width: 100%;
-    padding: 10px;
-    background-color: gold;
-    
+.card#login {
+  height: 390px;
+  border: none;
+  margin: 3px;
 }
 
-label{
-    
-    float: left;
-    text-transform: capitalize;
+h2.text-capitalize {
+  color: #d7a20d;
 }
 
-.card#login{
-    
-    height: 390px;
-    border: none;
-    margin: 3px;
+input[type="text"]#search {
+  background-color: white;
+  border: none;
+  width: 50%;
+  float: left;
+  border-radius: 10px;
 }
 
-h2.text-capitalize{
-    
-    color: #d7a20d;
+button[type="trash"]#trash {
+  background-color: azure;
+  float: left;
 }
 
-
-input[type = "text"]#search{
-    background-color: white;
-    border:none;
-    width: 50%;
-    float: left;
-    border-radius: 10px;
+select {
+  height: 40px;
+  width: 200px;
+  padding: 10px;
+  border: 1px solid whitesmoke;
+  background-color: white;
 }
 
-
-button[type = "trash"]#trash{
-    background-color:azure;
-    float: left;
+.card#login-form {
+  width: 80%;
+  border: none;
 }
 
-select{
-    
-    height: 40px;
-    width: 200px;
-    padding: 10px;
-    border: 1px solid whitesmoke;
-    background-color: white;
+#search {
+  background-color: #d7a20d;
 }
 
-.card#login-form{
-    
-    width: 80%;
-    border: none;
+.fa-check-circle {
+  font-size: 34px;
 }
 
-#search{
-    
-    background-color: #d7a20d;
+.card-body {
+  padding-top: 300px;
 }
 
-.fa-check-circle{
-    
-    font-size:34px;
+button.btn-outline {
+  width: 80%;
+  background: #d7a20d;
 }
 
-.card-body{
-    
-    padding-top: 300px;
+img.card#single {
+  height: 280px;
 }
 
-button.btn-outline{
-    width: 80%;
-    background: #d7a20d;
+#section {
+  padding-top: 200px;
+  padding-bottom: 50px;
 }
 
-img.card#single{
-    
-    height: 280px;
+.heading {
+  margin: 0px;
+  color: red;
 }
 
-#section{
-    
-    padding-top: 200px;
-    padding-bottom: 50px;
+p {
+  text-align: justify;
 }
-
-.heading{
-    
-    margin: 0px;
-    color: red;
-}
-
-p{
-    text-align: justify;
-}
-
 
 /*
 .fa-wifi{
@@ -276,98 +217,81 @@ p{
 }
 */
 
-
-#footer{
-    
-    padding-top: 30px;
-    height: 250px;
+#footer {
+  padding-top: 30px;
+  height: 250px;
 }
 
-a.btn{
-
-    background-color: #d7a20d;
-    width: 40%;
+a.btn {
+  background-color: #d7a20d;
+  width: 40%;
 }
 
-button{
-    
-    background-color: white;
-    border-radius: 10px;
-    border: none;
+button {
+  background-color: white;
+  border-radius: 10px;
+  border: none;
 }
 
-btn.btn-outline{
-    
-    width: 100%;
-    padding: 20px;
+btn.btn-outline {
+  width: 100%;
+  padding: 20px;
 }
 
-a#text{
-    
-    text-decoration: none;
-    background-color: white;
+a#text {
+  text-decoration: none;
+  background-color: white;
 }
 
-a#book-now{
-    
-    width:80%;
-    margin: 20px;
+a#book-now {
+  width: 80%;
+  margin: 20px;
 }
 
-em{
-    
-    color: gray;
+em {
+  color: gray;
 }
 
-span#price{
-    
-    color: green;
-    margin-left: 20px;
-    font-size: 24px;
-    width: 250px;
-    background: white;
+span#price {
+  color: green;
+  margin-left: 20px;
+  font-size: 24px;
+  width: 250px;
+  background: white;
 }
 
-p.lead{
-    
-    margin: 20px;
+p.lead {
+  margin: 20px;
 }
 
-li.list-group-item{
-    
-    padding: 2px;
+li.list-group-item {
+  padding: 2px;
 }
 
-ul.list-unstyle{
-    
-    padding: 10px;
+ul.list-unstyle {
+  padding: 10px;
 }
 
-a.text-dark{
-    
-    text-decoration: none;
+a.text-dark {
+  text-decoration: none;
 }
 
-a.btn#search{
-    
-    width: auto;
-    background-color: #d7a20d;
+a.btn#search {
+  width: auto;
+  background-color: #d7a20d;
 }
 
-a.btn:hover{
-    
-    background-color: #d7a20d;
+a.btn:hover {
+  background-color: #d7a20d;
 }
 
-img{
-    
-    width: 150px;
-    height: 120px;
-    margin-left:10px;
+img {
+  width: 150px;
+  height: 120px;
+  /* margin-left: 10px; */
 }
 
-
-/* .card#card1{
+.card#card1{
     
     background-image: url('../images/Colony\ Hotel.jpg');
     background-size: cover;
@@ -375,145 +299,133 @@ img{
     height:250px;
     border:none;
     width: 300px;
-} */
-
-
-.fa-heart{
-    
-    text-align: right;
-    margin: 10px;
 }
 
-.desc{
-    
-    display:block;
-    background-color: white;
-    border:1px solid whitesmoke;
-    width: 300px;
-/*    opacity: 0.6;*/
-    margin-right: 20px;
+.fa-heart {
+  text-align: right;
+  margin: 10px;
 }
 
-.fa-map-marker{
-
-    color: #d7a20d;
+.desc {
+  display: block;
+  background-color: white;
+  border: 1px solid whitesmoke;
+  width: 300px;
+  /*    opacity: 0.6;*/
+  margin-right: 20px;
 }
 
-.fa-star{
-    
-    color: #d7a20d;
+.fa-map-marker {
+  color: #d7a20d;
 }
 
-span{
-    
-    background: #d7a20d;
-    color: white;
-    width: 130px;
-    border-radius: 5px 1px 5px;
-    text-align: left;
-    padding: 2px;
-    margin: 0px;
-    
+.fa-star {
+  color: #d7a20d;
 }
 
-.card#card2{
-    
-    background-image: url('../images/Boulavard\ Hotel.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 250px;
-    width: 300px;
+span {
+  background: #d7a20d;
+  color: white;
+  width: 130px;
+  border-radius: 5px 1px 5px;
+  text-align: left;
+  padding: 2px;
+  margin: 0px;
 }
 
-.card#card3{
-    
-    background-image: url('../images/Farmington2.jpeg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 250px;
-    width: 300px;
+.card#card2 {
+  background-image: url("../images/Boulavard\ Hotel.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 250px;
+  width: 300px;
 }
 
-
-.card#card4{
-    
-    background-image: url('../images/Royal\ grand.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 250px;
-    width: 300px;
+.card#card3 {
+  background-image: url("../images/Farmington2.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 250px;
+  width: 300px;
 }
 
-.card#card5{
-    
-    background-image: url('../images/Mamba\ Point.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-   
-    height: 250px;
-    width: 300px;
+.card#card4 {
+  background-image: url("../images/Royal\ grand.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 250px;
+  width: 300px;
 }
 
-.card#card6{
-    
-    background-image: url('../images/ocean\ view.webp');
-    background-size: cover;
-    background-repeat: no-repeat;
-    
-    height: 250px;
-    width: 300px;
+.card#card5 {
+  background-image: url("../images/Mamba\ Point.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  height: 250px;
+  width: 300px;
 }
 
-ul{
-    
-    list-style-type: none;
+.card#card6 {
+  background-image: url("../images/ocean\ view.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  height: 250px;
+  width: 300px;
 }
 
-li{
-    list-style-type: none;
-    text-transform: capitalize;
-    margin-right: 20px;
+ul {
+  list-style-type: none;
 }
 
-.navbar{
-    
-    margin: 0px;
-    
+li {
+  list-style-type: none;
+  text-transform: capitalize;
+  margin-right: 20px;
 }
 
-a.nav-link{
-    
-    margin: 10px;
-    color: black;
-
+.navbar {
+  margin: 0px;
 }
 
-
-img.card{
-    
-    width: 100%;
-    height:auto;
+a.nav-link {
+  margin: 10px;
+  color: black;
 }
 
-a.nav-link:hover{
-    
-    
-    color: black;
+img.card {
+  width: 100%;
+  height: auto;
 }
 
-a.nav-link#home{
-    
-    margin-right: 20px;
-    color:gold;
+a.nav-link:hover {
+  color: black;
 }
 
-a.nav-link#login{
-    
-    margin-right: 10px;
-    color: black;
-    background: gold;
-    border-radius: 5px;
+a.nav-link#home {
+  margin-right: 20px;
+  color: gold;
 }
 
+a.nav-link#login {
+  margin-right: 10px;
+  color: black;
+  background: gold;
+  border-radius: 5px;
+}
 
-
+/* About Page Styline*/
+.header-section {
+    background-color: #f8f9fa;
+    padding: 40px 0;
+}
+.mission-vision {
+    margin-top: 40px;
+}
+.team-member {
+    margin-top: 30px;
+}
+.team-section {
+    margin-top: 50px;
+}
