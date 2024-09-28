@@ -351,7 +351,7 @@ app.post("/booking/:id", (req, res) => {
               return res.status(500).send("Error saving booking information");
             }
             // Once the booking is saved, render a confirmation page
-            res.render("bookingConfirmation", {
+            res.render("payment", {
               title: "Booking Confirmation",
               property: accommodation,
               bookingInfo: bookingInfo,
