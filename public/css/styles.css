@@ -414,3 +414,18 @@ a.nav-link#login {
   background: gold;
   border-radius: 5px;
 }
+
+/* About Page Styline*/
+.header-section {
+    background-color: #f8f9fa;
+    padding: 40px 0;
+}
+.mission-vision {
+    margin-top: 40px;
+}
+.team-member {
+    margin-top: 30px;
+}
+.team-section {
+    margin-top: 50px;
+}
