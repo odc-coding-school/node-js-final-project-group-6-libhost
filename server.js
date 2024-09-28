@@ -99,6 +99,15 @@ function hostAuthenticated(req, res, next) {
   }
 }
 
+function guestAuthenticated(req, res, next) {
+  if (req.session.userInfo && req.session.userInfo.role === "Guest") {
+    return next(); // User is authenticated, proceed to the next middleware/route
+  } else {
+    // alert("Kindly login before proceding");
+    res.redirect("/login"); // User is not authenticated, redirect to login page
+  }
+}
+
 let userInfo = {};
 let currentUser = {};
 
@@ -253,7 +262,7 @@ app.get("/property-detail/:id", (req, res) => {
   );
 });
 
-app.get("/bookings", (req, res) => {
+app.get("/bookings", guestAuthenticated, (req, res) => {
   const currentUser = req.session.userInfo;
 
   db.all(
@@ -267,6 +276,35 @@ app.get("/bookings", (req, res) => {
       res.render("bookingPage", { bookings: bookings, user: currentUser });
     }
   );
+});
+
+app.get("/host-manage-bookings", hostAuthenticated, (req, res) => {
+  const currentUser = req.session.userInfo;
+
+  // SQL query to join the bookings, user, and accommodations tables
+  const query = `
+    SELECT bookings.*, user.full_name, accommodations.name AS accommodation_name
+    FROM bookings
+    JOIN user ON bookings.guest_id = user.id
+    JOIN accommodations ON bookings.accommodation_id = accommodations.id
+    WHERE bookings.host_id = ?
+  `;
+
+  // Execute the query
+  db.all(query, [currentUser.id], (err, bookings) => {
+    if (err) {
+      return res.status(500).send("Error fetching bookings");
+    }
+
+    // Log the bookings to verify the data
+    console.log(bookings);
+
+    // Render the hostManageBookings page with booking information
+    res.render("hostManageBookings", {
+      bookings: bookings,
+      currentUser: currentUser,
+    });
+  });
 });
 
 app.post("/booking/:id", (req, res) => {
@@ -543,12 +581,12 @@ app.post(
   }
 );
 
-app.get("/guest-dashboard", isAuthenticated, (req, res) =>
-  res.render("userDashboard", {
-    title: "User Dashboard",
-    userInfo: userInfo,
-  })
-);
+// app.get("/guest-dashboard", isAuthenticated, (req, res) =>
+//   res.render("userDashboard", {
+//     title: "User Dashboard",
+//     userInfo: userInfo,
+//   })
+// );
 app.get("/host-dashboard", hostAuthenticated, (req, res) => {
   // currentUser = req.session.userInfo;
   currentuser(req);
@@ -592,7 +630,7 @@ app.get("/host-manage-property", hostAuthenticated, (req, res) => {
   );
 });
 // Accommodation Routes
-app.get("/add-accommodation", isAuthenticated, (req, res) => {
+app.get("/add-accommodation", hostAuthenticated, (req, res) => {
   console.log("GEee");
   res.render("add-accommodation");
 });
@@ -774,12 +812,12 @@ app.get("/logout", (req, res) => {
   });
 });
 
-app.get("/accommodations", (req, res) => {
-  db.all("SELECT * FROM accommodations", [], (err, rows) => {
-    if (err) return res.status(500).send("Server Error");
-    res.json(rows);
-  });
-});
+// app.get("/accommodations", (req, res) => {
+//   db.all("SELECT * FROM accommodations", [], (err, rows) => {
+//     if (err) return res.status(500).send("Server Error");
+//     res.json(rows);
+//   });
+// });
 
 // Search and Filter Accommodations
 app.get("/search", (req, res) => {
@@ -808,7 +846,7 @@ app.get("/search", (req, res) => {
 });
 
 // Payment and Confirmation Pages
-app.get("/payment", (req, res) => res.render("payment"));
+app.get("/payment", guestAuthenticated, (req, res) => res.render("payment"));
 app.get("/payment-confirmation", (req, res) =>
   res.render("payment-confirmation", {
     title: "View User Dashboard",
