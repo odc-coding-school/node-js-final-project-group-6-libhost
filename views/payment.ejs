@@ -1,121 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment - StayLib</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>StayLib - Payment Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #FFFBE7; /* Light yellow background */
-            color: #333;
-            font-family: Arial, sans-serif;
-        }
-        .header {
-            background-color: #FFE9B5; /* Lighter yellow header */
-            padding: 15px 0;
-            text-align: center;
-        }
-        .header img {
-            width: 120px;
-        }
-        .container {
-            padding: 30px;
-            margin-top: 20px;
-        }
-        .btn-custom {
-            background-color: #F5C469; /* Custom button color */
-            color: #FFF;
-            border: none;
-            padding: 12px 20px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-        .btn-custom:hover {
-            background-color: #e0a800;
-        }
-        .btn-cancel {
-            background-color: #ccc;
-            color: #333;
-            border: none;
-            padding: 12px 20px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-        .btn-cancel:hover {
-            background-color: #b3b3b3;
-        }
-        .payment-details, .card-details {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
+        .payment-card {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
         }
-        .payment-details p, .card-details p {
-            margin-bottom: 15px;
+
+        .proceed-btn {
+            background-color: #ff6600;
+            color: white;
         }
-        .form-group label {
-            font-weight: bold;
-        }
-        .form-group input, .form-group select {
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #F5C469;
-            box-shadow: 0 0 0 0.2rem rgba(245, 196, 105, 0.25);
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
+
+        .proceed-btn:hover {
+            background-color: #ff4500;
         }
     </style>
 </head>
+
 <body>
-    <div class="header">
-        <img src="images/logo.png" alt="StayLib Logo">
-    </div>
+    <%-include('navbar');-%>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <div class="payment-card p-4">
+                        <h3 class="text-center">Payment Summary</h3>
+                        <hr>
 
-    <h2 class="text-center mt-4">Payment</h2>
-    <p class="text-center">Kindly follow the instructions below</p>
+                        <!-- Accommodation Cost -->
+                        <div class="d-flex justify-content-between">
+                            <span>Accommodation Cost:</span>
+                            <span id="accommodation-cost">$200.00</span> <!-- Dynamically updated with JS/PHP -->
+                        </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 payment-details">
-                <h5>Transfer Details:</h5>
-                <p><strong>Hotel:</strong> Blue Origin Fams<br>Galle, Sri Lanka</p>
-                <p><strong>Total Amount:</strong> $400 USD</p>
-                <p><strong>Initial Payment:</strong> $200 USD</p>
-            </div>
-            <div class="col-md-6 card-details">
-                <form>
-                    <div class="form-group">
-                        <label for="cardNumber">Card Number</label>
-                        <input type="text" class="form-control" id="cardNumber" placeholder="Enter your card number">
+                        <!-- StayLib 8% Interest -->
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>StayLib Service Fee (8%):</span>
+                            <span id="staylib-fee">$16.00</span> <!-- Dynamically calculated -->
+                        </div>
+
+                        <!-- Total Payment -->
+                        <div class="d-flex justify-content-between mt-2">
+                            <span><strong>Total Payment:</strong></span>
+                            <span id="total-payment"><strong>$216.00</strong></span> <!-- Dynamically calculated -->
+                        </div>
+
+                        <hr>
+
+                        <!-- Payment Method -->
+                        <div class="form-group">
+                            <label for="payment-method">Choose Payment Method:</label>
+                            <select class="form-control" id="payment-method">
+                                <option value="orange_money">Orange Money</option>
+                                <option value="credit_card">Credit Card</option>
+                                <option value="paypal">PayPal</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+
+                        </div>
+
+                        <!-- Proceed Button -->
+                        <div class="text-center">
+                            <button class="btn proceed-btn btn-lg" onclick="submitPayment()">Proceed with
+                                Payment</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="bank">Bank</label>
-                        <select class="form-control" id="bank">
-                            <option>Select Bank</option>
-                            <option>UBA Bank</option>
-                            <option>LBDI Bank</option>
-                            <option>Orange Money</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="expDate">Exp Date</label>
-                        <input type="text" class="form-control" id="expDate" placeholder="MM/YY">
-                    </div>
-                    <div class="form-group">
-                        <label for="cvv">CVV</label>
-                        <input type="text" class="form-control" id="cvv" placeholder="Enter CVV">
-                    </div>
-                    <button type="submit" class="btn btn-custom">Pay Now</button>
-                    <button type="button" class="btn btn-cancel">Cancel</button>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            // Mock data for dynamic values (replace with server-side data)
+            const accommodationCost = 200.00;
+            const staylibFee = accommodationCost * 0.08;
+            const totalPayment = accommodationCost + staylibFee;
+
+            // Update the UI with dynamic values
+            document.getElementById('accommodation-cost').innerText = `$${accommodationCost.toFixed(2)}`;
+            document.getElementById('staylib-fee').innerText = `$${staylibFee.toFixed(2)}`;
+            document.getElementById('total-payment').innerText = `$${totalPayment.toFixed(2)}`;
+
+            // Function to handle the form submission (payment processing simulation)
+            function submitPayment() {
+                const paymentMethod = document.getElementById('payment-method').value;
+
+                // Redirect to payment processing page (or simulate payment)
+                window.location.href = `/process-payment?method=${paymentMethod}&total=${totalPayment.toFixed(2)}`;
+            }
+        </script>
 </body>
+
 </html>
