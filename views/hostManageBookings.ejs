@@ -69,13 +69,24 @@
                                                 <%= booking.check_in_date %> <br>
                                                     <strong>Check-out:</strong>
                                                     <%= booking.check_out_date %> <br>
-                                                        <strong>Guests:</strong> 3 <br>
-                                                        <strong>Total Price:</strong> $<%= booking.total_price %>
+                                                        <strong>Guests:</strong>
+                                                        <%= booking.max_guests %> <br>
+                                                            <strong>Total Price:</strong> $<%= booking.total_price %>
                                         </p>
-                                        <div class="action-btns">
-                                            <button class="btn btn-success">Confirm</button>
-                                            <button class="btn btn-danger">Decline</button>
-                                        </div>
+                                        <% if (booking.payment_status='pending' ) { %>
+                                            <!-- Show Confirm and Decline buttons only if the booking is pending -->
+                                            <form action="/confirm-booking/<%= booking.id %>" method="POST"
+                                                style="display:inline;">
+                                                <button type="submit" class="btn btn-success">Confirm</button>
+                                            </form>
+                                            <form action="/decline-booking/<%= booking.id %>" method="POST"
+                                                style="display:inline;">
+                                                <button type="submit" class="btn btn-danger">Decline</button>
+                                            </form>
+                                            <% } else { %>
+                                                <p>Booking has been <%= booking.payment_status %>
+                                                </p>
+                                                <% } %>
                                     </div>
                                 </div>
                             </div>

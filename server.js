@@ -141,8 +141,6 @@ db.serialize(() => {
       swimming_pool BOOLEAN,
       max_guests INT,
       amenities TEXT,
-      check_in_date DATE,
-      check_out_date DATE,
       availability BOOLEAN DEFAULT 1,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -188,11 +186,31 @@ db.serialize(() => {
       payment_status TEXT CHECK( payment_status IN ('pending', 'completed', 'failed') ) DEFAULT 'pending',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      
+      max_guests VARCHAR(250), 
       FOREIGN KEY (guest_id) REFERENCES user(id) ON DELETE CASCADE,
       FOREIGN KEY (accommodation_id) REFERENCES accommodations(id) ON DELETE CASCADE
     )
   `);
+  db.run(`
+    CREATE TABLE IF NOT EXISTS payments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      booking_id INTEGER,
+      guest_id INTEGER,
+      host_id INTEGER,
+      accommodation_id INTEGER,
+      payment_method VARCHAR(50),
+      accommodation_cost DECIMAL(10, 2),
+      service_fee DECIMAL(10, 2),
+      total_payment DECIMAL(10, 2),
+      status VARCHAR(50),
+      payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      transaction_id VARCHAR(100),
+      FOREIGN KEY (booking_id) REFERENCES bookings(id)
+      FOREIGN KEY (guest_id) REFERENCES user(id) ON DELETE CASCADE,
+      FOREIGN KEY (accommodation_id) REFERENCES accommodations(id)
+);
+
+    `);
 });
 
 // Routes
@@ -262,18 +280,25 @@ app.get("/property-detail/:id", (req, res) => {
   );
 });
 
-app.get("/bookings", guestAuthenticated, (req, res) => {
+app.get("/bookings", (req, res) => {
   const currentUser = req.session.userInfo;
 
   db.all(
-    "SELECT * FROM bookings WHERE guest_id = ?",
+    `SELECT bookings.*, user.full_name, user.email, user.phone_number, accommodations.name AS accommodation_name
+     FROM bookings
+     JOIN user ON bookings.host_id = user.id
+     JOIN accommodations ON bookings.accommodation_id = accommodations.id
+     WHERE bookings.guest_id = ?`,
     [currentUser.id],
     (err, bookings) => {
       if (err) {
-        return res.status(500).send("Error fetching bookings");
+        return res.status(500).send("Error fetching guest bookings");
       }
-      console.log(bookings);
-      res.render("bookingPage", { bookings: bookings, user: currentUser });
+
+      res.render("bookingPage", {
+        bookings: bookings,
+        user: currentUser,
+      });
     }
   );
 });
@@ -307,7 +332,37 @@ app.get("/host-manage-bookings", hostAuthenticated, (req, res) => {
   });
 });
 
-app.post("/booking/:id", (req, res) => {
+app.post("/confirm-booking/:id", (req, res) => {
+  const bookingId = req.params.id;
+
+  const updateQuery = `UPDATE bookings SET payment_status = 'completed' WHERE id = ?`;
+  db.run(updateQuery, [bookingId], (err) => {
+    if (err) {
+      // return res.status(500).send("Error confirming booking");
+      console.error(err.message);
+    }
+
+    // Redirect back to the host dashboard after confirmation
+    res.redirect("/host-manage-bookings");
+  });
+});
+
+app.post("/decline-booking/:id", (req, res) => {
+  const bookingId = req.params.id;
+
+  const updateQuery = `UPDATE bookings SET payment_status = 'failed' WHERE id = ?`;
+  db.run(updateQuery, [bookingId], (err) => {
+    if (err) {
+      // return res.status(500).send("Error declining booking");
+      console.error(err.message);
+    }
+
+    // Redirect back to the host dashboard after declining
+    res.redirect("/host-manage-bookings");
+  });
+});
+
+app.post("/booking/:id", guestAuthenticated, (req, res) => {
   const propertyId = req.params.id;
   const currentUser = req.session.userInfo;
 
@@ -327,22 +382,18 @@ app.post("/booking/:id", (req, res) => {
           return res.status(404).send("Accommodation not found");
         }
 
-        // Assuming the accommodation table has availability fields (for example)
-        const availableFrom = new Date(accommodation.check_in_date); // Assuming you have `available_from` in your accommodation table
-        const availableTo = new Date(accommodation.check_out_date); // Assuming you have `available_to` in your accommodation table
-
         // Parse the check-in and check-out dates from the form
         const checkInDate = new Date(req.body.checkInDate);
         const checkOutDate = new Date(req.body.checkOutDate);
 
         // Check if the selected dates are within the accommodation's availability
-        if (checkInDate < availableFrom || checkOutDate > availableTo) {
-          return res
-            .status(400)
-            .send(
-              "Selected dates are outside the accommodation's available range."
-            );
-        }
+        // if (checkInDate < availableFrom || checkOutDate > availableTo) {
+        //   return res
+        //     .status(400)
+        //     .send(
+        //       "Selected dates are outside the accommodation's available range."
+        //     );
+        // }
 
         // Calculate the number of days
         const timeDifference = checkOutDate - checkInDate;
@@ -367,12 +418,20 @@ app.post("/booking/:id", (req, res) => {
           total_price: totalPrice, // Calculated total price
         };
 
+        if (bookingInfo.number_of_guest > accommodation.max_guests) {
+          return res
+            .status(400)
+            .send(
+              "Number of guests are  more than the maximum allowed for this accommodation."
+            );
+        }
+
         console.log("Booking Info:", bookingInfo);
 
         // Save booking to the database
         const insertBookingQuery = `
-          INSERT INTO bookings (guest_id, host_id, accommodation_id, check_in_date, check_out_date, total_price)
-          VALUES (?, ?, ?, ?, ?, ?)
+          INSERT INTO bookings (guest_id, host_id, accommodation_id, check_in_date, check_out_date, total_price, max_guests)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
         db.run(
           insertBookingQuery,
@@ -383,17 +442,20 @@ app.post("/booking/:id", (req, res) => {
             bookingInfo.check_in_date,
             bookingInfo.check_out_date,
             bookingInfo.total_price,
+            bookingInfo.number_of_guest,
           ],
           (insertErr) => {
             if (insertErr) {
               return res.status(500).send("Error saving booking information");
             }
             // Once the booking is saved, render a confirmation page
-            res.render("payment", {
-              title: "Booking Confirmation",
-              property: accommodation,
-              bookingInfo: bookingInfo,
-            });
+            // res.render("bookingPage", {
+            //   title: "Booking Confirmation",
+            //   property: accommodation,
+            //   bookingInfo: bookingInfo,
+            //   user: currentUser,
+            // });
+            res.redirect("/bookings");
           }
         );
       }
@@ -401,6 +463,38 @@ app.post("/booking/:id", (req, res) => {
   } else {
     res.redirect("/login");
   }
+});
+
+// Payment and Confirmation Pages
+app.get("/payment/:id", guestAuthenticated, (req, res) => {
+  bookingId = req.params.id;
+  currentUser = req.session.userInfo;
+
+  const query = `
+    SELECT bookings.*, user.id, accommodations.name AS accommodation_name
+    FROM bookings
+    JOIN user ON bookings.guest_id = user.id
+    JOIN accommodations ON bookings.accommodation_id = accommodations.id
+    WHERE bookings.host_id = ?
+  `;
+
+  // Execute the query
+  db.all(query, [currentUser.id], (err, bookings) => {
+    if (err) {
+      return res.status(500).send("Error fetching bookings");
+    }
+
+    // Log the bookings to verify the data
+    console.log(bookings);
+
+    // Render the hostManageBookings page with booking information
+    res.render("payment", {
+      bookings: bookings,
+      user: currentUser,
+    });
+  });
+
+  // res.render("payment");
 });
 
 // res.render("propertydetail", { title: "Property Detail" });
@@ -536,14 +630,12 @@ app.post(
       swimming_pool,
       max_guests,
       amenities,
-      check_in_date,
-      check_out_date,
     } = req.body;
     const images = JSON.stringify(req.files.map((file) => file.path)); // Store as JSON array
     const userId = req.session.userInfo.id;
     db.run(
-      `INSERT INTO accommodations (name, city, address, price, description, images, bedrooms, bathrooms, kitchen, living_room, dinning_room, wifi, parking, balcony, gym, swimming_pool, max_guests, check_in_date, check_out_date,  user_id) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO accommodations (name, city, address, price, description, images, bedrooms, bathrooms, kitchen, living_room, dinning_room, wifi, parking, balcony, gym, swimming_pool, max_guests, user_id) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         name,
         city,
@@ -562,8 +654,6 @@ app.post(
         gym,
         swimming_pool,
         max_guests,
-        check_in_date,
-        check_out_date,
         userId,
       ],
       (err) => {
@@ -652,16 +742,14 @@ app.post("/add-accommodation", upload.array("images"), (req, res) => {
     gym: req.body.gym,
     swimming_pool: req.body.swimming_pool,
     max_guests: req.body.max_guests,
-    check_in_date: req.body.check_in_date,
-    check_out_date: req.body.check_out_date,
   };
 
   console.log(accommodationInfo);
   const images = JSON.stringify(req.files.map((file) => file.path)); // Store as JSON array
   const userId = req.session.userInfo.id;
   db.run(
-    `INSERT INTO accommodations (name, city, address, price, description, images, bedrooms, bathrooms, kitchen, living_room, dinning_room, wifi, parking, balcony, gym, swimming_pool, max_guests, check_in_date, check_out_date,  user_id) 
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO accommodations (name, city, address, price, description, images, bedrooms, bathrooms, kitchen, living_room, dinning_room, wifi, parking, balcony, gym, swimming_pool, max_guests, user_id) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       accommodationInfo.name,
       accommodationInfo.city,
@@ -680,8 +768,6 @@ app.post("/add-accommodation", upload.array("images"), (req, res) => {
       accommodationInfo.gym,
       accommodationInfo.swimming_pool,
       accommodationInfo.max_guests,
-      accommodationInfo.check_in_date,
-      accommodationInfo.check_out_date,
       userId,
     ],
     (err) => {
@@ -845,8 +931,6 @@ app.get("/search", (req, res) => {
   });
 });
 
-// Payment and Confirmation Pages
-app.get("/payment", guestAuthenticated, (req, res) => res.render("payment"));
 app.get("/payment-confirmation", (req, res) =>
   res.render("payment-confirmation", {
     title: "View User Dashboard",

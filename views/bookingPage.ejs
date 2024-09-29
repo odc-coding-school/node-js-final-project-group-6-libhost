@@ -22,31 +22,51 @@
 <body>
   <%-include('navbar');-%>
     <div class="container mt-5">
-      <h2 class="text-center mb-4">Your Bookings</h2>
+      <h2 class="text-center mb-4 mt-5">Your Bookings</h2>
       <div class="row">
         <!-- Loop over the user's booking info and generate a card for each booking -->
-        <div class="col-md-4 booking-card">
-          <div class="card">
-            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Property Image">
-            <div class="card-body">
-              <h5 class="card-title">Accommodation Name</h5>
-              <p class="card-text booking-info">
-                <strong>Check-in Date:</strong> 2024-09-20 <br>
-                <strong>Check-out Date:</strong> 2024-09-25 <br>
-                <strong>Number of Guests:</strong> 2 <br>
-                <strong>Total Price:</strong> $<%= bookings.total_price %>
-              </p>
-              <p class="card-text"><strong>Host Information</strong><br>
-                <strong>Name:</strong> John Doe <br>
-                <strong>Email:</strong> john@example.com <br>
-                <strong>Phone:</strong> +1234567890
-              </p>
-              <a href="#" class="btn btn-primary">View Details</a>
+        <% bookings.forEach(booking=> { %>
+          <div class="col-md-4 booking-card">
+            <div class="card">
+              <!-- <img src="https://via.placeholder.com/150" class="card-img-top" alt="Property Image"> -->
+              <div class="card-body">
+                <h5 class="card-title"> </h5>
+                <p class="card-text booking-info">
+                  <strong>Booking Date and time:</strong>
+                  <%= booking.created_at %> <br>
+                    <strong>Check-in Date:</strong>
+                    <%= booking.check_in_date %> <br>
+                      <strong>Check-out Date:</strong>
+                      <%= booking.check_out_date %> <br>
+                        <strong>Number of Guests:</strong>
+                        <%= booking.max_guests %> <br>
+                          <strong>Total Price:</strong> $ <%= booking.total_price %>
+
+                </p>
+                <p class="card-text"><strong>Host Information</strong><br>
+                  <strong>Name:</strong>
+                  <%= booking.full_name %> <br>
+                    <strong>Email:</strong>
+                    <%= booking.email %> <br>
+                      <strong>Phone:</strong>
+                      <%= booking.phone_number %>
+                </p>
+                <!-- If the booking is confirmed, show the "Proceed with Payment" button -->
+                <% if (booking.payment_status=='completed' ) { %>
+                  <form action="/payment/<%= booking.id %>" method="GET">
+                    <button type="submit" class="btn btn-success">Proceed with Payment</button>
+                  </form>
+                  <% } else if (booking.payment_status=='failed' ) { %>
+                    <p class="text-danger">This booking was declined by the host.</p>
+                    <% } else { %>
+                      <p class="text-warning">Waiting for host confirmation...</p>
+                      <% } %>
+              </div>
             </div>
           </div>
-        </div>
+          <% }) %>
 
-        <!-- More booking cards can be added in a loop -->
+            <!-- More booking cards can be added in a loop -->
 
       </div>
     </div>
