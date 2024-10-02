@@ -1,10 +1,16 @@
 app.get('/api/search', (req, res) => {
-    const { location, bedrooms, price, available } = req.query;
+    const { name, city, address, bedrooms, price } = req.query;
     let query = "SELECT * FROM accommodations WHERE ";
     const conditions = [];
 
-    if (location) {
-        conditions.push(`location LIKE '%${location}%'`);
+    if (name) {
+        conditions.push(`name LIKE '%${name}%'`);
+    }
+    if (city) {
+        conditions.push(`city = ${city}`);
+    }
+    if (address) {
+        conditions.push(`address LIKE '%${address}%'`);
     }
     if (bedrooms) {
         conditions.push(`bedrooms = ${bedrooms}`);
@@ -12,10 +18,7 @@ app.get('/api/search', (req, res) => {
     if (price) {
         conditions.push(`price <= ${price}`);
     }
-    if (available) {
-        conditions.push(`available = ${available}`);
-    }
-
+    
     query += conditions.join(' AND ');
 
     db.all(query, [], (err, rows) => {

@@ -7,11 +7,13 @@ const multer = require("multer");
 const sqlite3 = require("sqlite3").verbose();
 const session = require("express-session");
 const flash = require("connect-flash");
+// const searchFilter = require("./router/searchFilter");
+// app.use('/home', searchFilter)
 
 // Initialize App
 const app = express();
 const port = 5000;
-const db = new sqlite3.Database(path.join(__dirname, "staylib.db"));
+const db = new sqlite3.Database("staylib.db");
 
 // Session Configuration
 app.use(
@@ -214,57 +216,106 @@ db.serialize(() => {
 });
 
 // Routes
-const homeProperty = (res, req) => {
-  currentUser = req.session.userInfo;
-  db.all(
-    `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture FROM accommodations 
-     JOIN user ON accommodations.user_id = user.id`,
-    [],
-    (err, accommodations) => {
-      if (err) {
-        console.error(err.message);
-        return res.redirect("/home");
-      }
 
-      // Parse the JSON images before rendering
-      accommodations.forEach((accommodation) => {
-        accommodation.images = JSON.parse(accommodation.images);
-      });
-      console.log("sample", accommodations);
-      res.render("index", {
-        title: "Home || Page",
-        accommodations,
-        user: currentUser,
-      });
-    }
-  );
-};
-//
+// Route for fetching filtered accommodations
+app.get('/home', (req, res) => {
+  const { name, city, minPrice, maxPrice, bedrooms } = req.query;
 
-// Route for displaying home page with search and filter functionality
-app.get("/home", async (req, res) => {
-  console.log(req.query); // Debugging received parameters
+  let query = `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture 
+               FROM accommodations 
+               JOIN user ON accommodations.user_id = user.id 
+               WHERE 1=1`;  // 1=1 is used as a placeholder for easier query building
 
-  let filter = {};
-  
-  // Adding filters based on query parameters
-  if (req.query.name) filter.name = { $regex: req.query.name, $options: 'i' };
-  if (req.query.city) filter.city = { $regex: req.query.city, $options: 'i' };
-  if (req.query.address) filter.address = { $regex: req.query.address, $options: 'i' };
-  if (req.query.bedrooms) filter.bedrooms = parseInt(req.query.bedrooms);
-  if (req.query.price) filter.price = { $lte: parseInt(req.query.price) };
+  let queryParams = [];
 
-  console.log(filter); // Debugging applied filters
-
-  try {
-    // Querying the database with the filter criteria
-    const accommodations = await Accommodation.find(filter);
-    res.render('home', { accommodations });
-  } catch (error) {
-    console.error("Error fetching accommodations:", error);
-    res.status(500).send("Error fetching accommodations");
+  if (name) {
+    query += ` AND accommodations.name LIKE ?`;
+    queryParams.push(`%${name}%`);
   }
+
+  if (city) {
+    query += ` AND accommodations.city LIKE ?`;
+    queryParams.push(`%${city}%`);
+  }
+
+  if (minPrice) {
+    query += ` AND accommodations.price >= ?`;
+    queryParams.push(minPrice);
+  }
+
+  if (maxPrice) {
+    query += ` AND accommodations.price <= ?`;
+    queryParams.push(maxPrice);
+  }
+
+  if (bedrooms) {
+    query += ` AND accommodations.bedrooms = ?`;
+    queryParams.push(bedrooms);
+  }
+
+  db.all(query, queryParams, (err, accommodations) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ error: 'Failed to fetch accommodations' });
+    }
+
+    // Parse the JSON images for each accommodation
+    accommodations.forEach((accommodation) => {
+      accommodation.images = JSON.parse(accommodation.images);
+    });
+
+    // If it's an AJAX request, respond with JSON
+    if (req.xhr) {
+      return res.json({ accommodations });
+    }
+
+    // Otherwise, render the page
+    res.render('index', {
+      title: 'Home || Page',
+      accommodations,
+      user: req.session.userInfo,
+    });
+  });
 });
+
+
+// Route for displaying the home page with search and filter functionality
+// app.get('/home', (req, res) => {
+//   homeProperty(req, res);
+// });
+
+// const homeProperty = (res, req) => {
+//   currentUser = req.session.userInfo;
+//   db.all(
+//     `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture FROM accommodations 
+//      JOIN user ON accommodations.user_id = user.id`,
+//     [],
+//     (err, accommodations) => {
+//       if (err) {
+//         console.error(err.message);
+//         return res.redirect("/home");
+//       }
+
+//       // Parse the JSON images before rendering
+//       accommodations.forEach((accommodation) => {
+//         accommodation.images = JSON.parse(accommodation.images);
+//       });
+//       console.log("sample", accommodations);
+//       res.render("index", {
+//         title: "Home || Page",
+//         accommodations,
+//         user: currentUser,
+//       });
+//     }
+//   );
+// };
+// //
+
+// // Route for displaying home page with search and filter functionality
+// app.get('/home', (req, res) => {
+//   homeProperty(res, req);
+// })
+
 
 // Root route redirecting to home
 app.get("/", (req, res) => {
@@ -307,29 +358,29 @@ app.get("/property-detail/:id", (req, res) => {
 app.get("/bookings", (req, res) => {
   const currentUser = req.session.userInfo;
 
+  if (!currentUser) {
+    return res.status(401).send("User not logged in");
+  }
 
-  db.all("SELECT * FROM bookings WHERE guest_id = ?", [currentUser.id], (err, bookings) => {
+  // Query to get the guest's bookings with details about the host and accommodation
+  const query = `
+    SELECT bookings.*, user.full_name, user.email, user.phone_number, accommodations.name AS accommodation_name
+    FROM bookings
+    JOIN user ON bookings.host_id = user.id
+    JOIN accommodations ON bookings.accommodation_id = accommodations.id
+    WHERE bookings.guest_id = ?
+  `;
+
+  db.all(query, [currentUser.id], (err, bookings) => {
     if (err) {
-      return res.status(500).send("Error fetching bookings");
-  db.all(
-    `SELECT bookings.*, user.full_name, user.email, user.phone_number, accommodations.name AS accommodation_name
-     FROM bookings
-     JOIN user ON bookings.host_id = user.id
-     JOIN accommodations ON bookings.accommodation_id = accommodations.id
-     WHERE bookings.guest_id = ?`,
-    [currentUser.id],
-    (err, bookings) => {
-      if (err) {
-        return res.status(500).send("Error fetching guest bookings");
-      }
-
-      res.render("bookingPage", {
-        bookings: bookings,
-        user: currentUser,
-      });
-
+      return res.status(500).send("Error fetching guest bookings");
     }
-    res.render("bookingPage", { bookings, user: currentUser });
+
+    // Render the booking page with the fetched bookings
+    res.render("bookingPage", {
+      bookings: bookings,
+      user: currentUser,
+    });
   });
 });
 
@@ -396,136 +447,56 @@ app.post("/decline-booking/:id", (req, res) => {
   });
 });
 
+// POST route for booking
 app.post("/booking/:id", guestAuthenticated, (req, res) => {
-
   const propertyId = req.params.id;
-  const currentUser = req.session.userInfo;
+  const currentUser = req.session.userInfo; // Assuming guestAuthenticated ensures this exists
 
-  if (currentUser) {
+  if (!currentUser) {
+    return res.redirect("/login");
+  }
 
-    db.get(`
-      SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture
-      FROM accommodations
-      JOIN user ON accommodations.user_id = user.id
-      WHERE accommodations.id = ?
-    `, [propertyId], (err, accommodation) => {
+  // Retrieve accommodation and user details
+  db.get(
+    `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture
+     FROM accommodations
+     JOIN user ON accommodations.user_id = user.id
+     WHERE accommodations.id = ?`,
+    [propertyId],
+    (err, accommodation) => {
       if (err) {
         return res.status(500).send("Error retrieving accommodation details");
-
-    // First, get the accommodation's availability from the accommodation table
-    db.get(
-      `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture
-       FROM accommodations
-       JOIN user ON accommodations.user_id = user.id
-       WHERE accommodations.id = ?`,
-      [propertyId],
-      (err, accommodation) => {
-        if (err) {
-          return res.status(500).send("Error retrieving accommodation details");
-        }
-        if (!accommodation) {
-          return res.status(404).send("Accommodation not found");
-        }
-
-        // Parse the check-in and check-out dates from the form
-        const checkInDate = new Date(req.body.checkInDate);
-        const checkOutDate = new Date(req.body.checkOutDate);
-
-        // Check if the selected dates are within the accommodation's availability
-        // if (checkInDate < availableFrom || checkOutDate > availableTo) {
-        //   return res
-        //     .status(400)
-        //     .send(
-        //       "Selected dates are outside the accommodation's available range."
-        //     );
-        // }
-
-        // Calculate the number of days
-        const timeDifference = checkOutDate - checkInDate;
-        const days = timeDifference / (1000 * 60 * 60 * 24); // Convert milliseconds to days
-
-        if (days <= 0) {
-          return res
-            .status(400)
-            .send("Check-out date must be after check-in date");
-        }
-
-        // Calculate the total price
-        const totalPrice = days * accommodation.price;
-
-        const bookingInfo = {
-          check_in_date: req.body.checkInDate,
-          check_out_date: req.body.checkOutDate,
-          number_of_guest: req.body.numGuests,
-          accommodation_id: propertyId,
-          guest_id: currentUser.id,
-          host_id: accommodation.user_id,
-          total_price: totalPrice, // Calculated total price
-        };
-
-        if (bookingInfo.number_of_guest > accommodation.max_guests) {
-          return res
-            .status(400)
-            .send(
-              "Number of guests are  more than the maximum allowed for this accommodation."
-            );
-        }
-
-        console.log("Booking Info:", bookingInfo);
-
-        // Save booking to the database
-        const insertBookingQuery = `
-          INSERT INTO bookings (guest_id, host_id, accommodation_id, check_in_date, check_out_date, total_price, max_guests)
-          VALUES (?, ?, ?, ?, ?, ?, ?)
-        `;
-        db.run(
-          insertBookingQuery,
-          [
-            bookingInfo.guest_id,
-            bookingInfo.host_id,
-            bookingInfo.accommodation_id,
-            bookingInfo.check_in_date,
-            bookingInfo.check_out_date,
-            bookingInfo.total_price,
-            bookingInfo.number_of_guest,
-          ],
-          (insertErr) => {
-            if (insertErr) {
-              return res.status(500).send("Error saving booking information");
-            }
-            // Once the booking is saved, render a confirmation page
-            // res.render("bookingPage", {
-            //   title: "Booking Confirmation",
-            //   property: accommodation,
-            //   bookingInfo: bookingInfo,
-            //   user: currentUser,
-            // });
-            res.redirect("/bookings");
-          }
-        );
-
       }
       if (!accommodation) {
         return res.status(404).send("Accommodation not found");
       }
 
-      const availableFrom = new Date(accommodation.check_in_date);
-      const availableTo = new Date(accommodation.check_out_date);
+      // Parse check-in and check-out dates
       const checkInDate = new Date(req.body.checkInDate);
       const checkOutDate = new Date(req.body.checkOutDate);
 
+      // Validate dates
+      const availableFrom = new Date(accommodation.check_in_date);
+      const availableTo = new Date(accommodation.check_out_date);
+
       if (checkInDate < availableFrom || checkOutDate > availableTo) {
-        return res.status(400).send("Selected dates are outside the accommodation's available range.");
+        return res
+          .status(400)
+          .send("Selected dates are outside the accommodation's available range.");
       }
 
+      // Calculate the number of days
       const timeDifference = checkOutDate - checkInDate;
-      const days = timeDifference / (1000 * 60 * 60 * 24);
+      const days = timeDifference / (1000 * 60 * 60 * 24); // Convert milliseconds to days
 
       if (days <= 0) {
         return res.status(400).send("Check-out date must be after check-in date.");
       }
 
+      // Calculate the total price
       const totalPrice = days * accommodation.price;
+
+      // Prepare booking information
       const bookingInfo = {
         check_in_date: req.body.checkInDate,
         check_out_date: req.body.checkOutDate,
@@ -536,24 +507,41 @@ app.post("/booking/:id", guestAuthenticated, (req, res) => {
         total_price: totalPrice,
       };
 
-      db.run(`
-        INSERT INTO bookings (guest_id, host_id, accommodation_id, check_in_date, check_out_date, total_price)
-        VALUES (?, ?, ?, ?, ?, ?)
-      `, [bookingInfo.guest_id, bookingInfo.host_id, bookingInfo.accommodation_id, bookingInfo.check_in_date, bookingInfo.check_out_date, bookingInfo.total_price], (err) => {
-        if (err) {
-          return res.status(500).send("Error saving booking information");
+      // Check guest limit
+      if (bookingInfo.number_of_guest > accommodation.max_guests) {
+        return res
+          .status(400)
+          .send("Number of guests exceeds the maximum allowed for this accommodation.");
+      }
+
+      // Insert the booking into the database
+      const insertBookingQuery = `
+        INSERT INTO bookings (guest_id, host_id, accommodation_id, check_in_date, check_out_date, total_price, number_of_guest)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `;
+      db.run(
+        insertBookingQuery,
+        [
+          bookingInfo.guest_id,
+          bookingInfo.host_id,
+          bookingInfo.accommodation_id,
+          bookingInfo.check_in_date,
+          bookingInfo.check_out_date,
+          bookingInfo.total_price,
+          bookingInfo.number_of_guest,
+        ],
+        (insertErr) => {
+          if (insertErr) {
+            return res.status(500).send("Error saving booking information");
+          }
+          // Redirect to bookings or render a confirmation page
+          res.redirect("/bookings");
         }
-        res.render("bookingConfirmation", {
-          title: "Booking Confirmation",
-          property: accommodation,
-          bookingInfo,
-        });
-      });
-    });
-  } else {
-    res.redirect("/login");
-  }
+      );
+    }
+  );
 });
+
 
 
 // Explore page route
