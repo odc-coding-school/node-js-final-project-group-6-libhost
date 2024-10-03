@@ -1,0 +1,8 @@
+POST https://localhost:5000/home
+{
+    "name": "Town House",
+    "city": "Duport",
+    "address": "Paynesville",
+    "bedrooms": "5",
+    "price": "50"
+}

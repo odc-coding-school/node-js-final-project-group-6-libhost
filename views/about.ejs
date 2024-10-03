@@ -12,68 +12,185 @@
     <!-- localhosted font-awesome icons -->
     <link rel="stylesheet" href="/font-awesome 4.7.0/css/font-awesome.css">
     <meta charset="utf-8">
+
+    <style>
+      body {
+    font-family: 'Arial', sans-serif;
+}
+
+h1, h2 {
+    font-weight: bold;
+}
+
+.about-us p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.mission-vision {
+    padding: 3rem 0;
+}
+
+.mission-vision h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.mission-vision p {
+    font-size: 1.1rem;
+}
+
+.our-team {
+    padding: 3rem 0;
+}
+
+.our-team h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.team-card {
+    transition: all 0.3s ease;
+}
+
+.team-card:hover {
+    transform: scale(1.05);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .about-us .col-md-6 img {
+        margin-top: 2rem;
+    }
+
+    .team-card {
+        margin-bottom: 2rem;
+    }
+}
+    </style>
 </head>
 
 <body>
     <%-include('navbar');-%>
 
-       
-    <div class="container">
-        <!-- Header Section -->
-        <div class="header-section text-center">
-            <h1 styles="padding:50px">About Us</h1>
-            <p>Learn more about what we do and who we are.</p>
-        </div>
-        
+    <!doctype html>
+<html lang="en">
+  <head>
+    <title>LuxuryHotel a Hotel Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900|Rubik:300,400,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+
+    <link rel="stylesheet" href="fonts/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <!-- Theme Style -->
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+  </head>
+  <body>
     
-        <!-- About Project -->
-        <div class="row align-items-center mt-5">
-            <div class="col-md-6">
-                <h2>Our Project</h2>
-                <p>This project is dedicated to providing seamless accommodation bookings across Liberia, enhancing the travel experience for tourists and locals alike.</p>
-            </div>
-            <div class="col-md-6">
-                <img src="images\Royal grand.jpg" class="img-fluid" alt="Responsive image">
-            </div>
-        </div>
+ 
+    <!-- About Us Section -->
+    <section class="about-us container my-5">
+      <div class="row align-items-center">
+          <div class="col-md-6">
+              <h1>About Us</h1>
+              <p>
+                  LibHost is a revolutionary web platform, designed to seamlessly connect property owners across Liberia with travelers looking for short and long-term accommodations. We aim to transform the travel experience in Liberia, providing easy access to authentic and local stays while promoting local tourism.
+              </p>
+          </div>
+          <div class="col-md-6">
+              <img src="about-image.jpg" alt="About Us" class="img-fluid">
+          </div>
+      </div>
+  </section>
+
+  <!-- Mission & Vision Section -->
+  <section class="mission-vision bg-light py-5">
+      <div class="container text-center">
+          <div class="row">
+              <div class="col-md-6">
+                  <h2>Our Mission</h2>
+                  <p>
+                      To provide a seamless, accessible, and transparent platform for booking accommodations across Liberia, enabling both hosts and guests to have a safe and enjoyable experience.
+                  </p>
+              </div>
+              <div class="col-md-6">
+                  <h2>Our Vision</h2>
+                  <p>
+                      To be the leading accommodation platform in Liberia, offering unique experiences to travelers and empowering local hosts to share their spaces with the world.
+                  </p>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- Our Team Section -->
+  <section class="our-team py-5">
+      <div class="container text-center">
+          <h2>Our Team</h2>
+          <div class="row">
+              <!-- Team Member Card 1 -->
+              <div class="col-md-4">
+                  <div class="card team-card">
+                      <img src="member1.jpg" alt="Member 1" class="card-img-top">
+                      <div class="card-body">
+                          <h5 class="card-title">James A. Morgan Jr.</h5>
+                          <p class="card-text">Team Lead/Project Manager</p>
+                      </div>
+                  </div>
+              </div>
+              <!-- Team Member Card 2 -->
+              <div class="col-md-4">
+                  <div class="card team-card">
+                      <img src="images\Stephen.jpg" alt="Member 2" class="card-img-top" style="object-fit: cover;">
+                      <div class="card-body">
+                          <h5 class="card-title">Stephen P. Godwin</h5>
+                          <p class="card-text">Chief Technology Officer</p>
+                      </div>
+                  </div>
+              </div>
+              <!-- Team Member Card 3 -->
+              <div class="col-md-4">
+                  <div class="card team-card">
+                      <img src="images\Gabriel.jpg" alt="Member 3" class="card-img-top" style="object-fit: cover;">
+                      <div class="card-body">
+                          <h5 class="card-title">Gabriel Kun</h5>
+                          <p class="card-text">Head of Marketing</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+
+   
+      
+  
     
-        <!-- Mission and Vision -->
-        <div class="mission-vision">
-            <div class="row">
-                <div class="col-md-6">
-                    <h3>Mission</h3>
-                    <p>To connect people with the best local accommodations, providing exceptional comfort and quality with every booking.</p>
-                </div>
-                <div class="col-md-6">
-                    <h3>Vision</h3>
-                    <p>To be the leading accommodation booking platform in Liberia, revolutionizing the way people plan their stays.</p>
-                </div>
-            </div>
-        </div>
     
-        <!-- Team Section -->
-        <div class="team-section">
-            <h2>Our Team</h2>
-            <div class="row">
-                <div class="col-md-4 team-member">
-                    <img src="images\morganPic.jpg" class="img-fluid" alt="Member image">
-                    <h4>James Anointed Morgan Jr.</h4>
-                    <p>CEO & Founder</p>
-                </div>
-                <div class="col-md-4 team-member">
-                    <img src="team-member2.jpg" class="img-fluid" alt="Member image">
-                    <h4>Stephen P. Godwin</h4>
-                    <p>CTO</p>
-                </div>
-                <div class="col-md-4 team-member">
-                    <img src="team-member3.jpg" class="img-fluid" alt="Member image">
-                    <h4>Gabriel Kun</h4>
-                    <p>Marketing Director</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/jquery-migrate-3.0.0.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/magnific-popup-options.js"></script>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
