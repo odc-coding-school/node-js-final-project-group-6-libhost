@@ -37,19 +37,26 @@
                         <!-- Accommodation Cost -->
                         <div class="d-flex justify-content-between">
                             <span>Accommodation Cost:</span>
-                            <span id="accommodation-cost">$200.00</span> <!-- Dynamically updated with JS/PHP -->
+                            <span id="accommodation-cost">
+                                $<%= accommodation_cost %>
+                            </span>
+
+                            <!-- Dynamically updated with JS/PHP -->
                         </div>
 
                         <!-- StayLib 8% Interest -->
                         <div class="d-flex justify-content-between mt-2">
                             <span>StayLib Service Fee (8%):</span>
-                            <span id="staylib-fee">$16.00</span> <!-- Dynamically calculated -->
+                            <span id="staylib-fee">
+                                $<%= service_fee %>
+                            </span> <!-- Dynamically calculated -->
                         </div>
 
                         <!-- Total Payment -->
                         <div class="d-flex justify-content-between mt-2">
                             <span><strong>Total Payment:</strong></span>
-                            <span id="total-payment"><strong>$216.00</strong></span> <!-- Dynamically calculated -->
+                            <span id="total-payment"><strong>$<%= total_payment %> </strong></span>
+                            <!-- Dynamically calculated -->
                         </div>
 
                         <hr>
@@ -69,33 +76,36 @@
                         </div>
 
                         <!-- Proceed Button -->
-                        <div class="text-center">
-                            <button class="btn proceed-btn btn-lg" onclick="submitPayment()">Proceed with
+                        <form class="text-center" action="/payment/<%= bookingId %>" method="POST"
+                            style="display:inline;">
+                            <button type="submit" class="btn proceed-btn btn-lg">Proceed with
                                 Payment</button>
-                        </div>
+                        </form>
                     </div>
+
                 </div>
             </div>
         </div>
 
+
         <script>
             // Mock data for dynamic values (replace with server-side data)
-            const accommodationCost = 200.00;
-            const staylibFee = accommodationCost * 0.08;
-            const totalPayment = accommodationCost + staylibFee;
+            // const accommodationCost = 200.00;
+            // const staylibFee = accommodationCost * 0.08;
+            // const totalPayment = accommodationCost + staylibFee;
 
             // Update the UI with dynamic values
-            document.getElementById('accommodation-cost').innerText = `$${accommodationCost.toFixed(2)}`;
-            document.getElementById('staylib-fee').innerText = `$${staylibFee.toFixed(2)}`;
-            document.getElementById('total-payment').innerText = `$${totalPayment.toFixed(2)}`;
+            // document.getElementById('accommodation-cost').innerText = `$${accommodationCost.toFixed(2)}`;
+            // document.getElementById('staylib-fee').innerText = `$${staylibFee.toFixed(2)}`;
+            // document.getElementById('total-payment').innerText = `$${totalPayment.toFixed(2)}`;
 
             // Function to handle the form submission (payment processing simulation)
-            function submitPayment() {
-                const paymentMethod = document.getElementById('payment-method').value;
+            // function submitPayment() {
+            //     const paymentMethod = document.getElementById('payment-method').value;
 
-                // Redirect to payment processing page (or simulate payment)
-                window.location.href = `/process-payment?method=${paymentMethod}&total=${totalPayment.toFixed(2)}`;
-            }
+            // Redirect to payment processing page (or simulate payment)
+            // window.location.href = `/process-payment?method=${paymentMethod}&total=${totalPayment.toFixed(2)}`;
+            // }
         </script>
 </body>
 

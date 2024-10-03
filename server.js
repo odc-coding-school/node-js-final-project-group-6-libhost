@@ -280,7 +280,7 @@ app.get("/property-detail/:id", (req, res) => {
   );
 });
 
-app.get("/bookings", (req, res) => {
+app.get("/bookings", guestAuthenticated, (req, res) => {
   const currentUser = req.session.userInfo;
 
   db.all(
@@ -475,26 +475,72 @@ app.get("/payment/:id", guestAuthenticated, (req, res) => {
     FROM bookings
     JOIN user ON bookings.guest_id = user.id
     JOIN accommodations ON bookings.accommodation_id = accommodations.id
-    WHERE bookings.host_id = ?
+    WHERE bookings.id = ?
   `;
 
   // Execute the query
-  db.all(query, [currentUser.id], (err, bookings) => {
+  db.all(query, [bookingId], (err, bookings) => {
     if (err) {
       return res.status(500).send("Error fetching bookings");
     }
 
     // Log the bookings to verify the data
-    console.log(bookings);
+    console.log("Bookingssss", bookings);
+
+    const service_fee = (bookings[0].total_price * 8) / 100;
+    const accommodation_cost = bookings[0].total_price;
+    const total_payment = service_fee + accommodation_cost;
 
     // Render the hostManageBookings page with booking information
     res.render("payment", {
       bookings: bookings,
       user: currentUser,
+      service_fee: service_fee,
+      accommodation_cost: accommodation_cost,
+      total_payment: total_payment,
+      bookingId: bookingId,
     });
   });
+});
 
-  // res.render("payment");
+app.post("/payment/:id", (req, res) => {
+  const bookingId = req.params.id;
+  currentUser = req.session.userInfo;
+  console.log(bookingId);
+
+  db.get(
+    `SELECT bookings.*, user.id, accommodations.id AS accommodationId
+    FROM bookings
+    JOIN user ON bookings.guest_id = user.id
+    JOIN accommodations ON bookings.accommodation_id = accommodations.id
+    WHERE bookings.id = ?`,
+    [bookingId],
+    (err, bookings) => {
+      // Calculate the service fee and total payment
+      const service_fee = (bookings.total_price * 8) / 100;
+      const accommodation_cost = bookings.total_price;
+      const total_payment = service_fee + accommodation_cost;
+
+      db.run(
+        `INSERT INTO payments (booking_id, guest_id,accommodation_cost,service_fee,total_payment) 
+     VALUES (?,?,?,?,?)`,
+        [
+          bookingId,
+          currentUser.id,
+          accommodation_cost,
+          service_fee,
+          total_payment,
+        ],
+        (err) => {
+          if (err) return res.status(500).send("Server Error");
+          else {
+            res.redirect(`/payment/${bookingId}`);
+          }
+        }
+      );
+    }
+  );
+  // res.redirect("/");
 });
 
 // res.render("propertydetail", { title: "Property Detail" });
