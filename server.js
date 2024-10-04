@@ -317,7 +317,63 @@ app.get("/home", (req, res) => {
 
 // Root route redirecting to home
 app.get("/", (req, res) => {
-  homeProperty(res, req);
+  const { name, city, minPrice, maxPrice, bedrooms } = req.query;
+
+  let query = `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture 
+               FROM accommodations 
+               JOIN user ON accommodations.user_id = user.id 
+               WHERE 1=1`; // 1=1 is used as a placeholder for easier query building
+
+  let queryParams = [];
+
+  if (name) {
+    query += ` AND accommodations.name LIKE ?`;
+    queryParams.push(`%${name}%`);
+  }
+
+  if (city) {
+    query += ` AND accommodations.city LIKE ?`;
+    queryParams.push(`%${city}%`);
+  }
+
+  if (minPrice) {
+    query += ` AND accommodations.price >= ?`;
+    queryParams.push(minPrice);
+  }
+
+  if (maxPrice) {
+    query += ` AND accommodations.price <= ?`;
+    queryParams.push(maxPrice);
+  }
+
+  if (bedrooms) {
+    query += ` AND accommodations.bedrooms = ?`;
+    queryParams.push(bedrooms);
+  }
+
+  db.all(query, queryParams, (err, accommodations) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ error: "Failed to fetch accommodations" });
+    }
+
+    // Parse the JSON images for each accommodation
+    accommodations.forEach((accommodation) => {
+      accommodation.images = JSON.parse(accommodation.images);
+    });
+
+    // If it's an AJAX request, respond with JSON
+    if (req.xhr) {
+      return res.json({ accommodations });
+    }
+
+    // Otherwise, render the page
+    res.render("index", {
+      title: "Home || Page",
+      accommodations,
+      user: req.session.userInfo,
+    });
+  });
 });
 
 // About page route
