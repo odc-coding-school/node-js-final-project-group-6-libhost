@@ -1,5 +1,4 @@
-// searchFilter.js
-
+// searchFilter.js  
 document.addEventListener('DOMContentLoaded', function() {
     const searchForm = document.getElementById('searchForm');
     const accommodationCards = document.querySelectorAll('.accommodation-card');  // All the accommodation cards
