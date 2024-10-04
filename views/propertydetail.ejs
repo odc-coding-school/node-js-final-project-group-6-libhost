@@ -6,7 +6,11 @@
         <%= title %>
     </title>
     <!-- Bootstrap CSS -->
-    <link href="/bootstrap 5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="/bootstrap 5.3.3/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <meta charset="utf-8">
     <style>
@@ -35,7 +39,7 @@
                     <% if (property.images && property.images.length) { %>
                         <% property.images.forEach((image, index)=> { %>
                             <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                                <img src="<%= image %>" class="d-block w-100" alt="Property Image"
+                                <img src="/<%= image %>" class="d-block w-100" alt="Property Image"
                                     style="height: 450px; object-fit: cover;">
                             </div>
                             <% }) %>
@@ -43,6 +47,7 @@
                                     <div class="carousel-item active">
                                         <img src="/images/sinkor-palace-hotel.jpg" class="d-block w-100"
                                             alt="Default Property Image" style="height: 450px; object-fit: cover;">
+
                                     </div>
                                     <% } %>
                 </div>
