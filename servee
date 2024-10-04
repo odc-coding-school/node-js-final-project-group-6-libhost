@@ -7,13 +7,11 @@ const multer = require("multer");
 const sqlite3 = require("sqlite3").verbose();
 const session = require("express-session");
 const flash = require("connect-flash");
-// const searchFilter = require("./router/searchFilter");
-// app.use('/home', searchFilter)
 
 // Initialize App
 const app = express();
 const port = 5000;
-const db = new sqlite3.Database("staylib.db");
+const db = new sqlite3.Database(path.join(__dirname, "staylib.db"));
 
 // Session Configuration
 app.use(
@@ -28,12 +26,12 @@ app.use(
 // Flash middleware
 app.use(flash());
 
-//Middleware to pass flash messages to all views
-app.use((req, res, next) => {
-  res.locals.success_msg = req.flash("success_msg");
-  res.locals.error_msg = req.flash("error_msg");
-  next();
-});
+// Middleware to pass flash messages to all views
+// app.use((req, res, next) => {
+//   res.locals.success_msg = req.flash("success_msg");
+//   res.locals.error_msg = req.flash("error_msg");
+//   next();
+// });
 
 // Middleware Configuration
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -216,116 +214,43 @@ db.serialize(() => {
 });
 
 // Routes
+const homeProperty = (res, req) => {
+  currentUser = req.session.userInfo;
+  db.all(
+    `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture FROM accommodations 
+     JOIN user ON accommodations.user_id = user.id`,
+    [],
+    (err, accommodations) => {
+      if (err) {
+        console.error(err.message);
+        return res.redirect("/home");
+      }
 
-// Route for fetching filtered accommodations
+      // Parse the JSON images before rendering
+      accommodations.forEach((accommodation) => {
+        accommodation.images = JSON.parse(accommodation.images);
+      });
+      console.log("sample", accommodations);
+      res.render("index", {
+        title: "Home || Page",
+        accommodations,
+        user: currentUser,
+      });
+    }
+  );
+};
+// Home, About, Explore, and Dashboards
+
 app.get("/home", (req, res) => {
-  const { name, city, minPrice, maxPrice, bedrooms } = req.query;
-
-  let query = `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture 
-               FROM accommodations 
-               JOIN user ON accommodations.user_id = user.id 
-               WHERE 1=1`; // 1=1 is used as a placeholder for easier query building
-
-  let queryParams = [];
-
-  if (name) {
-    query += ` AND accommodations.name LIKE ?`;
-    queryParams.push(`%${name}%`);
-  }
-
-  if (city) {
-    query += ` AND accommodations.city LIKE ?`;
-    queryParams.push(`%${city}%`);
-  }
-
-  if (minPrice) {
-    query += ` AND accommodations.price >= ?`;
-    queryParams.push(minPrice);
-  }
-
-  if (maxPrice) {
-    query += ` AND accommodations.price <= ?`;
-    queryParams.push(maxPrice);
-  }
-
-  if (bedrooms) {
-    query += ` AND accommodations.bedrooms = ?`;
-    queryParams.push(bedrooms);
-  }
-
-  db.all(query, queryParams, (err, accommodations) => {
-    if (err) {
-      console.error(err.message);
-      return res.status(500).json({ error: "Failed to fetch accommodations" });
-    }
-
-    // Parse the JSON images for each accommodation
-    accommodations.forEach((accommodation) => {
-      accommodation.images = JSON.parse(accommodation.images);
-    });
-
-    // If it's an AJAX request, respond with JSON
-    if (req.xhr) {
-      return res.json({ accommodations });
-    }
-
-    // Otherwise, render the page
-    res.render("index", {
-      title: "Home || Page",
-      accommodations,
-      user: req.session.userInfo,
-    });
-  });
+  homeProperty(res, req);
 });
-
-// Route for displaying the home page with search and filter functionality
-// app.get('/home', (req, res) => {
-//   homeProperty(req, res);
-// });
-
-// const homeProperty = (res, req) => {
-//   currentUser = req.session.userInfo;
-//   db.all(
-//     `SELECT accommodations.*, user.user_name, user.full_name, user.email, user.phone_number, user.profile_picture FROM accommodations
-//      JOIN user ON accommodations.user_id = user.id`,
-//     [],
-//     (err, accommodations) => {
-//       if (err) {
-//         console.error(err.message);
-//         return res.redirect("/home");
-//       }
-
-//       // Parse the JSON images before rendering
-//       accommodations.forEach((accommodation) => {
-//         accommodation.images = JSON.parse(accommodation.images);
-//       });
-//       console.log("sample", accommodations);
-//       res.render("index", {
-//         title: "Home || Page",
-//         accommodations,
-//         user: currentUser,
-//       });
-//     }
-//   );
-// };
-// //
-
-// // Route for displaying home page with search and filter functionality
-// app.get('/home', (req, res) => {
-//   homeProperty(res, req);
-// })
-
-// Root route redirecting to home
 app.get("/", (req, res) => {
   homeProperty(res, req);
 });
-
-// About page route
 app.get("/about", (req, res) => {
-  const currentUser = req.session.userInfo;
+  currentUser = req.session.userInfo;
   res.render("about", { title: "About", user: currentUser });
 });
-
 app.get("/property-detail/:id", (req, res) => {
   currentUser = req.session.userInfo;
   const propertyId = req.params.id;
@@ -437,7 +362,6 @@ app.post("/decline-booking/:id", (req, res) => {
   });
 });
 
-// Route to handle booking submission
 app.post("/booking/:id", guestAuthenticated, (req, res) => {
   const propertyId = req.params.id;
   const currentUser = req.session.userInfo;
@@ -585,14 +509,11 @@ app.post("/payment/:id", (req, res) => {
       const total_payment = service_fee + accommodation_cost;
 
       db.run(
-        `INSERT INTO payments (booking_id, guest_id, host_id, accommodation_id, payment_method, accommodation_cost,service_fee,total_payment) 
-     VALUES (?,?,?,?,?,?,?,?)`,
+        `INSERT INTO payments (booking_id, guest_id,accommodation_cost,service_fee,total_payment) 
+     VALUES (?,?,?,?,?)`,
         [
           bookingId,
           currentUser.id,
-          bookings.host_id,
-          bookings.accommodation_id,
-          "Orange Money",
           accommodation_cost,
           service_fee,
           total_payment,
@@ -629,7 +550,6 @@ app.get("/explore", (req, res) => {
     });
   });
 });
-
 app.get("/admin-dashboard", adminAuthenticated, (req, res) => {
   currentuser(req);
   db.all(`SELECT * FROM user`, [], (err, users) => {
@@ -650,7 +570,6 @@ app.get("/admin-dashboard", adminAuthenticated, (req, res) => {
     });
   });
 });
-
 app.get("/manage-user", adminAuthenticated, (req, res) => {
   currentuser(req);
   db.all(`SELECT * FROM user`, [], (err, users) => {
@@ -661,7 +580,6 @@ app.get("/manage-user", adminAuthenticated, (req, res) => {
     res.render("adminManageUser", { users: users, currentUser: currentUser });
   });
 });
-
 app.get("/manage-accommodation", adminAuthenticated, (req, res) => {
   currentuser(req);
   db.all(`SELECT * FROM accommodations`, [], (err, accommodations) => {
@@ -675,7 +593,6 @@ app.get("/manage-accommodation", adminAuthenticated, (req, res) => {
     });
   });
 });
-
 app.get("/add-user", adminAuthenticated, (req, res) => {
   db.all(`SELECT * FROM roles`, [], (err, roles) => {
     if (err) {
@@ -686,7 +603,6 @@ app.get("/add-user", adminAuthenticated, (req, res) => {
     res.render("add-user", { title: "Add User || Page", roles: roles });
   });
 });
-
 app.post("/add-user", upload.single("photo"), async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const userInfo = {
@@ -720,7 +636,7 @@ app.post("/add-user", upload.single("photo"), async (req, res) => {
     }
   );
 });
-
+// Accommodation Routes
 app.get("/admin-add-accommodation", adminAuthenticated, (req, res) =>
   res.render("admin-add-accommodation")
 );
@@ -1022,49 +938,30 @@ app.get("/logout", (req, res) => {
 //   });
 // });
 
-// // Route to display the homepage with optional search/filter functionality
-app.get("/", (req, res) => {
-  const { name, city, address, bedrooms, price } = req.query;
-  let query = "SELECT * FROM accommodations WHERE 1=1"; // Base query to fetch all accommodations
-  let params = [];
-
-  // Append filters dynamically based on the user input
-  if (name) {
-    query += " AND name LIKE ?";
-    params.push(`%${name}%`);
-  }
-  if (city) {
-    query += " AND city LIKE ?";
-    params.push(`%${city}%`);
-  }
-  if (address) {
-    query += " AND address LIKE ?";
-    params.push(`%${address}%`);
-  }
-  if (bedrooms) {
-    query += " AND bedrooms = ?";
-    params.push(bedrooms);
-  }
-  if (price) {
-    query += " AND price <= ?";
-    params.push(price);
-  }
-
-  // Execute the query to fetch filtered accommodations from the database
-  db.all(query, params, (err, rows) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send("Error querying the database");
-    } else {
-      // Render the homepage view with the filtered accommodations
-      res.render("index", { accommodations: rows });
-    }
-  });
-});
-
-// Search route
+// Search and Filter Accommodations
 app.get("/search", (req, res) => {
-  res.render("search", { title: "Search || Page" });
+  const { location, priceMin, priceMax, amenities } = req.query;
+  let sql = `SELECT * FROM accommodations WHERE 1 = 1`;
+  if (location) sql += ` AND location LIKE '%' || ? || '%'`;
+  if (priceMin && priceMax) sql += ` AND price BETWEEN ? AND ?`;
+  if (amenities) {
+    const amenitiesList = amenities.split(",");
+    amenitiesList.forEach((amenity, index) => {
+      sql +=
+        index === 0
+          ? ` AND (amenities LIKE '%' || ? || '%'`
+          : ` OR amenities LIKE '%' || ? || '%'`;
+    });
+    if (amenitiesList.length > 0) sql += ")";
+  }
+  const params = [];
+  if (location) params.push(location);
+  if (priceMin && priceMax) params.push(priceMin, priceMax);
+  if (amenities) params.push(...amenities.split(","));
+  db.all(sql, params, (err, rows) => {
+    if (err) return res.status(500).send({ error: err.message });
+    res.send(rows);
+  });
 });
 
 app.get("/payment-confirmation", (req, res) =>
@@ -1081,6 +978,7 @@ app.get("/forget_password", (req, res) =>
 app.get("/fectingdashboard", (req, res) => {
   res.render("fectingdashboard");
 });
+
 // Start Server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
