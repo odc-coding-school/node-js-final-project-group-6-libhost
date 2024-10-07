@@ -7,12 +7,12 @@ body {
   border-radius: 10px;
   height: auto;
   padding-top: 5px;
-  padding-bottom: 5px;
+  /* padding-bottom: 5px; */
   margin: 10px;
 }
 
 #img-card {
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
 }
 
 #features {
@@ -185,7 +185,7 @@ select {
 }
 
 .card-body {
-  padding-top: 300px;
+  /* padding-top: 300px; */
 }
 
 button.btn-outline {
@@ -291,14 +291,13 @@ img {
   /* margin-left: 10px; */
 }
 
-.card#card1{
-    
-    background-image: url('../images/Colony\ Hotel.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    height:250px;
-    border:none;
-    width: 300px;
+.card#card1 {
+  background-image: url("../images/Colony\ Hotel.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 250px;
+  border: none;
+  width: 300px;
 }
 
 .fa-heart {
@@ -417,15 +416,15 @@ a.nav-link#login {
 
 /* About Page Styline*/
 .header-section {
-    background-color: #f8f9fa;
-    padding: 40px 0;
+  background-color: #f8f9fa;
+  padding: 40px 0;
 }
 .mission-vision {
-    margin-top: 40px;
+  margin-top: 40px;
 }
 .team-member {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 .team-section {
-    margin-top: 50px;
+  margin-top: 50px;
 }
