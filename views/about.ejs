@@ -5,203 +5,246 @@
     <title>
         <%= title %>
     </title>
-    <!-- external css -->
-    <link rel="stylesheet" href="css/styles.css">
-    <!-- localhosted bootstrap -->
-    <link href="/bootstrap 5.3.3/css/bootstrap.min.css" rel="stylesheet">
-    <!-- localhosted font-awesome icons -->
-    <link rel="stylesheet" href="/font-awesome 4.7.0/css/font-awesome.css">
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Localhosted Bootstrap -->
+    <link href="/bootstrap 5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Localhosted Font-awesome icons -->
+    <link rel="stylesheet" href="/font-awesome 4.7.0/css/font-awesome.css">
 
     <style>
-      body {
-    font-family: 'Arial', sans-serif;
-}
+        /* Global Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #FFF8E1;
+            /* Light cream background */
+            color: black;
+            /* Text color is black */
+            line-height: 1.6;
+        }
 
-h1, h2 {
-    font-weight: bold;
-}
+        h1,
+        h2,
+        h3 {
+            font-weight: bold;
+            color: #D7A20D;
+            /* Golden yellow for headings */
+        }
 
-.about-us p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-}
+        p {
+            font-size: 1.1rem;
+            color: black;
+            /* Black for paragraph text */
+        }
 
-.mission-vision {
-    padding: 3rem 0;
-}
+        /* Navbar */
+        nav {
+            background-color: #D7A20D;
+            /* Golden Yellow Navbar */
+        }
 
-.mission-vision h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
+        nav a {
+            color: white;
+        }
 
-.mission-vision p {
-    font-size: 1.1rem;
-}
+        /* About Us Section */
+        .about-us {
+            padding: 5rem 0;
+        }
 
-.our-team {
-    padding: 3rem 0;
-}
+        .about-us h1 {
+            font-size: 2.5rem;
+            color: #D7A20D;
+            /* Golden Yellow */
+        }
 
-.our-team h2 {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-}
+        .about-us p {
+            color: black;
+            /* Black text */
+        }
 
-.team-card {
-    transition: all 0.3s ease;
-}
+        .about-us img {
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
 
-.team-card:hover {
-    transform: scale(1.05);
-}
+        /* Mission & Vision Section */
+        .mission-vision {
+            padding: 4rem 0;
+            background-color: white;
+            /* White background for contrast */
+        }
 
-/* Mobile responsive adjustments */
-@media (max-width: 768px) {
-    .about-us .col-md-6 img {
-        margin-top: 2rem;
-    }
+        .mission-vision h2 {
+            font-size: 2rem;
+            color: #D7A20D;
+            /* Golden yellow */
+        }
 
-    .team-card {
-        margin-bottom: 2rem;
-    }
-}
+        .mission-vision p {
+            font-size: 1.2rem;
+            color: black;
+            /* Black text for readability */
+            line-height: 1.8;
+        }
+
+        /* Our Team Section */
+        .our-team {
+            padding: 5rem 0;
+            background-color: #FFF8E1;
+            /* Light cream background */
+        }
+
+        .our-team h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #D7A20D;
+            /* Golden Yellow */
+        }
+
+        .team-card {
+            border: none;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .team-card img {
+            border-radius: 10px 10px 0 0;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .team-card .card-body {
+            background-color: white;
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .team-card .card-title {
+            font-size: 1.4rem;
+            color: #D7A20D;
+            /* Golden yellow for titles */
+        }
+
+        .team-card .card-text {
+            color: black;
+            margin-bottom: 1rem;
+        }
+
+        /* Mobile Responsive Adjustments */
+        @media (max-width: 768px) {
+            .about-us .col-md-6 img {
+                margin-top: 2rem;
+            }
+
+            .team-card {
+                margin-bottom: 2rem;
+            }
+
+            .team-card img {
+                height: 250px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <%-include('navbar');-%>
+    <!-- Include Navbar -->
+    <%- include('navbar'); -%>
 
-    <!doctype html>
-<html lang="en">
-  <head>
-    <title>LuxuryHotel a Hotel Template</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- About Us Section -->
+        <section class="about-us container my-5">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1>About Us</h1>
+                    <p>
+                        LibHost is a revolutionary web platform, designed to seamlessly connect property owners across
+                        Liberia with travelers looking for short and long-term accommodations. We aim to transform the
+                        travel experience in Liberia, providing easy access to authentic and local stays while promoting
+                        local tourism.
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <img src="/images/The-Farmington-Hotel.jpeg" alt="About Us" class="img-fluid w-100">
+                </div>
+            </div>
+        </section>
 
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900|Rubik:300,400,700" rel="stylesheet">
+        <!-- Mission & Vision Section -->
+        <section class="mission-vision text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2>Our Mission</h2>
+                        <p>To provide a seamless, accessible, and transparent platform for booking accommodations across
+                            Liberia, enabling both hosts and guests to have a safe and enjoyable experience.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h2>Our Vision</h2>
+                        <p>To be the leading accommodation platform in Liberia, offering unique experiences to travelers
+                            and empowering local hosts to share their spaces with the world.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/animate.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <!-- Our Team Section -->
+        <section class="our-team">
+            <div class="container text-center">
+                <h2>Our Team</h2>
+                <div class="row">
+                    <!-- Team Member Card 1 -->
+                    <div class="col-md-4">
+                        <div class="card team-card">
+                            <img src="member1.jpg" alt="Member 1" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">James A. Morgan Jr.</h5>
+                                <p class="card-text">Team Lead/Project Manager</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Team Member Card 2 -->
+                    <div class="col-md-4">
+                        <div class="card team-card">
+                            <img src="images/Stephen.jpg" alt="Member 2" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">Stephen P. Godwin</h5>
+                                <p class="card-text">Chief Technology Officer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Team Member Card 3 -->
+                    <div class="col-md-4">
+                        <div class="card team-card">
+                            <img src="images/Gabriel.jpg" alt="Member 3" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">Gabriel Kun</h5>
+                                <p class="card-text">Head of Marketing</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <link rel="stylesheet" href="fonts/ionicons/css/ionicons.min.css">
-    <link rel="stylesheet" href="fonts/fontawesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
+        <!-- External JS and Local Bootstrap -->
+        <script src="js/jquery-3.7.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
 
-    <!-- Theme Style -->
-    <!-- <link rel="stylesheet" href="css/style.css"> -->
-  </head>
-  <body>
-    
- 
-    <!-- About Us Section -->
-    <section class="about-us container my-5">
-      <div class="row align-items-center">
-          <div class="col-md-6">
-              <h1>About Us</h1>
-              <p>
-                  LibHost is a revolutionary web platform, designed to seamlessly connect property owners across Liberia with travelers looking for short and long-term accommodations. We aim to transform the travel experience in Liberia, providing easy access to authentic and local stays while promoting local tourism.
-              </p>
-          </div>
-          <div class="col-md-6">
-              <img src="about-image.jpg" alt="About Us" class="img-fluid">
-          </div>
-      </div>
-  </section>
-
-  <!-- Mission & Vision Section -->
-  <section class="mission-vision bg-light py-5">
-      <div class="container text-center">
-          <div class="row">
-              <div class="col-md-6">
-                  <h2>Our Mission</h2>
-                  <p>
-                      To provide a seamless, accessible, and transparent platform for booking accommodations across Liberia, enabling both hosts and guests to have a safe and enjoyable experience.
-                  </p>
-              </div>
-              <div class="col-md-6">
-                  <h2>Our Vision</h2>
-                  <p>
-                      To be the leading accommodation platform in Liberia, offering unique experiences to travelers and empowering local hosts to share their spaces with the world.
-                  </p>
-              </div>
-          </div>
-      </div>
-  </section>
-
-  <!-- Our Team Section -->
-  <section class="our-team py-5">
-      <div class="container text-center">
-          <h2>Our Team</h2>
-          <div class="row">
-              <!-- Team Member Card 1 -->
-              <div class="col-md-4">
-                  <div class="card team-card">
-                      <img src="member1.jpg" alt="Member 1" class="card-img-top">
-                      <div class="card-body">
-                          <h5 class="card-title">James A. Morgan Jr.</h5>
-                          <p class="card-text">Team Lead/Project Manager</p>
-                      </div>
-                  </div>
-              </div>
-              <!-- Team Member Card 2 -->
-              <div class="col-md-4">
-                  <div class="card team-card">
-                      <img src="images\Stephen.jpg" alt="Member 2" class="card-img-top" style="object-fit: cover;">
-                      <div class="card-body">
-                          <h5 class="card-title">Stephen P. Godwin</h5>
-                          <p class="card-text">Chief Technology Officer</p>
-                      </div>
-                  </div>
-              </div>
-              <!-- Team Member Card 3 -->
-              <div class="col-md-4">
-                  <div class="card team-card">
-                      <img src="images\Gabriel.jpg" alt="Member 3" class="card-img-top" style="object-fit: cover;">
-                      <div class="card-body">
-                          <h5 class="card-title">Gabriel Kun</h5>
-                          <p class="card-text">Head of Marketing</p>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </section>
-
-   
-      
-  
-    
-    
-
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/jquery-migrate-3.0.0.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.waypoints.min.js"></script>
-    <script src="js/jquery.stellar.min.js"></script>
-
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/magnific-popup-options.js"></script>
-
-    <script src="js/main.js"></script>
-  </body>
-</html>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-            <%-include('footer');-%>
-                <!-- jQuery -->
-                <script src="js/jquery-3.7.1.min.js">
-                </script>
-                <!-- external JS -->
-                <script src="js/script.js">
-                </script>
+        <!-- Footer -->
+        <%- include('footer'); -%>
 </body>
 
 </html>

@@ -11,7 +11,7 @@
 
               <!-- Price Badge -->
               <div class="price-tag text-white px-2 py-1 rounded"
-                style="position: absolute; top: 10px; left: 10px; background-color: #d7a20d;">
+                style="position: absolute; top: 10px; left: 10px; background-color: #D7A20D;">
                 <i class="fa fa-dollar"></i>
                 <%= accommodation.price %>
               </div>
@@ -77,8 +77,11 @@
   <!-- Optional Custom CSS for additional beautification -->
   <style>
     body {
-      background-color: #f7f7f7;
+      background-color: #fff8e1;
+      /* Soft background color */
       font-family: 'Poppins', sans-serif;
+      color: black;
+      /* Black text for strong contrast */
     }
 
     .card {
@@ -93,6 +96,8 @@
     .price-tag {
       font-size: 1.1rem;
       font-weight: bold;
+      background-color: #D7A20D;
+      /* Use primary accent color */
     }
 
     .carousel-control-prev-icon,
@@ -116,6 +121,11 @@
 
     .fa-star {
       margin-right: 2px;
+    }
+
+    .fa-star.text-warning {
+      color: #D7A20D;
+      /* Match the accent color with stars */
     }
   </style>
 </body>

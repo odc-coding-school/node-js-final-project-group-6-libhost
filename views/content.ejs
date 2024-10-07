@@ -1,78 +1,59 @@
 <style>
     /* Custom CSS to enhance styling */
-#searchForm .form-control {
-    border-radius: 0.375rem;
-    padding: 0.5rem;
-    font-size: 1rem;
-}
-
-#searchForm .btn {
-    padding: 0.5rem 1.25rem;
-    font-size: 1rem;
-    border-radius: 0.375rem;
-}
-
-.accommodation-card {
-    transition: opacity 0.3s ease-in-out;
-}
-
-.accommodation-card[style*="display: none"] {
-    opacity: 0;
-}
-
-#searchaccomodation{
-    max-height: 300px;
-    overflow-y: auto;
-    background-color: goldenrod;
-}
-
 </style>
 <div class="container mt-5">
-    <h1 class="mb-4">Search and Filter Accommodations</h1>
+    <h1 class="mb-4" style="color: black;">Search and Filter Accommodations</h1>
 
     <!-- Search Form -->
     <form id="searchForm" class="row g-3 align-items-center">
         <!-- Accommodation Name -->
         <div class="col-md-2">
-            <label for="name" class="form-label">Accommodation Name:</label>
-            <input type="text" class="form-control" name="name" id="name" placeholder="Search by name">
+            <label for="name" class="form-label" style="color: black;">Accommodation Name:</label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="Search by name"
+                style="background-color: #FFF8E1; border-color: #D7A20D;">
         </div>
 
         <!-- City -->
         <div class="col-md-2">
-            <label for="city" class="form-label">City:</label>
-            <input type="text" class="form-control" name="city" id="city" placeholder="Search by city">
+            <label for="city" class="form-label" style="color: black;">City:</label>
+            <input type="text" class="form-control" name="city" id="city" placeholder="Search by city"
+                style="background-color: #FFF8E1; border-color: #D7A20D;">
         </div>
 
         <!-- Min Price -->
         <div class="col-md-2">
-            <label for="minPrice" class="form-label">Min Price:</label>
-            <input type="number" class="form-control" name="minPrice" id="minPrice">
+            <label for="minPrice" class="form-label" style="color: black;">Min Price:</label>
+            <input type="number" class="form-control" name="minPrice" id="minPrice"
+                style="background-color: #FFF8E1; border-color: #D7A20D;">
         </div>
 
         <!-- Max Price -->
         <div class="col-md-2">
-            <label for="maxPrice" class="form-label">Max Price:</label>
-            <input type="number" class="form-control" name="maxPrice" id="maxPrice">
+            <label for="maxPrice" class="form-label" style="color: black;">Max Price:</label>
+            <input type="number" class="form-control" name="maxPrice" id="maxPrice"
+                style="background-color: #FFF8E1; border-color: #D7A20D;">
         </div>
 
         <!-- Bedrooms -->
         <div class="col-md-2">
-            <label for="bedrooms" class="form-label">Bedrooms:</label>
-            <input type="number" class="form-control" name="bedrooms" id="bedrooms">
+            <label for="bedrooms" class="form-label" style="color: black;">Bedrooms:</label>
+            <input type="number" class="form-control" name="bedrooms" id="bedrooms"
+                style="background-color: #FFF8E1; border-color: #D7A20D;">
         </div>
 
         <!-- Search Button -->
         <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100" id="searchaccomodation">Search</button>
+            <button type="submit" class="btn w-100" id="searchaccomodation"
+                style="background-color: #D7A20D; color: white; border-color: #D7A20D;">Search</button>
         </div>
     </form>
 
-    <!-- Accommodation Cards Section -->
-   
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Custom JS -->
-<script src="/js/searchFilter.js"></script>
-</body>
+    <!-- Accommodation Cards Section -->
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="/js/searchFilter.js"></script>
+    </body>
