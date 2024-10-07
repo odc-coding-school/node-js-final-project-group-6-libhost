@@ -14,38 +14,34 @@
     <meta charset="utf-8">
 </head>
 
-<body>
-    <%-include('navbar');-%>
+<body style="background-color: #fff8e1; color: black;">
+    <%- include('navbar'); -%>
 
         <div class="card-body">
             <div class="container" id="form">
-                <div class="content">
-                    <center>
-                        <div class="card" id="confrimation_alert">
-
-                            <center>
-                                <br>
-                                <i class="fa fa-check-circle" style="font-size: 34px; color: green"></i>
-                                <br>
-                                <br>
-                                <p class="text-capitalize text-center text-xx-lg">
-                                    once we verified, you can access dashboard
-                                </p>
-                                <a class="btn btn-outline" href="/dashboard">
-                                    view dashboard
-                                </a>
-                            </center>
-                        </div>
-                    </center>
+                <div class="content d-flex justify-content-center align-items-center ">
+                    <div class="card shadow-lg p-4" id="confirmation_alert"
+                        style="max-width: 500px; border-radius: 15px; background-color: white;">
+                        <center>
+                            <i class="fa fa-check-circle" style="font-size: 50px; color: #D7A20D;"></i>
+                            <br><br>
+                            <p class="text-capitalize text-center fs-4">
+                                Payment Confirmed. Check your email for apartment details.
+                            </p>
+                            <a class="btn btn-outline-dark mt-3" href="/explore"
+                                style="background-color: #D7A20D; color: #ffffff; border-color: #D7A20D;">
+                                View Other Apartment
+                            </a>
+                        </center>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- jQuery -->
-            <script src="js/jquery-3.7.1.min.js">
-            </script>
-            <!-- external JS -->
-            <script src="js/script.js">
-            </script>
+        <!-- jQuery -->
+        <script src="js/jquery-3.7.1.min.js"></script>
+        <!-- external JS -->
+        <script src="js/script.js"></script>
 </body>
 
 </html>

@@ -584,6 +584,14 @@ app.post("/booking/:id", guestAuthenticated, (req, res) => {
   }
 });
 
+app.get("/payment-confirmation", guestAuthenticated, (req, res) => {
+  currentUser = req.session.userInfo;
+  res.render("payment-confirmation", {
+    title: "View User Dashboard",
+    user: currentUser,
+  });
+});
+
 // Payment and Confirmation Pages
 app.get("/payment/:id", guestAuthenticated, (req, res) => {
   bookingId = req.params.id;
@@ -656,7 +664,8 @@ app.post("/payment/:id", (req, res) => {
         (err) => {
           if (err) return res.status(500).send("Server Error");
           else {
-            res.redirect(`/payment/${bookingId}`);
+            // res.redirect(`/payment/${bookingId}`);
+            res.redirect("/payment-confirmation");
           }
         }
       );
@@ -733,13 +742,18 @@ app.get("/manage-accommodation", adminAuthenticated, (req, res) => {
 });
 
 app.get("/add-user", adminAuthenticated, (req, res) => {
+  currentUser = req.session.userInfo;
   db.all(`SELECT * FROM roles`, [], (err, roles) => {
     if (err) {
       console.error(err.message);
       return res.redirect("/manage-accommodation");
     }
     console.log(roles);
-    res.render("add-user", { title: "Add User || Page", roles: roles });
+    res.render("add-user", {
+      title: "Add User || Page",
+      roles: roles,
+      user: currentUser,
+    });
   });
 });
 
@@ -1122,12 +1136,6 @@ app.get("/", (req, res) => {
 app.get("/search", (req, res) => {
   res.render("search", { title: "Search || Page" });
 });
-
-app.get("/payment-confirmation", (req, res) =>
-  res.render("payment-confirmation", {
-    title: "View User Dashboard",
-  })
-);
 
 // Forget Password
 app.get("/forget_password", (req, res) =>
