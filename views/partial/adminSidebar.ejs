@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<nav id="sidebarMenu" class="d-lg-block sidebar bg-light shadow col-md-2 position-fixed h-100" style="">
+<nav id="sidebarMenu" class="d-lg-block sidebar bg-light shadow col-md-2 position-fixed h-100">
   <div class="position-sticky">
     <!-- Logo Section -->
     <div class="logo text-center bg-light p-3">
@@ -8,7 +8,7 @@
 
     <!-- Sidebar Menu -->
     <div class="list-group list-group-flush mx-2">
-      <a href="/admin-dashboard" class="list-group-item list-group-item-action py-3 ripple" aria-current="true">
+      <a href="/admin-dashboard" class="list-group-item list-group-item-action py-3 ripple">
         <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Dashboard</span>
       </a>
       <a href="/manage-user" class="list-group-item list-group-item-action py-3 ripple">
@@ -23,18 +23,32 @@
       <a href="#" class="list-group-item list-group-item-action py-3 ripple">
         <i class="fa-solid fa-money-check-alt fa-fw me-3"></i><span>Payment Overview</span>
       </a>
-      <!-- <a href="#" class="list-group-item list-group-item-action py-3 ripple">
-        <i class="fa-solid fa-comments fa-fw me-3"></i><span>Messages</span>
-      </a> -->
       <a href="#" class="list-group-item list-group-item-action py-3 ripple">
         <i class="fa-solid fa-chart-line fa-fw me-3"></i><span>Analytics</span>
       </a>
-      <!-- <a href="#" class="list-group-item list-group-item-action py-3 ripple">
-        <i class="fa-solid fa-life-ring fa-fw me-3"></i><span>Help</span>
-      </a> -->
-      <!-- <a href="#" class="list-group-item list-group-item-action py-3 ripple">
-        <i class="fa-solid fa-cogs fa-fw me-3"></i><span>Settings</span>
-      </a> -->
     </div>
   </div>
 </nav>
+
+<style>
+  .list-group-item {
+    color: black;
+    /* Default text color */
+    transition: background-color 0.3s, color 0.3s;
+    /* Smooth transition for hover effects */
+  }
+
+  .list-group-item:hover {
+    background-color: #D7A20D;
+    /* Change background color on hover */
+    color: white;
+    /* Change text color on hover */
+  }
+
+  .list-group-item.active {
+    /* background-color: #D7A20D; */
+    /* Active link background */
+    /* color: white; */
+    /* Active link text color */
+  }
+</style>
