@@ -56,7 +56,7 @@
                         <% bookings.forEach(booking=> { %>
                             <div class="col-md-6">
                                 <div class="card booking-card">
-                                    <div class="card-header">
+                                    <div class="card-header bg-dark">
                                         <span>Booking # <%= booking.id %> </span>
                                     </div>
                                     <div class="card-body">
@@ -77,11 +77,11 @@
                                             <!-- Show Confirm and Decline buttons only if the booking is pending -->
                                             <form action="/confirm-booking/<%= booking.id %>" method="POST"
                                                 style="display:inline;">
-                                                <button type="submit" class="btn btn-success">Confirm</button>
+                                                <button type="submit" class="btn btn-warning">Confirm</button>
                                             </form>
                                             <form action="/decline-booking/<%= booking.id %>" method="POST"
                                                 style="display:inline;">
-                                                <button type="submit" class="btn btn-danger">Decline</button>
+                                                <button type="submit" class="btn btn-dark">Decline</button>
                                             </form>
                                             <% } else { %>
                                                 <p>Booking has been <%= booking.payment_status %>
