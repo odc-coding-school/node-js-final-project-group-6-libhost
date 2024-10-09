@@ -104,15 +104,18 @@
                       <%= booking.phone_number %>
                 </p>
                 <!-- If the booking is confirmed, show the "Proceed with Payment" button -->
-                <% if (booking.payment_status=='completed' ) { %>
-                  <form action="/payment/<%= booking.id %>" method="GET">
-                    <button type="submit" class="btn btn-success">Proceed with Payment</button>
-                  </form>
+                <% if (booking.payment_status=='completed' && booking.status=='completed' ) { %>
+                  <p class="text-warning">Booked...</p>
+
                   <% } else if (booking.payment_status=='failed' ) { %>
                     <p class="text-danger">This booking was declined by the host.</p>
-                    <% } else { %>
-                      <p class="text-warning">Waiting for host confirmation...</p>
-                      <% } %>
+                    <% } else if (booking.payment_status=='completed' ) { %>
+                      <form action="/payment/<%= booking.id %>" method="GET">
+                        <button type="submit" class="btn btn-success">Proceed with Payment</button>
+                      </form>
+                      <% } else { %>
+                        <p class="text-warning">Waiting for host confirmation...</p>
+                        <% } %> %>
               </div>
             </div>
           </div>

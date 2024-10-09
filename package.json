@@ -22,7 +22,9 @@
     "express-session": "^1.18.0",
     "js-final-project-group-6-libhost": "file:",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.15",
     "path": "^0.12.7",
+    "socket.io": "^4.8.0",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {

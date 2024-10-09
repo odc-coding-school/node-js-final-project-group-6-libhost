@@ -15,7 +15,6 @@
             header {
                 background-color: #D7A20D;
                 /* Gold Header */
-                /* color: white; */
             }
 
             h4 {
@@ -37,7 +36,6 @@
                 background-color: #D7A20D;
                 /* Gold for primary buttons */
                 border: none;
-                /* Remove default border */
             }
 
             .btn-primary:hover {
@@ -54,35 +52,50 @@
                 background-color: #DC3545;
                 /* Red for remove buttons */
             }
+
+            .badge-pending {
+                background-color: #FFC107;
+                /* Yellow for pending status */
+            }
+
+            .badge-denied {
+                background-color: #DC3545;
+                /* Red for denied status */
+            }
+
+            .badge-approved {
+                background-color: #28A745;
+                /* Green for approved status */
+            }
         </style>
 </head>
 
 <body style="background-color: #fff8e1;">
     <!-- Navbar or Header if necessary -->
     <header>
-        <!-- Include your navbar here -->
         <%- include('partial/navbar.ejs') %>
     </header>
 
     <!-- Main Content -->
-    <div class=" container-fluid">
+    <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-2">
                 <%- include('partial/adminSidebar.ejs') %>
             </div>
 
-            <!-- User Management Content -->
+            <!-- Accommodations Management Content -->
             <div class="col-md-10 ms-auto p-4 mt-5">
                 <h4>Accommodations Management</h4>
 
-                <!-- Add User Button -->
+                <!-- Add Accommodation Button -->
                 <div class="mb-4">
                     <a class="btn btn-primary" href="/admin-add-accommodation">Add New Property</a>
                 </div>
 
-                <!-- Users Table -->
-                <div class="table-responsive">
+                <!-- Pending Accommodations -->
+                <h5>Pending Accommodations</h5>
+                <div class="table-responsive mb-4">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -95,7 +108,57 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% accommodations.forEach(accommodation=> { %>
+                            <% pendingAccommodations.forEach(accommodation=> { %>
+                                <tr>
+                                    <td>
+                                        <%= accommodation.id %>
+                                    </td>
+                                    <td>
+                                        <%= accommodation.name %>
+                                    </td>
+                                    <td>
+                                        <%= accommodation.address %>
+                                    </td>
+                                    <td>
+                                        <%= accommodation.price %>
+                                    </td>
+                                    <td><span class="badge badge-pending">Pending</span></td>
+                                    <td>
+                                        <!-- <button class="btn btn-sm btn-warning">Edit</button>
+                                        <button class="btn btn-sm btn-danger">Remove</button> -->
+                                        <div class="action-btns">
+                                            <form action="/approve-accommodation/<%= accommodation.id %>" method="POST"
+                                                style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                            </form>
+                                            <form action="/deny-accommodation/<%= accommodation.id %>" method="POST"
+                                                style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-secondary">Deny</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Approved Accommodations -->
+                <h5>Approved Accommodations</h5>
+                <div class="table-responsive mb-4">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Accommodation ID</th>
+                                <th>Name</th>
+                                <th>Location</th>
+                                <th>Price (USD)</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% approvedAccommodations.forEach(accommodation=> { %>
                                 <tr>
                                     <td>
                                         <%= accommodation.id %>
@@ -109,99 +172,55 @@
                                     <td>
                                         <%= accommodation.price %>
                                     </td>
-                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td><span class="badge badge-approved">Approved</span></td>
                                     <td>
-                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                                            data-bs-target="#editUserModal-U001">Edit</button>
-                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                            data-bs-target="#removeUserModal-U001">Remove</button>
+                                        <button class="btn btn-sm btn-warning">Edit</button>
+                                        <button class="btn btn-sm btn-danger">Remove</button>
                                     </td>
                                 </tr>
                                 <% }) %>
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Add User Modal -->
-    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="role" class="form-label">Role</label>
-                            <select class="form-control" id="role" required>
-                                <option value="Host">Host</option>
-                                <option value="Guest">Guest</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add User</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit User Modals -->
-    <div class="modal fade" id="editUserModal-U001" tabindex="-1" aria-labelledby="editUserModalLabel-U001"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editUserModalLabel-U001">Edit User - John Doe</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" value="John Doe" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" value="john@example.com" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="role" class="form-label">Role</label>
-                            <select class="form-control" id="role" required>
-                                <option value="Host" selected>Host</option>
-                                <option value="Guest">Guest</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Remove User Modals -->
-    <div class="modal fade" id="removeUserModal-U001" tabindex="-1" aria-labelledby="removeUserModalLabel-U001"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="removeUserModalLabel-U001">Remove User - John Doe</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to remove <strong>John Doe</strong>?</p>
-                    <button type="submit" class="btn btn-danger">Remove User</button>
+                <!-- Denied Accommodations -->
+                <h5>Denied Accommodations</h5>
+                <div class="table-responsive mb-4">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Accommodation ID</th>
+                                <th>Name</th>
+                                <th>Location</th>
+                                <th>Price (USD)</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% deniedAccommodations.forEach(accommodation=> { %>
+                                <tr>
+                                    <td>
+                                        <%= accommodation.id %>
+                                    </td>
+                                    <td>
+                                        <%= accommodation.name %>
+                                    </td>
+                                    <td>
+                                        <%= accommodation.location %>
+                                    </td>
+                                    <td>
+                                        <%= accommodation.price %>
+                                    </td>
+                                    <td><span class="badge badge-denied">Denied</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning">Edit</button>
+                                        <button class="btn btn-sm btn-danger">Remove</button>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 // Required Modules
 const express = require("express");
+const app = express();
 const bodyParser = require("body-parser");
 const path = require("path");
 const bcrypt = require("bcrypt");
@@ -7,13 +8,58 @@ const multer = require("multer");
 const sqlite3 = require("sqlite3").verbose();
 const session = require("express-session");
 const flash = require("connect-flash");
+const http = require("http"); // Required for using socket.io with Express
+const socketIo = require("socket.io");
+const server = http.createServer(app); // Create an HTTP server
+const io = socketIo(server);
+const nodemailer = require("nodemailer");
 // const searchFilter = require("./router/searchFilter");
 // app.use('/home', searchFilter)
 
 // Initialize App
-const app = express();
+
 const port = 5000;
 const db = new sqlite3.Database("staylib.db");
+
+// Listen for client connections on Socket.io
+io.on("connection", (socket) => {
+  console.log("New client connected:", socket.id);
+
+  // Listen for 'sendMessage' event from the client
+  socket.on("sendMessage", (messageData) => {
+    console.log("Message received:", messageData);
+
+    // Save message to database (replace with your actual query)
+    // const query = `INSERT INTO messages (message, sender, timestamp) VALUES (?, ?, ?)`;
+    const query = `INSERT INTO messages (message, created_at) VALUES (?, ?)`;
+    db.run(
+      query,
+      // [messageData.text, messageData.sender, messageData.timestamp],
+      [messageData.text, messageData.timestamp],
+      (err) => {
+        if (err) {
+          console.error("Error saving message:", err);
+        } else {
+          // Broadcast message to all connected clients
+          io.emit("receiveMessage", messageData);
+        }
+      }
+    );
+  });
+  // Handle client disconnect
+  socket.on("disconnect", () => {
+    console.log("Client disconnected:", socket.id);
+  });
+});
+
+// Set up the transporter for sending emails
+const transporter = nodemailer.createTransport({
+  service: "gmail", // You can use other services like SendGrid, etc.
+  auth: {
+    user: "your-email@gmail.com", // Your email
+    pass: "your-email-password", // Your email password or app-specific password
+  },
+});
 
 // Session Configuration
 app.use(
@@ -143,6 +189,7 @@ db.serialize(() => {
       swimming_pool BOOLEAN,
       max_guests INT,
       amenities TEXT,
+      status TEXT CHECK( status IN ('pending', 'approved', 'denied') ) DEFAULT 'pending',
       availability BOOLEAN DEFAULT 1,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -210,9 +257,27 @@ db.serialize(() => {
       FOREIGN KEY (booking_id) REFERENCES bookings(id)
       FOREIGN KEY (guest_id) REFERENCES user(id) ON DELETE CASCADE,
       FOREIGN KEY (accommodation_id) REFERENCES accommodations(id)
+    )
+  `);
+  db.run(`
+    CREATE TABLE IF NOT EXISTS conversations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guest_id INTEGER,
+    host_id INTEGER,
+    last_message TEXT,
+    last_message_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-    `);
+`);
+  db.run(`
+  CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    conversation_id INTEGER,
+    sender_id INTEGER,
+    receiver_id INTEGER,
+    message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+`);
 });
 
 // Routes
@@ -415,16 +480,18 @@ app.get("/bookings", guestAuthenticated, (req, res) => {
   const currentUser = req.session.userInfo;
 
   db.all(
-    `SELECT bookings.*, user.full_name, user.email, user.phone_number, accommodations.name AS accommodation_name
+    `SELECT bookings.*, user.full_name, user.email, user.phone_number, payments.status, accommodations.name AS accommodation_name
      FROM bookings
      JOIN user ON bookings.host_id = user.id
      JOIN accommodations ON bookings.accommodation_id = accommodations.id
+     JOIN payments ON bookings.id = payments.booking_id
      WHERE bookings.guest_id = ?`,
     [currentUser.id],
     (err, bookings) => {
       if (err) {
         return res.status(500).send("Error fetching guest bookings");
       }
+      console.log(bookings);
 
       res.render("bookingPage", {
         bookings: bookings,
@@ -649,8 +716,8 @@ app.post("/payment/:id", (req, res) => {
       const total_payment = service_fee + accommodation_cost;
 
       db.run(
-        `INSERT INTO payments (booking_id, guest_id, host_id, accommodation_id, payment_method, accommodation_cost,service_fee,total_payment) 
-     VALUES (?,?,?,?,?,?,?,?)`,
+        `INSERT INTO payments (booking_id, guest_id, host_id, accommodation_id, payment_method, accommodation_cost,service_fee,total_payment, status) 
+     VALUES (?,?,?,?,?,?,?,?,?)`,
         [
           bookingId,
           currentUser.id,
@@ -660,6 +727,7 @@ app.post("/payment/:id", (req, res) => {
           accommodation_cost,
           service_fee,
           total_payment,
+          "completed",
         ],
         (err) => {
           if (err) return res.status(500).send("Server Error");
@@ -729,16 +797,95 @@ app.get("/manage-user", adminAuthenticated, (req, res) => {
 
 app.get("/manage-accommodation", adminAuthenticated, (req, res) => {
   currentuser(req);
+
   db.all(`SELECT * FROM accommodations`, [], (err, accommodations) => {
     if (err) {
       console.error(err.message);
       return res.redirect("/manage-accommodation");
     }
+
+    // Initialize empty arrays for each status
+    const approvedAccommodations = [];
+    const pendingAccommodations = [];
+    const deniedAccommodations = [];
+
+    // Filter accommodations based on their status
+    accommodations.forEach((accommodation) => {
+      if (accommodation.status === "approved") {
+        approvedAccommodations.push(accommodation);
+      } else if (accommodation.status === "pending") {
+        pendingAccommodations.push(accommodation);
+      } else if (accommodation.status === "denied") {
+        deniedAccommodations.push(accommodation);
+      }
+    });
+
+    // Render the view with the filtered accommodations
     res.render("adminManageAccommodations", {
-      accommodations: accommodations,
       currentUser: currentUser,
+      approvedAccommodations: approvedAccommodations,
+      pendingAccommodations: pendingAccommodations,
+      deniedAccommodations: deniedAccommodations,
     });
   });
+});
+
+// Route for admin to approve the accommodation
+app.post("/approve-accommodation/:id", (req, res) => {
+  const accommodationId = req.params.id;
+  const status = "approved";
+
+  const updateQuery = `UPDATE accommodations SET status = 'approved' WHERE id = ?`;
+  db.run(updateQuery, [accommodationId], (err) => {
+    if (err) {
+      // return res.status(500).send("Error confirming booking");
+      console.error(err.message);
+    }
+    res.redirect("/manage-accommodation");
+
+    // Redirect back to the host dashboard after confirmation
+    // res.redirect("/host-manage-bookings");
+  });
+
+  // try {
+  //   await db.query("UPDATE accommodations SET status = ? WHERE id = ?", [
+  //     status,
+  //     accommodationId,
+  //   ]);
+  //   res.redirect("/admin/accommodations");
+  // } catch (err) {
+  //   console.error(err);
+  //   res.status(500).send("Error approving accommodation");
+  // }
+});
+
+// Route for admin to deny the accommodation
+app.post("/deny-accommodation/:id", async (req, res) => {
+  const accommodationId = req.params.id;
+  const status = "denied";
+
+  const updateQuery = `UPDATE accommodations SET status = 'denied' WHERE id = ?`;
+  db.run(updateQuery, [accommodationId], (err) => {
+    if (err) {
+      // return res.status(500).send("Error confirming booking");
+      console.error(err.message);
+    }
+    res.redirect("/manage-accommodation");
+
+    // Redirect back to the host dashboard after confirmation
+    // res.redirect("/host-manage-bookings");
+  });
+
+  // try {
+  //   await db.query("UPDATE accommodations SET status = ? WHERE id = ?", [
+  //     status,
+  //     accommodationId,
+  //   ]);
+  //   res.redirect("/admin/accommodations");
+  // } catch (err) {
+  //   console.error(err);
+  //   res.status(500).send("Error denying accommodation");
+  // }
 });
 
 app.get("/add-user", adminAuthenticated, (req, res) => {
@@ -975,6 +1122,51 @@ app.post("/add-accommodation", upload.array("images"), (req, res) => {
 });
 
 console.log(userInfo);
+
+app.get("/guest-message-overview", guestAuthenticated, (req, res) => {
+  currentUser = req.session.userInfo;
+
+  res.render("guest-message-overview.ejs", { user: currentUser });
+});
+
+app.get("/guest-message", guestAuthenticated, (req, res) => {
+  currentUser = req.session.userInfo;
+  const query = "SELECT * FROM messages ORDER BY created_at ASC";
+  db.all(query, [], (err, rows) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).send("Error loading messages");
+    }
+
+    res.render("guest-message.ejs", { messages: rows, user: currentUser });
+  });
+  // res.render("guest-message.ejs", { user: currentUser });
+});
+
+const sendBookingNotification = (hostEmail, bookingDetails) => {
+  // Define the email options
+  const mailOptions = {
+    from: "your-email@gmail.com", // Sender address
+    to: hostEmail, // Host's email
+    subject: "New Booking Request", // Subject line
+    text: `A guest has requested a booking for your property. 
+             Details: 
+             Property: ${bookingDetails.propertyName}
+             Guest Name: ${bookingDetails.guestName}
+             Check-in Date: ${bookingDetails.checkInDate}
+             Check-out Date: ${bookingDetails.checkOutDate}`,
+  };
+
+  // Send the email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("Error sending email:", error);
+    } else {
+      console.log("Email sent successfully:", info.response);
+    }
+  });
+};
+
 // Signup
 app.get("/signup", (req, res) => {
   currentUser = req.session.userInfo;
