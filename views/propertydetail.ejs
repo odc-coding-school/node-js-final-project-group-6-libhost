@@ -145,64 +145,69 @@
             <div class="row text-center">
                 <div class="col-sm">
                     <i class="fa fa-bed fa-2x text-warning"></i>
-                    <p class="text-capitalize mt-2">
+                    <p class="text-capitalize mt-2" style="text-align: center;">
                         <%= property.bedrooms %> Bedroom(s)
                     </p>
                 </div>
-                <div class="col-sm">
-                    <i class="fa fa-bath fa-2x text-warning"></i>
-                    <p class="text-capitalize mt-2">
+                <div class="col-sm" style="">
+                    <i class="fa fa-bath fa-2x text-warning" style=""></i>
+                    <p class="text-capitalize mt-2" style="text-align: center;">
                         <%= property.bathrooms %> Bathroom(s)
                     </p>
                 </div>
                 <% if (property.wifi===1) { %>
                     <div class="col-sm">
                         <i class="fa fa-wifi fa-2x text-warning"></i>
-                        <p class="text-uppercase mt-2">WiFi</p>
+                        <p class="text-uppercase mt-2" style="text-align: center;">WiFi</p>
                     </div>
                     <% } %>
                         <% if (property.kitchen===1) { %>
                             <div class="col-sm">
                                 <i class="fas fa-utensils fa-2x text-warning"></i>
-                                <p class="text-uppercase mt-2">Kitchen</p>
+                                <p class="text-uppercase mt-2" style="text-align: center;">Kitchen</p>
                             </div>
                             <% } %>
                                 <% if (property.living_room===1) { %>
                                     <div class="col-sm">
                                         <i class="fa fa-couch fa-2x text-warning"></i>
-                                        <p class="text-capitalize mt-2">Living Room</p>
+                                        <p class="text-capitalize mt-2" style="text-align: center;">Living Room</p>
                                     </div>
                                     <% } %>
                                         <% if (property.dining_room===1) { %>
                                             <div class="col-sm">
                                                 <i class="fas fa-chair fa-2x text-warning"></i>
-                                                <p class="text-capitalize mt-2">Dining Room</p>
+                                                <p class="text-capitalize mt-2" style="text-align: center;">Dining Room
+                                                </p>
                                             </div>
                                             <% } %>
                                                 <% if (property.balcony===1) { %>
                                                     <div class="col-sm">
                                                         <i class="fas fa-archway fa-2x text-warning"></i>
-                                                        <p class="text-capitalize mt-2">Balcony</p>
+                                                        <p class="text-capitalize mt-2" style="text-align: center;">
+                                                            Balcony</p>
                                                     </div>
                                                     <% } %>
                                                         <% if (property.parking===1) { %>
                                                             <div class="col-sm">
                                                                 <i class="fas fa-parking fa-2x text-warning"></i>
-                                                                <p class="text-capitalize mt-2">Parking</p>
+                                                                <p class="text-capitalize mt-2"
+                                                                    style="text-align: center;">Parking</p>
                                                             </div>
                                                             <% } %>
                                                                 <% if (property.gym===1) { %>
                                                                     <div class="col-sm">
                                                                         <i
                                                                             class="fas fa-dumbbell fa-2x text-warning"></i>
-                                                                        <p class="text-capitalize mt-2">Gym</p>
+                                                                        <p class="text-capitalize mt-2"
+                                                                            style="text-align: center;">Gym</p>
                                                                     </div>
                                                                     <% } %>
                                                                         <% if (property.swimming_pool===1) { %>
                                                                             <div class="col-sm">
                                                                                 <i
                                                                                     class="fas fa-swimmer fa-2x text-warning"></i>
-                                                                                <p class="text-capitalize mt-2">Swimming
+                                                                                <p class="text-capitalize mt-2"
+                                                                                    style="text-align: center;">Swimming
                                                                                     Pool</p>
                                                                             </div>
                                                                             <% } %>
