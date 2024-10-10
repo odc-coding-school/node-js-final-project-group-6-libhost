@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <!-- external css -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- localhosted bootstrap -->
+    <link href="/bootstrap 5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- localhosted font-awesome icons -->
+    <link rel="stylesheet" href="/font-awesome 4.7.0/css/font-awesome.css">
+    <meta charset="utf-8">
+</head>
+
+<body style="background-color: #fff8e1; color: black;">
+    <%- include('navbar'); -%>
+
+        <div class="card-body">
+            <div class="container" id="form">
+                <div class="content d-flex justify-content-center align-items-center ">
+                    <div class="card shadow-lg p-4" id="confirmation_alert"
+                        style="max-width: 500px; border-radius: 15px; background-color: white;">
+                        <center>
+                            <i class="fa fa-check-circle" style="font-size: 50px; color: #D7A20D;"></i>
+                            <br><br>
+                            <p class="text-capitalize text-center fs-4">
+                                Payment Confirmed. Check your email for apartment details.
+                            </p>
+                            <a class="btn btn-outline-dark mt-3" href="/explore"
+                                style="background-color: #D7A20D; color: #ffffff; border-color: #D7A20D;">
+                                View Other Apartment
+                            </a>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery -->
+        <script src="js/jquery-3.7.1.min.js"></script>
+        <!-- external JS -->
+        <script src="js/script.js"></script>
+</body>
+
+</html>

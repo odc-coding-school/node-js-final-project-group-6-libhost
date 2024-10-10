@@ -1,0 +1,25 @@
+
+<!-- results.ejs -->
+<div class="container mt-4">
+    <h2>Search Results</h2>
+    <% if (accommodations.length > 0) { %>
+        <div class="row">
+            <% accommodations.forEach(function(accommodation) { %>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= accommodation.name %></h5>
+                            <p class="card-text"><%= accommodation.description %></p>
+                            <p class="card-text"><b>Price:</b> $<%= accommodation.price %></p>
+                            <p class="card-text"><b>Location:</b> <%= accommodation.location %></p>
+                            <p class="card-text"><b>Bedrooms:</b> <%= accommodation.bedrooms %></p>
+                            <p class="card-text"><b>Status:</b> <%= accommodation.available ? 'Available' : 'Not Available' %></p>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <p>No results found.</p>
+    <% } %>
+  </div>

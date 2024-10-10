@@ -1,0 +1,59 @@
+<style>
+    /* Custom CSS to enhance styling */
+</style>
+<div class="container mt-5 pt-5">
+    <h1 class="mb-4" style="color: black;">Search and Filter Accommodations</h1>
+
+    <!-- Search Form -->
+    <form id="searchForm" class="row g-3 align-items-center">
+        <!-- Accommodation Name -->
+        <div class="col-md-2">
+            <label for="name" class="form-label" style="color: black;">Accommodation Name:</label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="Search by name"
+                style="background-color: #FFF8E1; border-color: #D7A20D;">
+        </div>
+
+        <!-- City -->
+        <div class="col-md-2">
+            <label for="city" class="form-label" style="color: black;">City:</label>
+            <input type="text" class="form-control" name="city" id="city" placeholder="Search by city"
+                style="background-color: #FFF8E1; border-color: #D7A20D;">
+        </div>
+
+        <!-- Min Price -->
+        <div class="col-md-2">
+            <label for="minPrice" class="form-label" style="color: black;">Min Price:</label>
+            <input type="number" class="form-control" name="minPrice" id="minPrice" placeholder="Search by min price"
+                style="background-color: #FFF8E1; border-color: #D7A20D;">
+        </div>
+
+        <!-- Max Price -->
+        <div class="col-md-2">
+            <label for="maxPrice" class="form-label" style="color: black;">Max Price:</label>
+            <input type="number" class="form-control" name="maxPrice" id="maxPrice" placeholder="Search by max price"
+                style="background-color: #FFF8E1; border-color: #D7A20D;">
+        </div>
+
+        <!-- Bedrooms -->
+        <div class="col-md-2">
+            <label for="bedrooms" class="form-label" style="color: black;">Bedrooms:</label>
+            <input type="number" class="form-control" name="bedrooms" id="bedrooms" placeholder="Search by bedrooms"
+                style="background-color: #FFF8E1; border-color: #D7A20D;">
+        </div>
+
+        <!-- Search Button -->
+        <div class="col-md-2" style="margin-top: 45px;">
+            <button type="submit" class="btn w-100" id="searchaccomodation"
+                style="background-color: #D7A20D; color: white;">Search</button>
+        </div>
+    </form>
+
+
+    <!-- Accommodation Cards Section -->
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="/js/searchFilter.js"></script>
+    </body>

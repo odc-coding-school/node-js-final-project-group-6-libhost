@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Form</title>
+    <link href="/bootstrap 5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        body {
+            background-color: #FFFBE7;
+            /* Light yellow background */
+            color: #333;
+        }
+
+        .booking-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .hotel-image {
+            width: 80%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .date-icon {
+            color: #ffc107;
+        }
+
+        .btn-custom {
+            background-color: #F5C469;
+            /* Custom button color */
+            color: #FFF;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+
+        .btn-cancel {
+            background-color: #ccc;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <%-include('navbar');-%>
+            <!-- <img src="images/logo.png" alt="StayLib Logo" style="width: 90px;"> -->
+    </div>
+
+    <h2 style="text-align: center;">Booking Form</h2>
+    <p style="text-align: center;">Please fill out the form below</p>
+    <div class="container mt-5">
+        <form action="/booking" method="post">
+            <div class="booking-container">
+                <div class="hotel-details">
+                    <img src="images/Mamba Point.jpg" alt="Mambapoint Hotel" class="hotel-image">
+                    <p class="mt-2"><strong>Mambapoint Hotel</strong><br>Mamba Point</p>
+                </div>
+
+                <div class="booking-details">
+                    <!-- <div class="form-group">
+                        <label for="duration">How long will you stay?</label>
+                        <div class="btn-group" role="group" aria-label="Duration">
+                            <button type="button" class="btn btn-custom" id="decrease-btn"
+                                style="background-color: red;">-</button>
+                            <input type="text" id="duration" name="duration" class="form-control" value="1 Days"
+                                readonly disabled>
+                            <button type="button" class="btn btn-custom" id="increase-btn"
+                                style="background-color: green;">+</button>
+                        </div>
+                    </div> -->
+
+                    <div class="form-group mt-3">
+                        <label for="checkin">Check-in Date</label>
+                        <input type="date" id="checkin" name="checkin" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="checkout">Check-out Date</label>
+                        <input type="date" id="checkout" name="checkout" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <p id="price-display">You will pay $ USD for 1 Days</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-custom">Book Now!</button>
+                    <button type="reset" class="btn btn-cancel">Cancel</button>
+
+                    <%-include('footer');-%>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var decreaseBtn = document.getElementById('decrease-btn');
+            var increaseBtn = document.getElementById('increase-btn');
+            var durationInput = document.getElementById('duration');
+            var pricePerDay = <%= property.price %>; // Replace this with the actual price fetched from the server
+            var priceDisplay = document.getElementById('price-display');
+
+            function updatePrice(days) {
+                var totalPrice = pricePerDay * days;
+                priceDisplay.textContent = `You will pay $${totalPrice} USD for ${days} Days`;
+            }
+
+            decreaseBtn.addEventListener('click', function () {
+                var currentValue = parseInt(durationInput.value);
+                if (currentValue > 1) { // Minimum value check
+                    var newDuration = currentValue - 1;
+                    durationInput.value = newDuration + ' Days';
+                    updatePrice(newDuration);
+                }
+            });
+
+            increaseBtn.addEventListener('click', function () {
+                var currentValue = parseInt(durationInput.value);
+                var newDuration = currentValue + 1;
+                durationInput.value = newDuration + ' Days';
+                updatePrice(newDuration);
+            });
+
+            // Initialize price with 1 day
+            updatePrice(1);
+        });
+    </script>
+
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

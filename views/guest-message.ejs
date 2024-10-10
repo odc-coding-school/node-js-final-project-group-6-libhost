@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>User Bookings</title>
+    <script src="/socket.io/socket.io.js"></script> <!-- Include socket.io client library -->
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f7f7;
+        }
+
+        .chat-container {
+            max-width: 900px;
+            margin: 50px auto;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .chat-box {
+            max-height: 400px;
+            overflow-y: scroll;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .message {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            max-width: 60%;
+        }
+
+        .message.guest {
+            background-color: #D7A20D;
+            color: #fff;
+            text-align: left;
+            align-self: flex-start;
+        }
+
+        .message.host {
+            background-color: #e4e6eb;
+            text-align: right;
+            align-self: flex-end;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .message-input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+        }
+
+        .message-input-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+
+        .message-input-container button {
+            background-color: #D7A20D;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+        }
+
+        .message-input-container button:hover {
+            background-color: #b78f0b;
+        }
+
+        .chat-header {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            background-color: #f1f1f1;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-header img {
+            border-radius: 50%;
+            height: 40px;
+            width: 40px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('navbar'); -%>
+        <div class="chat-container">
+            <!-- Chat Header (Guest or Host Info) -->
+            <div class="chat-header">
+                <img src="path-to-profile-picture.jpg" alt="Host Profile">
+                <div>
+                    <h5 class="m-0">Chat with <span id="chatWith">Host Name</span></h5>
+                    <small>Host</small>
+                </div>
+            </div>
+            <!-- Example of Guest Messages -->
+            <!-- <div class="message guest">
+                Hi, I would like to know more about the apartment.
+                <div class="message-time">10:30 AM</div>
+            </div> -->
+
+            <!-- Example of Host Messages -->
+            <!-- <div class="message host">
+                Sure, the apartment is located in a quiet neighborhood.
+                <div class="message-time">10:32 AM</div>
+            </div> -->
+
+            <!-- Message Box -->
+            <div class="chat-box d-flex flex-column" id="chatWindow">
+                <% messages.forEach(function(message) { %>
+                    <p>[<%= message.timestamp %>] : <%= message.text %>
+                    </p>
+                    <% }) %>
+            </div>
+
+            <!-- Message Input Box -->
+            <div class="message-input-container">
+                <input type="text" placeholder="Type your message..." id="messageInput">
+                <button type="button" id="sendButton">Send</button>
+            </div>
+        </div>
+
+        <!-- Include external JS -->
+        <script src="/js/chat.js"></script> <!-- Path to your JavaScript file -->
+        <%- include('footer'); -%>
+            <!-- Bootstrap JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

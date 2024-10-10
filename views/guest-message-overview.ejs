@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>User Bookings</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .conversation-list {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        .conversation-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .conversation-item img {
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
+            margin-right: 10px;
+        }
+
+        .conversation-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .conversation-preview {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('navbar'); -%>
+        <div class="conversation-list">
+            <h3>Messages</h3>
+
+            <!-- Loop through all conversations -->
+            <div class="conversation-item" onclick="window.location.href='/message-detail/1'">
+                <div class="conversation-info">
+                    <img src="host1-picture.jpg" alt="Host 1">
+                    <div>
+                        <h6 class="mb-0">Host 1 Name</h6>
+                        <p class="conversation-preview">Last message preview...</p>
+                    </div>
+                </div>
+                <small class="text-muted">10:30 AM</small>
+            </div>
+            <a href="/guest-message" style="text-decoration: none;">
+                <div class="conversation-item">
+                    <div class="conversation-info">
+                        <img src="host2-picture.jpg" alt="Host 2">
+                        <div>
+                            <h6 class="mb-0">Host 2 Name</h6>
+                            <p class="conversation-preview">Last message preview...</p>
+                        </div>
+                    </div>
+                    <small class="text-muted">Yesterday</small>
+                </div>
+            </a>
+
+            <!-- Add more conversations as needed -->
+        </div>
+        <%- include('footer'); -%>
+            <!-- Bootstrap JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
