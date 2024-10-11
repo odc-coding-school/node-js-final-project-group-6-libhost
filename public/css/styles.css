@@ -1,0 +1,430 @@
+body {
+  margin: 0px;
+  background-color: white;
+}
+
+.content {
+  border-radius: 10px;
+  height: auto;
+  padding-top: 5px;
+  /* padding-bottom: 5px; */
+  margin: 10px;
+}
+
+#img-card {
+  /* padding-bottom: 20px; */
+}
+
+#features {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+p {
+  font-family: sans-serif;
+}
+
+#book {
+  height: 300px;
+}
+
+.header {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+p.text-dark#price {
+  margin: 0px;
+}
+
+#content-section {
+  padding-top: 50px;
+  padding-bottom: 80px;
+}
+
+.container-fluid {
+  /*    border-top: 1px solid whitesmoke;*/
+  margin: 10px;
+}
+
+p#paragraph {
+  margin-left: 20px;
+}
+
+.parag {
+  display: none;
+}
+
+#booking {
+  width: 350px;
+  height: 250px;
+}
+
+.card#price {
+  box-shadow: 1px 2px 1px lightgray;
+  height: 30px;
+  width: 150px;
+  border: 1px solid white;
+}
+
+a#link:hover {
+  background-color: gold;
+}
+
+p#text {
+  margin: 10px;
+}
+
+.card#confrimation_alert {
+  border: 1px solid whitesmoke;
+  width: 380px;
+  height: 250px;
+}
+
+#options {
+  float: left;
+}
+
+img.logo {
+  width: 100px;
+  height: 100px;
+}
+
+#close {
+  background-color: red;
+  color: white;
+  float: left;
+  font-size: xx-large;
+  width: 50px;
+  text-align: center;
+}
+
+.col-sm#digit-1,
+.col-sm#digit-2,
+.col-sm#digit-3,
+.col-sm#digit-4 {
+  padding: 20px;
+  background-color: whitesmoke;
+  margin: 10px;
+}
+
+.container#form {
+  padding-top: 200px;
+  padding-bottom: 80px;
+}
+
+input[type="text"],
+input[type="password"] {
+  border: 1px solid orange;
+  padding: 10px;
+}
+
+input[type="checkbox"] {
+  border: 1px solid orange;
+}
+
+a#forget {
+  text-decoration: none;
+  padding: 10px;
+  text-transform: capitalize;
+}
+
+button[type="submit"].btn-outline {
+  width: 100%;
+  padding: 10px;
+  background-color: gold;
+}
+
+label {
+  float: left;
+  text-transform: capitalize;
+}
+
+.card#login {
+  height: 390px;
+  border: none;
+  margin: 3px;
+}
+
+h2.text-capitalize {
+  color: #d7a20d;
+}
+
+input[type="text"]#search {
+  background-color: white;
+  border: none;
+  width: 50%;
+  float: left;
+  border-radius: 10px;
+}
+
+button[type="trash"]#trash {
+  background-color: azure;
+  float: left;
+}
+
+select {
+  height: 40px;
+  width: 200px;
+  padding: 10px;
+  border: 1px solid whitesmoke;
+  background-color: white;
+}
+
+.card#login-form {
+  width: 80%;
+  border: none;
+}
+
+#search {
+  background-color: #d7a20d;
+}
+
+.fa-check-circle {
+  font-size: 34px;
+}
+
+.card-body {
+  /* padding-top: 300px; */
+}
+
+button.btn-outline {
+  width: 80%;
+  background: #d7a20d;
+}
+
+img.card#single {
+  height: 280px;
+}
+
+#section {
+  padding-top: 200px;
+  padding-bottom: 50px;
+}
+
+.heading {
+  margin: 0px;
+  color: red;
+}
+
+p {
+  text-align: justify;
+}
+
+/*
+.fa-wifi{
+    font-size:xx-large;
+}
+*/
+
+#footer {
+  padding-top: 30px;
+  height: 250px;
+}
+
+a.btn {
+  background-color: #d7a20d;
+  width: 40%;
+}
+
+button {
+  background-color: white;
+  border-radius: 10px;
+  border: none;
+}
+
+btn.btn-outline {
+  width: 100%;
+  padding: 20px;
+}
+
+a#text {
+  text-decoration: none;
+  background-color: white;
+}
+
+a#book-now {
+  width: 80%;
+  margin: 20px;
+}
+
+em {
+  color: gray;
+}
+
+span#price {
+  color: green;
+  margin-left: 20px;
+  font-size: 24px;
+  width: 250px;
+  background: white;
+}
+
+p.lead {
+  margin: 20px;
+}
+
+li.list-group-item {
+  padding: 2px;
+}
+
+ul.list-unstyle {
+  padding: 10px;
+}
+
+a.text-dark {
+  text-decoration: none;
+}
+
+a.btn#search {
+  width: auto;
+  background-color: #d7a20d;
+}
+
+a.btn:hover {
+  background-color: #d7a20d;
+}
+
+img {
+  width: 150px;
+  height: 120px;
+  /* margin-left: 10px; */
+}
+
+.card#card1 {
+  background-image: url("../images/Colony\ Hotel.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 250px;
+  border: none;
+  width: 300px;
+}
+
+.fa-heart {
+  text-align: right;
+  margin: 10px;
+}
+
+.desc {
+  display: block;
+  background-color: white;
+  border: 1px solid whitesmoke;
+  width: 300px;
+  /*    opacity: 0.6;*/
+  margin-right: 20px;
+}
+
+.fa-map-marker {
+  color: #d7a20d;
+}
+
+.fa-star {
+  color: #d7a20d;
+}
+
+span {
+  background: #d7a20d;
+  color: white;
+  width: 130px;
+  border-radius: 5px 1px 5px;
+  text-align: left;
+  padding: 2px;
+  margin: 0px;
+}
+
+.card#card2 {
+  background-image: url("../images/Boulavard\ Hotel.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 250px;
+  width: 300px;
+}
+
+.card#card3 {
+  background-image: url("../images/Farmington2.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 250px;
+  width: 300px;
+}
+
+.card#card4 {
+  background-image: url("../images/Royal\ grand.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 250px;
+  width: 300px;
+}
+
+.card#card5 {
+  background-image: url("../images/Mamba\ Point.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  height: 250px;
+  width: 300px;
+}
+
+.card#card6 {
+  background-image: url("../images/ocean\ view.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  height: 250px;
+  width: 300px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  list-style-type: none;
+  text-transform: capitalize;
+  margin-right: 20px;
+}
+
+.navbar {
+  margin: 0px;
+}
+
+a.nav-link {
+  margin: 10px;
+  color: black;
+}
+
+img.card {
+  width: 100%;
+  height: auto;
+}
+
+a.nav-link:hover {
+  color: black;
+}
+
+a.nav-link#home {
+  margin-right: 20px;
+  color: gold;
+}
+
+a.nav-link#login {
+  margin-right: 10px;
+  color: black;
+  background: gold;
+  border-radius: 5px;
+}
+
+/* About Page Styline*/
+.header-section {
+  background-color: #f8f9fa;
+  padding: 40px 0;
+}
+.mission-vision {
+  margin-top: 40px;
+}
+.team-member {
+  margin-top: 30px;
+}
+.team-section {
+  margin-top: 50px;
+}

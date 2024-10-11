@@ -1,0 +1,19 @@
+<nav class="navbar bg-white fixed-top">
+  <a class="navbar-brand" href="/home">
+    <img src="/images/IMG-20240909-WA0016-removebg-preview.png" class="img-fluid "
+      style="height: 50px; object-fit: cover;">
+  </a>
+  <ul class="nav navbar-justified navbar-pills">
+    <li class="nav-item"><a class="nav-link" href="/home" id="link">home</a></li>
+    <li class="nav-item"><a class="nav-link" href="/about" id="link">about</a></li>
+    <li class="nav-item"><a class="nav-link" href="/explore" id="link">explore</a></li>
+    <% if (user) { %> <!-- Check if user is logged in -->
+      <li class="nav-item"><a class="nav-link" href="/bookings" id="link">Booking</a></li>
+      <li class="nav-item"><a class="nav-link" href="/guest-message-overview" id="link">Messages</a></li>
+      <li class="nav-item"><a class="nav-link" href="/logout" id="link">Logout</a></li>
+      <% } else { %>
+        <li class="nav-item"><a class="nav-link" href="/login" id="link">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="/signup" id="link">Sign Up</a></li>
+        <% } %>
+  </ul>
+</nav>

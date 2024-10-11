@@ -1,0 +1,54 @@
+<!-- Sidebar -->
+<nav id="sidebarMenu" class="d-lg-block sidebar bg-light shadow col-md-2 position-fixed h-100">
+  <div class="position-sticky">
+    <!-- Logo Section -->
+    <div class="logo text-center bg-light p-3">
+      <img src="images/logo.png" alt="Logo" class="img-fluid" style="max-width: 150px; height: 60px;">
+    </div>
+
+    <!-- Sidebar Menu -->
+    <div class="list-group list-group-flush mx-2">
+      <a href="/admin-dashboard" class="list-group-item list-group-item-action py-3 ripple">
+        <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Dashboard</span>
+      </a>
+      <a href="/manage-user" class="list-group-item list-group-item-action py-3 ripple">
+        <i class="fa-solid fa-users fa-fw me-3"></i><span>User Management</span>
+      </a>
+      <a href="/manage-accommodation" class="list-group-item list-group-item-action py-3 ripple">
+        <i class="fa-solid fa-building fa-fw me-3"></i><span>Accommodation Management</span>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 ripple">
+        <i class="fa-solid fa-calendar-check fa-fw me-3"></i><span>Booking</span>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 ripple">
+        <i class="fa-solid fa-money-check-alt fa-fw me-3"></i><span>Payment Overview</span>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 ripple">
+        <i class="fa-solid fa-chart-line fa-fw me-3"></i><span>Analytics</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .list-group-item {
+    color: black;
+    /* Default text color */
+    transition: background-color 0.3s, color 0.3s;
+    /* Smooth transition for hover effects */
+  }
+
+  .list-group-item:hover {
+    background-color: #D7A20D;
+    /* Change background color on hover */
+    color: white;
+    /* Change text color on hover */
+  }
+
+  .list-group-item.active {
+    /* background-color: #D7A20D; */
+    /* Active link background */
+    /* color: white; */
+    /* Active link text color */
+  }
+</style>

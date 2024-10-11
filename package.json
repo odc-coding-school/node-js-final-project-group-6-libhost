@@ -1,0 +1,33 @@
+{
+  "name": "js-final-project-group-6-libhost",
+  "version": "1.0.0",
+  "description": "Final Project - ODC Full-Stack Web Development",
+  "main": "server.js",
+  "engines": {
+    "node": "14.x"
+  },
+  "scripts": {
+    "teststart": "node server.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "Group #6 - StayLib",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "connect-flash": "^0.1.1",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-session": "^1.18.0",
+    "js-final-project-group-6-libhost": "file:",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.15",
+    "path": "^0.12.7",
+    "socket.io": "^4.8.0",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.6"
+  }
+}

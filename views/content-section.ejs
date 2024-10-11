@@ -1,0 +1,133 @@
+<body>
+  <div class="container text-center mt-5" id="content-section">
+    <p class="text-dark text-capitalize display-6 fw-bold">Discover Hidden Gems Across Liberia</p>
+    <p class="text-muted lead">Explore unique accommodations with stunning views and luxurious amenities.</p>
+
+    <div class="row mt-4">
+      <% accommodations.forEach((accommodation, index)=> { %>
+        <% if (accommodation.status==="approved" ) { %>
+          <div class="col-md-4 mb-5">
+            <a href="/property-detail/<%= accommodation.id %>" class="text-decoration-none">
+              <div class="card shadow-lg border-0 h-100">
+
+                <!-- Price Badge -->
+                <div class="price-tag text-white px-2 py-1 rounded"
+                  style="position: absolute; top: 10px; left: 10px; background-color: #D7A20D; z-index: 1111;">
+                  <i class="fa fa-dollar"></i>
+                  <%= accommodation.price * 190 %> LRD
+                </div>
+
+                <!-- Carousel -->
+                <div id="carousel<%= index %>" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner rounded-top">
+                    <% accommodation.images.forEach((image, imgIndex)=> { %>
+                      <div class="carousel-item <%= imgIndex === 0 ? 'active' : '' %>">
+                        <img src="<%= image %>" alt="Property Image" class="card-img-top img-fluid d-block w-100"
+                          style="height: 250px; object-fit: cover;">
+                      </div>
+                      <% }) %>
+                  </div>
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carousel<%= index %>"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carousel<%= index %>"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
+
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="text-start">
+                    <h5 class="card-title text-capitalize fw-bold">
+                      <%= accommodation.name %>
+                    </h5>
+                    <p class="text-muted mb-2">
+                      <i class="fa fa-map-marker-alt"></i>
+                      <%= accommodation.city %>, <%= accommodation.address %>
+                    </p>
+                    <p class="small text-muted">
+                      <%= accommodation.full_name %>
+                    </p>
+                  </div>
+
+                  <!-- Bedrooms and Rating -->
+                  <p class="card-text text-capitalize">
+                    <i class="fa fa-bed"></i>
+                    <%= accommodation.bedrooms %> Bedrooms
+                      <span class="float-end">
+                        <% for(let i=0; i < 5; i++) { %>
+                          <i class="fa fa-star <%= i < accommodation.rating ? 'text-warning' : 'text-muted' %>"></i>
+                          <% } %>
+                      </span>
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <% } %>
+            <% }) %>
+    </div>
+  </div>
+
+  <script src="js/search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Optional Custom CSS for additional beautification -->
+  <style>
+    body {
+      background-color: #fff8e1;
+      /* Soft background color */
+      font-family: 'Poppins', sans-serif;
+      color: black;
+      /* Black text for strong contrast */
+    }
+
+    .card {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .price-tag {
+      font-size: 1.1rem;
+      font-weight: bold;
+      background-color: #D7A20D;
+      /* Use primary accent color */
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+    }
+
+    .carousel-inner img {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .card-title {
+      color: #333;
+    }
+
+    .fa-star {
+      margin-right: 2px;
+    }
+
+    .fa-star.text-warning {
+      color: #D7A20D;
+      /* Match the accent color with stars */
+    }
+  </style>
+</body>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Localhosted Bootstrap -->
+    <link href="/bootstrap 5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Localhosted Font-awesome icons -->
+    <link rel="stylesheet" href="/font-awesome 4.7.0/css/font-awesome.css">
+
+    <style>
+        /* Global Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #FFF8E1;
+            /* Light cream background */
+            color: black;
+            /* Text color is black */
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-weight: bold;
+            color: #D7A20D;
+            /* Golden yellow for headings */
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: black;
+            /* Black for paragraph text */
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #D7A20D;
+            /* Golden Yellow Navbar */
+        }
+
+        nav a {
+            color: white;
+        }
+
+        /* About Us Section */
+        .about-us {
+            padding: 5rem 0;
+        }
+
+        .about-us h1 {
+            font-size: 2.5rem;
+            color: #D7A20D;
+            /* Golden Yellow */
+        }
+
+        .about-us p {
+            color: black;
+            /* Black text */
+        }
+
+        .about-us img {
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Mission & Vision Section */
+        .mission-vision {
+            padding: 4rem 0;
+            background-color: white;
+            /* White background for contrast */
+        }
+
+        .mission-vision h2 {
+            font-size: 2rem;
+            color: #D7A20D;
+            /* Golden yellow */
+        }
+
+        .mission-vision p {
+            font-size: 1.2rem;
+            color: black;
+            /* Black text for readability */
+            line-height: 1.8;
+        }
+
+        /* Our Team Section */
+        .our-team {
+            padding: 5rem 0;
+            background-color: #FFF8E1;
+            /* Light cream background */
+        }
+
+        .our-team h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #D7A20D;
+            /* Golden Yellow */
+        }
+
+        .team-card {
+            border: none;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .team-card img {
+            border-radius: 10px 10px 0 0;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .team-card .card-body {
+            background-color: white;
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .team-card .card-title {
+            font-size: 1.4rem;
+            color: #D7A20D;
+            /* Golden yellow for titles */
+        }
+
+        .team-card .card-text {
+            color: black;
+            margin-bottom: 1rem;
+        }
+
+        /* Mobile Responsive Adjustments */
+        @media (max-width: 768px) {
+            .about-us .col-md-6 img {
+                margin-top: 2rem;
+            }
+
+            .team-card {
+                margin-bottom: 2rem;
+            }
+
+            .team-card img {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Include Navbar -->
+    <%- include('navbar'); -%>
+        <div class="container" id="section">
+            <div class="row align-items-center">
+                <div class="col-sm">
+                    <h1 class="text-capitalize">Discover Your Perfect Stay, Anywhere in Liberia</h1>
+                    <p class="text-dark text-capitalize">Whether you're exploring the vibrant streets of Monrovia,
+                        unwinding on the
+                        sea beaches of Buchanan, or discovering the hidden gems in Liberia's countryside, Stay Lib
+                        offers a seamless way
+                        to find and book your ideal accommodation. From cozy guesthouses to luxury villas, we connect
+                        you with authentic
+                        stays that make you feel right at home. Start your journey with us and experience Liberia like
+                        never before.</p>
+                    <a class="btn text-capitalize" href="#">Discover</a>
+                </div>
+                <div class="col-sm">
+                    <div class="card">
+                        <img src="images/79829879.jpg" alt="Liberia Accommodation" class="img-fluid w-100"
+                            style="border-radius: 8px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Us Section -->
+        <section class="about-us container ">
+            <div class="row align-items-center">
+
+                <div class="col-md-6">
+                    <img src="/images/The-Farmington-Hotel.jpeg" alt="About Us" class="img-fluid w-100">
+                </div>
+                <div class="col-md-6">
+                    <h1>About Us</h1>
+                    <p>
+                        LibHost is a revolutionary web platform, designed to seamlessly connect property owners across
+                        Liberia with travelers looking for short and long-term accommodations. We aim to transform the
+                        travel experience in Liberia, providing easy access to authentic and local stays while promoting
+                        local tourism.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission & Vision Section -->
+        <section class="mission-vision text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2>Our Mission</h2>
+                        <p>To provide a seamless, accessible, and transparent platform for booking accommodations across
+                            Liberia, enabling both hosts and guests to have a safe and enjoyable experience.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h2>Our Vision</h2>
+                        <p>To be the leading accommodation platform in Liberia, offering unique experiences to travelers
+                            and empowering local hosts to share their spaces with the world.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Team Section -->
+        <section class="our-team">
+            <div class="container text-center">
+                <h2>Our Team</h2>
+                <div class="row">
+                    <!-- Team Member Card 1 -->
+                    <div class="col-md-4">
+                        <div class="card team-card">
+                            <img src="images/MorganTheTechEnthusiast-PIC.jpg" alt="Member 1" class="card-img-top"
+                                style="object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">James A. Morgan Jr.</h5>
+                                <p class="card-text" style="text-align: center;">Team Lead/Project Manager</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Team Member Card 2 -->
+                    <div class="col-md-4">
+                        <div class="card team-card">
+                            <img src="images/Professor.jpg" alt="Member 2" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">Stephen P. Godwin</h5>
+                                <p class="card-text" style="text-align: center;">Chief Technology Officer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Team Member Card 3 -->
+                    <div class="col-md-4">
+                        <div class="card team-card">
+                            <img src="images/Gabriel.jpg" alt="Member 3" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">Gabriel Kun</h5>
+                                <p class="card-text" style="text-align: center;" style="text-align: center;">Head of Marketing</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card team-card">
+                            <img src="images/Mark.jpg" alt="Member 3" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">Mark Morris Weeman</h5>
+                                <p class="card-text" style="text-align: center;">Assistant Head of Marketing</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- External JS and Local Bootstrap -->
+        <script src="js/jquery-3.7.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Footer -->
+        <%- include('footer'); -%>
+</body>
+
+</html>
