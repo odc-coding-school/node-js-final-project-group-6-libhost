@@ -480,11 +480,10 @@ app.get("/bookings", guestAuthenticated, (req, res) => {
   const currentUser = req.session.userInfo;
 
   db.all(
-    `SELECT bookings.*, user.full_name, user.email, user.phone_number, payments.status, accommodations.name AS accommodation_name
+    `SELECT bookings.*, user.full_name, user.email, user.phone_number, accommodations.name AS accommodation_name
      FROM bookings
      JOIN user ON bookings.host_id = user.id
      JOIN accommodations ON bookings.accommodation_id = accommodations.id
-     JOIN payments ON bookings.id = payments.booking_id
      WHERE bookings.guest_id = ?`,
     [currentUser.id],
     (err, bookings) => {
@@ -506,9 +505,10 @@ app.get("/host-manage-bookings", hostAuthenticated, (req, res) => {
 
   // SQL query to join the bookings, user, and accommodations tables
   const query = `
-    SELECT bookings.*, user.full_name, accommodations.name AS accommodation_name
+    SELECT bookings.*, user.full_name, payments.status, accommodations.name AS accommodation_name
     FROM bookings
     JOIN user ON bookings.guest_id = user.id
+    JOIN payments ON  
     JOIN accommodations ON bookings.accommodation_id = accommodations.id
     WHERE bookings.host_id = ?
   `;
