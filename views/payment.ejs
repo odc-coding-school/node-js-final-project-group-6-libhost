@@ -69,26 +69,36 @@
                         <h3 class="text-center">Payment Summary</h3>
                         <hr>
 
+                        <!-- Payment Currency -->
+                        <div class="form-group">
+                            <label for="currency-select">Choose Payment Currency:</label>
+                            <select class="form-control" id="currency-select">
+                                <option value="USD">USD</option>
+                                <option value="LRD">LRD</option>
+                            </select>
+                        </div>
+
                         <!-- Accommodation Cost -->
                         <div class="d-flex justify-content-between">
                             <p>Accommodation Cost:</p>
                             <p id="accommodation-cost">
-                                $<%= accommodation_cost %>
+                                $<%= accommodation_cost %> USD
                             </p>
                         </div>
 
-                        <!-- StayLib 8% Interest -->
+                        <!-- StayLib Service Fee -->
                         <div class="d-flex justify-content-between mt-2">
-                            <p>StayLib Service Fee (8%):</p>
+                            <p>StayLib Service Fee (2%):</p>
                             <p id="staylib-fee">
-                                $<%= service_fee %>
+                                $<%= service_fee %> USD
                             </p>
                         </div>
 
                         <!-- Total Payment -->
                         <div class="d-flex justify-content-between mt-2">
                             <p class="total-payment-text">Total Payment:</p>
-                            <p class="total-payment-amount" id="total-payment">$<%= total_payment %>
+                            <p class="total-payment-amount" id="total-payment">
+                                $<%= total_payment %> USD
                             </p>
                         </div>
 
@@ -99,6 +109,7 @@
                             <label for="payment-method">Choose Payment Method:</label>
                             <select class="form-control" id="payment-method">
                                 <option value="orange_money">Orange Money</option>
+                                <option value="mobile_money">Mobile Money</option>
                                 <option value="credit_card">Credit Card</option>
                                 <option value="paypal">PayPal</option>
                             </select>
@@ -115,15 +126,31 @@
         </div>
 
         <script>
-            // Mock data for dynamic values (replace with server-side data)
-            // const accommodationCost = 200.00;
-            // const staylibFee = accommodationCost * 0.08;
-            // const totalPayment = accommodationCost + staylibFee;
+            const accommodationCostUSD = <%= accommodation_cost %>;  // Value from server-side
+            const serviceFeeUSD = <%= service_fee %>;                // Value from server-side
+            const totalPaymentUSD = <%= total_payment %>;            // Value from server-side
+            const conversionRate = 190;  // 1 USD = 190 LRD
 
-            // Update the UI with dynamic values
-            // document.getElementById('accommodation-cost').innerText = `$${accommodationCost.toFixed(2)}`;
-            // document.getElementById('staylib-fee').innerText = `$${staylibFee.toFixed(2)}`;
-            // document.getElementById('total-payment').innerText = `$${totalPayment.toFixed(2)}`;
+            const currencySelect = document.getElementById("currency-select");
+            const accommodationCostElement = document.getElementById("accommodation-cost");
+            const staylibFeeElement = document.getElementById("staylib-fee");
+            const totalPaymentElement = document.getElementById("total-payment");
+
+            currencySelect.addEventListener("change", function () {
+                const selectedCurrency = currencySelect.value;
+
+                if (selectedCurrency === "LRD") {
+                    // Convert to LRD
+                    accommodationCostElement.innerText = `L$${(accommodationCostUSD * conversionRate).toFixed(2)} LRD`;
+                    staylibFeeElement.innerText = `L$${(serviceFeeUSD * conversionRate).toFixed(2)} LRD`;
+                    totalPaymentElement.innerText = `L$${(totalPaymentUSD * conversionRate).toFixed(2)} LRD`;
+                } else {
+                    // Display in USD
+                    accommodationCostElement.innerText = `$${accommodationCostUSD.toFixed(2)} USD`;
+                    staylibFeeElement.innerText = `$${serviceFeeUSD.toFixed(2)} USD`;
+                    totalPaymentElement.innerText = `$${totalPaymentUSD.toFixed(2)} USD`;
+                }
+            });
         </script>
 </body>
 

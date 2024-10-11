@@ -76,6 +76,10 @@
                     </p>
                     <p class="text-muted">Address: <%= property.address %>
                     </p>
+                    <p class="text-muted">Price in USD: $<%= property.price %>
+                    </p>
+                    <p class="text-muted">Price in LRD: $<%= property.price * 190 %>
+                    </p>
 
                     <!-- Meet the Host Section -->
                     <h4 class="text-warning mt-4">Meet the Host</h4>
@@ -111,7 +115,7 @@
                         <h4>Start Booking</h4>
                         <p class="text-dark">
                             <strong><i class="fa fa-dollar"></i>
-                                <%= property.price %> per day
+                                <%= property.price %> USD per day or <%= property.price * 190 %> LRD per day
                             </strong>
                         </p>
 
