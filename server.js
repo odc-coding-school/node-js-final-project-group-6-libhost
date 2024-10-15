@@ -682,7 +682,7 @@ app.get("/payment/:id", guestAuthenticated, (req, res) => {
     // Log the bookings to verify the data
     console.log("Bookingssss", bookings);
 
-    const service_fee = (bookings[0].total_price * 8) / 100;
+    const service_fee = (bookings[0].total_price * 2) / 100;
     const accommodation_cost = bookings[0].total_price;
     const total_payment = service_fee + accommodation_cost;
 

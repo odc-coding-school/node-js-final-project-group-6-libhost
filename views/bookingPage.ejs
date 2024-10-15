@@ -93,7 +93,8 @@
                       <%= booking.check_out_date %> <br>
                         <strong>Number of Guests:</strong>
                         <%= booking.max_guests %> <br>
-                          <strong>Total Price:</strong> $<%= booking.total_price %>
+                          <strong>Total Price in USD:</strong> $<%= booking.total_price %> <br>
+                          <strong>Total Price in LRD:</strong> $<%= booking.total_price * 190 %>
                 </p>
                 <p class="card-text"><strong>Host Information</strong><br>
                   <strong>Name:</strong>
